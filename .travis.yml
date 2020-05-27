@@ -3,6 +3,9 @@ sudo: required
 dist: bionic
 env:
   global:
+  # auto vagrant installation
+  - VAGRANT_CURRENT_VERSION="$(curl -s https://checkpoint-api.hashicorp.com/v1/check/vagrant | jq -r -M '.current_version')"    
+  # auto vagrant installation
   - VAGRANT_VERSION="2.2.9"
   - KUBECTL_VERSION=1.18.3
   - KUBERNETES_VERSION=1.18.3
@@ -96,7 +99,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           # - echo "=============================Exit out of the demo-ns namespace ============================================================="
           - ip address show #Confirm that you can see the interfaces in the default namespace
           - sudo arp #Confirm that you can see the interfaces in the default namespace
-          - sudo tcpdump -ni eth0 icmp -c 4 #Confirm that you can see the interfaces in the default namespace
+          - sudo tcpdump -ni ens4 icmp -c 4 #Confirm that you can see the interfaces in the default namespace
           - sudo conntrack -L | grep 8.8.8.8
           - conntrack -L #list all the connections currently being tracked
           - conntrack -E && sleep 5 #watch continuously for new connections
