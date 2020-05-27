@@ -69,8 +69,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           # - curl $CONTAINERIP:8080 #confirm that the web server is still running on port 8080 on the container and accessible from the node
           - echo "=============================Inspecting Conntrack Connection Tracking============================================================="
           # - sudo apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
-          - sudo apt install --qqy bridge-utils # Install Linux Bridge Tools.
-          - sudo apt install --qqy tcpdump
+          - sudo apt-get -qq -y install bridge-utils # Install Linux Bridge Tools.
+          - sudo apt-get -qq -y install tcpdump
           - sudo ip address show #List your networking devices
           - sudo ip netns list # list configured network namespaces
           - sudo ip netns add demo-ns #add a namespace called demo-ns
@@ -99,6 +99,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - sudo conntrack -L | grep 8.8.8.8
           - conntrack -L #list all the connections currently being tracked
           - conntrack -E && sleep 5 #watch continuously for new connections
+          # - conntrack -L -f ipv4 -d IPADDRESS -o extended #grep conntrack table information using the source IP and Port
+          # - kubectl get po — all-namespaces -o wide | grep IPADDRESS #use kubectl to lookup the name of the pod using that Pod IP address
           # - conntrack -D -p tcp --orig-port-dst 80 # delete the relevant conntrack state
           # - sudo conntrack -D -s IPADDRESS
           # - conntrack -L -d IPADDRESS #list conntrack-tracked connections to a particular destination address
