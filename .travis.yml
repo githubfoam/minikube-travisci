@@ -111,8 +111,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - echo "=============================Inspecting Iptables Rules============================================================="
           - sysctl net.netfilter.nf_conntrack_max #sysctl setting for the maximum number of connections to track
           - sudo sysctl -w net.netfilter.nf_conntrack_max=191000 #set a new valu
-          - sudo iptables-save | head -n 20 #dump all iptables rules on a node
-          - iptables -t nat -L KUBE-SERVICES #list just the Kubernetes Service NAT rules
+          # - sudo iptables-save | head -n 20 #dump all iptables rules on a node
+          - sudo iptables -t nat -L KUBE-SERVICES #list just the Kubernetes Service NAT rules
           - echo "=============================Querying Cluster DNS============================================================="
           - sudo apt install dnsutils -y #if dig is not installed
           - kubectl get service -n kube-system kube-dns #find the cluster IP of the kube-dns service CLUSTER-IP
