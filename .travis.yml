@@ -189,7 +189,7 @@ matrix:
         - source ~venvpy3/bin/activate
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_tasks
+      <<: *fleet_script_minikube_tasks
       after_success:
         - deactivate
 
