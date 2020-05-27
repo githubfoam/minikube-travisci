@@ -19,24 +19,15 @@ notifications:
 
 fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
       script:
-          # - egrep -c '(vmx|svm)' /proc/cpuinfo   #check if virtualization is supported on Linux, xenial fails, bionic works
-          # - |
-          #   if [[ $(lsb_release -rs) == "18.04" ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
-          #            egrep -c '(vmx|svm)' /proc/cpuinfo
-          #            echo "virtualization is supported"
-          #     else
-          #            echo "virtualization is not supported"
-          #     fi
           - |
-            set -exo pipefail #safety for script
-            if [ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]#check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
-            then
+            set -eox pipefail #safety for script
+            if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
                      echo "virtualization is not supported"
             else
                   echo "===================================="
-                  echo $(egrep -c '(vmx|svm)' /proc/cpuinfo)
+                  echo eval "$(egrep -c '(vmx|svm)' /proc/cpuinfo)" 2>/dev/null
                   echo "===================================="
-                  echo "virtualization is not supported"
+                  echo "virtualization is supported"
             fi
           - sudo apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
           - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
@@ -75,7 +66,6 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
 fleet_script_minikube_tasks : &fleet_script_minikube_tasks
       script:
           # overriding global env variables
-          # - egrep -c '(vmx|svm)' /proc/cpuinfo   #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
           - |
             set -eox pipefail #safety for script
             if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
@@ -84,7 +74,7 @@ fleet_script_minikube_tasks : &fleet_script_minikube_tasks
                   echo "===================================="
                   echo eval "$(egrep -c '(vmx|svm)' /proc/cpuinfo)" 2>/dev/null
                   echo "===================================="
-                  echo "virtualization is not supported"
+                  echo "virtualization is supported"
             fi
           - export MINIKUBE_WANTUPDATENOTIFICATION=false
           - export MINIKUBE_WANTREPORTERRORPROMPT=false
