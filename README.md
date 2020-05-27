@@ -1,0 +1,2 @@
+# minikube-travisci
+minikube pipeline
