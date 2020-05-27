@@ -28,7 +28,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           #            echo "virtualization is not supported"
           #     fi
           - |
-            set -euo pipefail #safety for script
+            set -exo pipefail #safety for script
             if [ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]#check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
             then
                      echo "virtualization is not supported"
@@ -77,7 +77,7 @@ fleet_script_minikube_tasks : &fleet_script_minikube_tasks
           # overriding global env variables
           # - egrep -c '(vmx|svm)' /proc/cpuinfo   #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
           - |
-            set -euox pipefail #safety for script
+            set -eox pipefail #safety for script
             if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
                      echo "virtualization is not supported"
             else
