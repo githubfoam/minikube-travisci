@@ -117,6 +117,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - sudo apt install dnsutils -y #if dig is not installed
           - kubectl get service -n kube-system kube-dns #find the cluster IP of the kube-dns service CLUSTER-IP
           # - nsenter -t 14346 -n dig kubernetes.default.svc.cluster.local @IPADDRESS #nsenter to run dig in the a container namespace, Service’s full domain name of service-name.namespace.svc.cluster.local
+          - sudo apt-get -qq -y install -y ipvsadm
           - ipvsadm -Ln #list the translation table of IPs ,kube-proxy can configure IPVS to handle the translation of virtual Service IPs to pod IPs
           # - ipvsadm -Ln -t IPADDRESS:PORT #show a single Service IP
           - echo "=========================================================================================="
