@@ -100,9 +100,9 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - ip address show #Confirm that you can see the interfaces in the default namespace
           - sudo arp #Confirm that you can see the interfaces in the default namespace
           # - sudo tcpdump -ni ens4 icmp -c 4 && sleep 10 #Confirm that you can see the interfaces in the default namespace
-          - sudo conntrack -L | grep 8.8.8.8
-          - conntrack -L #list all the connections currently being tracked
-          - conntrack -E && sleep 5 #watch continuously for new connections
+          # - sudo conntrack -L | grep 8.8.8.8
+          # - conntrack -L #list all the connections currently being tracked
+          # - conntrack -E && sleep 5 #watch continuously for new connections
           # - conntrack -L -f ipv4 -d IPADDRESS -o extended #grep conntrack table information using the source IP and Port
           # - kubectl get po — all-namespaces -o wide | grep IPADDRESS #use kubectl to lookup the name of the pod using that Pod IP address
           # - conntrack -D -p tcp --orig-port-dst 80 # delete the relevant conntrack state
