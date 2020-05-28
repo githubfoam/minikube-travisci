@@ -20,6 +20,14 @@ notifications:
   slack:
     on_failure: always
 
+fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are running minikube within a VM, consider using --driver=none
+      script:
+          - docker version
+          - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-$(uname)-amd64
+          - chmod +x ./kind
+          - mv ./kind /usr/local/bin/kind
+
+
 # fleet_script_minikube_docker_tasks : &fleet_script_minikube_docker_tasks #If you are running minikube within a VM, consider using --driver=none
 #       script:
 #           - |
@@ -310,6 +318,20 @@ matrix:
     #   <<: *fleet_script_minikube_tasks
     #   after_success:
     #     - deactivate
+
+    - name: "kind istio  Python 3.7 on bionic" #OK
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      <<: *fleet_script_minikube_latest_tasks
+      after_success:
+        - deactivate
 
     - name: "minikube latest  Python 3.7 on bionic" #OK
       dist: bionic
