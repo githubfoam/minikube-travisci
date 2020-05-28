@@ -123,7 +123,8 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - kubectl get service --all-namespaces #list all services in all namespace
           - |
             for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-              if kubectl get pods --namespace=kubernetes-dashboard | grep Running ; then
+              if kubectl get pods --namespace=kubernetes-dashboard |grep Running && \
+                 kubectl get pods --namespace=dashboard-metrics-scraper |grep Running ; then
                 break
               fi
               sleep 2
