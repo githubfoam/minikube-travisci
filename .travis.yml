@@ -62,6 +62,15 @@ fleet_script_minikube_vault_consul_tasks : &fleet_script_minikube_vault_consul_t
           - kubectl get pods -n default;
           - minikube dashboard
           - echo "============================consul vault=============================================================="
+          - sudo snap install helm --classic #install helm
+          - helm init #install Tiller into existent cluster
+          - git clone https://github.com/hashicorp/vault-helm.git #install from custom repo,
+          - helm install --name vault --values values/vault.yaml vault-helm #install Vault
+          # - sudo snap install vault #install Vault locally
+          - export VAULT_ADDR='http://127.0.0.1:8200' #export Vault address as envvar to prevent any issues with connection
+          - kubectl exec vault-0 -- vault status #vault status
+          - kubectl exec vault-0 -- vault operator init -key-shares 1 -key-threshold 1 #Get seal key and root token
+          -
           - echo "============================consul vault=============================================================="
           # - echo "============================consul vault=============================================================="
           # - mkdir $HOME/go #create a workspace, configure the GOPATH and add the workspace's bin folder to your system path
