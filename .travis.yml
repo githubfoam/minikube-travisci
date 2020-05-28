@@ -20,6 +20,13 @@ notifications:
   slack:
     on_failure: always
 
+#https://istio.io/docs/setup/platform-setup/microk8s/
+fleet_script_microk8s_istio_tasks : &fleet_script_microk8s_istio_tasks #If you are running minikube within a VM, consider using --driver=none
+      script:
+          - sudo snap install microk8s --classic #Install the latest version of MicroK8s
+          - sudo microk8s.enable istio #Enable Istio
+          - watch microk8s.kubectl get all --all-namespaces #check deployment progress
+
 #https://istio.io/docs/setup/platform-setup/gardener/
 #https://github.com/gardener/gardener/blob/master/docs/development/local_setup.md
 fleet_script_minikube_gadener_tasks : &fleet_script_minikube_gadener_tasks #If you are running minikube within a VM, consider using --driver=none
@@ -134,13 +141,13 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           #To login to Dashboard, you need a Bearer Token. Use the following command to store the token in a variable
           - token=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
           - echo $token #Display the token using the echo command and copy it to use for logging into Dashboard.
-          - kubectl proxy & # Access Dashboard using the kubectl command-line tool by running the following command
-          - echo "===============================Adding Heapster Metrics to the Kubernetes Dashboard==========================================================="
-          - sudo snap install helm --classic && helm init
-          - kubectl create serviceaccount --namespace kube-system tiller #Create a service account
-          - kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller #Bind the new service account to the cluster-admin role. This will give tiller admin access to the entire cluster
-          - kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' #Deploy tiller and add the line serviceAccount: tiller to spec.template.spec
-          - helm install --name heapster stable/heapster --namespace kube-system #install Heapster
+          - kubectl proxy & # Access Dashboard using the kubectl command-line tool by running the following command, Starting to serve on 127.0.0.1:8001
+          # - echo "===============================Adding Heapster Metrics to the Kubernetes Dashboard==========================================================="
+          # - sudo snap install helm --classic && helm init
+          # - kubectl create serviceaccount --namespace kube-system tiller #Create a service account
+          # - kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller #Bind the new service account to the cluster-admin role. This will give tiller admin access to the entire cluster
+          # - kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}' #Deploy tiller and add the line serviceAccount: tiller to spec.template.spec
+          # - helm install --name heapster stable/heapster --namespace kube-system #install Heapster
           - kind delete cluster --name istio-testing #delete the existing cluster
 
 # fleet_script_minikube_docker_tasks : &fleet_script_minikube_docker_tasks #If you are running minikube within a VM, consider using --driver=none
