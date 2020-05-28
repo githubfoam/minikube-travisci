@@ -62,15 +62,6 @@ fleet_script_minikube_vault_consul_tasks : &fleet_script_minikube_vault_consul_t
           - kubectl get pods -n default;
           - minikube dashboard
           - echo "============================consul vault=============================================================="
-          - echo $GOPATH
-          - mkdir $HOME/go #create a workspace, configure the GOPATH and add the workspace's bin folder to your system path
-          - export GOPATH=$HOME/go
-          - export PATH=$PATH:$GOPATH/bin
-          #TLS will be used to secure RPC communication between each Consul member
-          #create a Certificate Authority (CA) to sign the certificates, via CloudFlare's SSL ToolKit (cfssl and cfssljson), and distribute keys to the nodes.
-          - go get -u github.com/cloudflare/cfssl/cmd/cfssl # install the SSL ToolKit
-          - go get -u github.com/cloudflare/cfssl/cmd/cfssljson
-          - make workstation
           - echo "============================consul vault=============================================================="
           # - echo "============================consul vault=============================================================="
           # - mkdir $HOME/go #create a workspace, configure the GOPATH and add the workspace's bin folder to your system path
