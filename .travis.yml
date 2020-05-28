@@ -114,7 +114,7 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - kind get clusters #see the list of kind clusters
           - kind create cluster --name istio-testing #Create a cluster,By default, the cluster will be given the name kind
           - kind get clusters
-          - sudo snap install kubectl
+          - sudo snap install kubectl --classic
           - kubectl config get-contexts #list the local Kubernetes contexts
           - kubectl config use-context kind-istio-testing #run following command to set the current context for kubectl
           - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml #deploy Dashboard
@@ -397,51 +397,51 @@ matrix:
   include:
 
 
-    - name: "kind istio  Python 3.7 on bionic" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_gadener_tasks
-      after_success:
-        - deactivate
+    # - name: "kind istio  Python 3.7 on bionic" #
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_gadener_tasks
+    #   after_success:
+    #     - deactivate
+    #
+    # - name: "minikube gardener istio  Python 3.7 on bionic" #
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_gadener_tasks
+    #   after_success:
+    #     - deactivate
+    #
+    # - name: "kind gardener istio  Python 3.7 on bionic" #
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_kind_gadener_tasks
+    #   after_success:
+    #     - deactivate
 
-    - name: "minikube gardener istio  Python 3.7 on bionic" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_gadener_tasks
-      after_success:
-        - deactivate
-
-    - name: "kind gardener istio  Python 3.7 on bionic" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_kind_gadener_tasks
-      after_success:
-        - deactivate
 
 
-
-    - name: "kind istio  Python 3.7 on bionic" #OK
+    - name: "kind istio  Python 3.7 on bionic"
       dist: bionic
       language: python
       python: 3.7
@@ -455,33 +455,35 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "minikube latest  Python 3.7 on bionic" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_tasks
-      after_success:
-        - deactivate
 
-    - name: "minikube latest  Python 3.7 on xenial" #OK
-      dist: xenial
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_tasks
-      after_success:
-        - deactivate
+
+    # - name: "minikube latest  Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_latest_tasks
+    #   after_success:
+    #     - deactivate
+    #
+    # - name: "minikube latest  Python 3.7 on xenial" #OK
+    #   dist: xenial
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_latest_tasks
+    #   after_success:
+    #     - deactivate
 
     # - name: "Python 3.7 on bionic arm64" # package architecture (amd64) does not match system (arm64)
     #   os: linux
