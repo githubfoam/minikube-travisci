@@ -101,3 +101,14 @@ Kubernetes auditing provides a security-relevant chronological set of records do
     to where was it going?
 https://kubernetes.io/docs/tasks/debug-application-cluster/audit/
 ~~~~
+
+~~~~
+Linkerd adds critical security, observability, and reliability features to your Kubernetes stack—no code change required.
+Linkerd offers out of the box many interesting features like
+  automatic TLS,
+  Automatic Proxy Injection,
+  Dashboard and Grafana,
+  Telemetry and Monitoring
+  canary & blue/green deploys via the Traffic Split feature
+https://linkerd.io/
+~~~~
