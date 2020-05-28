@@ -25,7 +25,6 @@ notifications:
 fleet_script_minikube_gadener_tasks : &fleet_script_minikube_gadener_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
           - sudo snap install helm --classic
-          - sudo snap install kubectl --classic && kubectl version –client
           - sudo apt-get -qqy install openvpn
           - egrep -c '(vmx|svm)' /proc/cpuinfo | echo "virtualization is  supported" | echo "virtualization is not supported"
           - sudo apt-get -qq -y install conntrack #X Sorry, Kubernetes v1.18.3 requires conntrack to be installed in root's path
@@ -33,6 +32,7 @@ fleet_script_minikube_gadener_tasks : &fleet_script_minikube_gadener_tasks #If y
           - curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
           - mkdir -p $HOME/.kube $HOME/.minikube
           - touch $KUBECONFIG
+          - sudo snap install kubectl --classic && kubectl version –client
           - echo "=====================Local Gardener setup Using minikube====================================================================="
           - minikube config set embed-certs true
           - minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION --embed-certs #  `--embed-certs` can be omitted if minikube has already been set to create self-contained kubeconfig files.
@@ -49,7 +49,8 @@ fleet_script_minikube_gadener_tasks : &fleet_script_minikube_gadener_tasks #If y
           - "sudo chown -R travis: /home/travis/.minikube/"
           - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
           - echo "=========================================================================================="
-          - kubectl version --client #ensure the version
+          - kubectl version
+          - kubectl version --client #the version of the client
           - kubectl cluster-info
           - minikube status
           - echo "=========================================================================================="
@@ -83,7 +84,7 @@ fleet_script_kind_gadener_tasks : &fleet_script_kind_gadener_tasks #If you are r
           - kind get clusters #see the list of kind clusters
           - kind create cluster --name istio-testing #Create a cluster,By default, the cluster will be given the name kind
           - kind get clusters
-          - sudo snap install kubectl
+          - sudo snap install kubectl --classic
           - kubectl config get-contexts #list the local Kubernetes contexts
           - kubectl config use-context kind-istio-testing #run following command to set the current context for kubectl
           - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml #deploy Dashboard
@@ -119,6 +120,7 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - kubectl config use-context kind-istio-testing #run following command to set the current context for kubectl
           - kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml #deploy Dashboard
           - echo "===============================Waiting for Dashboard to be ready==========================================================="
+          - kubectl get service --all-namespaces #list all services in all namespace
           - |
             for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
               if kubectl get pods --namespace=kubernetes-dashboard | grep Running ; then
@@ -131,7 +133,8 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           #To login to Dashboard, you need a Bearer Token. Use the following command to store the token in a variable
           - token=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
           - echo $token #Display the token using the echo command and copy it to use for logging into Dashboard.
-          - kubectl proxy # Access Dashboard using the kubectl command-line tool by running the following command
+          - kubectl proxy &# Access Dashboard using the kubectl command-line tool by running the following command
+          - curl 127.0.0.1:8001
           # - kind delete cluster --name istio-testing #delete the existing cluster
 
 # fleet_script_minikube_docker_tasks : &fleet_script_minikube_docker_tasks #If you are running minikube within a VM, consider using --driver=none
