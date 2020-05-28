@@ -27,7 +27,7 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - docker version
           - curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-$(uname)-amd64
           - chmod +x ./kind
-          - mv ./kind /usr/local/bin/kind
+          - sudo mv ./kind /usr/local/bin/kind
           - kind get clusters #see the list of kind clusters
           - kind create cluster --name istio-testing #Create a cluster,By default, the cluster will be given the name kind
           - kind get clusters
