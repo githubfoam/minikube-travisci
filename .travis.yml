@@ -143,7 +143,16 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           #To login to Dashboard, you need a Bearer Token. Use the following command to store the token in a variable
           - token=$(kubectl get secrets -o jsonpath="{.items[?(@.metadata.annotations['kubernetes\.io/service-account\.name']=='default')].data.token}"|base64 --decode)
           - echo $token #Display the token using the echo command and copy it to use for logging into Dashboard.
+          - sudo apt-get install net-tools -qqy #Install netcat
           - kubectl proxy & # Access Dashboard using the kubectl command-line tool by running the following command, Starting to serve on 127.0.0.1:8001
+          - sudo nc -z -v 127.0.0.1 8001 2>&1 | grep succeeded
+          - |
+            for i in {1..60}; do # Timeout after 5 minutes, 60x1=60 secs
+              if nc -z -v 127.0.0.1 8001 2>&1 | grep succeeded ; then
+                break
+              fi
+              sleep 1
+            done
           - echo "===============================Install istio==========================================================="
           - 'curl -L https://istio.io/downloadIstio | sh -' #Download Istio
           -  cd istio-* #Move to the Istio package directory. For example, if the package is istio-1.6.0
