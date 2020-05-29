@@ -175,19 +175,19 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
               sleep 2
             done
           - kubectl get service --all-namespaces #list all services in all namespace
-          - |
-            kubectl exec -it $(kubectl get pod \
-                         -l app=ratings \
-                         -o jsonpath='{.items[0].metadata.name}') \
-                         -c ratings \
-                         -- curl productpage:9080/productpage | grep -o "<title>.*</title>" <title>Simple Bookstore App</title>
+          # - |
+          #   kubectl exec -it $(kubectl get pod \
+          #                -l app=ratings \
+          #                -o jsonpath='{.items[0].metadata.name}') \
+          #                -c ratings \
+          #                -- curl productpage:9080/productpage | grep -o "<title>.*</title>" <title>Simple Bookstore App</title>
           #Open the application to outside traffic
           #The Bookinfo application is deployed but not accessible from the outside. To make it accessible, you need to create an Istio Ingress Gateway, which maps a path to a route at the edge of your mesh.
-          - kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml #Associate this application with the Istio gateway
-          - istioctl analyze #Ensure that there are no issues with the configuration
+          # - kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml #Associate this application with the Istio gateway
+          # - istioctl analyze #Ensure that there are no issues with the configuration
           #Determining the ingress IP and ports
           #If the EXTERNAL-IP value is set, your environment has an external load balancer that you can use for the ingress gateway.
-          - kubectl get svc istio-ingressgateway -n istio-system #determine if your Kubernetes cluster is running in an environment that supports external load balancers
+          # - kubectl get svc istio-ingressgateway -n istio-system #determine if your Kubernetes cluster is running in an environment that supports external load balancers
           # #Follow these instructions if you have determined that your environment has an external load balancer.
           # # If the EXTERNAL-IP value is <none> (or perpetually <pending>), your environment does not provide an external load balancer for the ingress gateway,access the gateway using the service’s node port.
           # - export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
