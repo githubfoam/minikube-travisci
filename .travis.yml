@@ -148,7 +148,10 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - 'curl -L https://istio.io/downloadIstio | sh -' #Download Istio
           -  cd istio-* #Move to the Istio package directory. For example, if the package is istio-1.6.0
           - export PATH=$PWD/bin:$PATH #Add the istioctl client to your path, The istioctl client binary in the bin/ directory.
-          - istioctl verify-install #Begin the Istio pre-installation verification check
+          #precheck inspects a Kubernetes cluster for Istio install requirements
+          - istioctl experimental precheck #https://istio.io/docs/reference/commands/istioctl/#istioctl-experimental-precheck
+          #Begin the Istio pre-installation verification check
+          # - istioctl verify-install #Error: could not load IstioOperator from cluster: the server could not find the requested resource.  Use --filename
           - istioctl version
           # - istioctl manifest apply --set profile=demo #Install Istio, use the demo configuration profile
           # - kubectl label namespace default istio-injection=enabled #Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later
