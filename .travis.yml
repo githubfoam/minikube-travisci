@@ -24,6 +24,31 @@ notifications:
 fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
           - sudo snap install microk8s --classic #Install the latest version of MicroK8s
+          - microk8s.kubectl get no
+          - microk8s.enable dns dashboard
+          - watch microk8s.kubectl get all --all-namespaces #check deployment progress
+          - echo "=========================================================================================="
+          - kubectl version
+          - kubectl version --client #the version of the client
+          - kubectl cluster-info
+          - echo "=========================================================================================="
+          - |
+            echo "Waiting for Kubernetes to be ready ..."
+            for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+              if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running ; then
+                break
+              fi
+              sleep 2
+            done
+          - microk8s.kubectl get all --all-namespaces
+          - microk8s.kubectl run nginx --image nginx --replicas 3
+          - microk8s.kubectl get all --all-namespaces
+
+#https://istio.io/docs/setup/platform-setup/microk8s/
+fleet_script_microk8s_istio_tasks : &fleet_script_microk8s_istio_tasks #If you are running minikube within a VM, consider using --driver=none
+      script:
+          - sudo snap install microk8s --classic #Install the latest version of MicroK8s
+          #When prompted, choose whether to enforce mutual TLS authentication among sidecars. If you have a mixed deployment with non-Istio and Istio enabled services or you’re unsure, choose No.
           - sudo microk8s.enable istio #Enable Istio
           - watch microk8s.kubectl get all --all-namespaces #check deployment progress
           - echo "=========================================================================================="
@@ -40,13 +65,29 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
               fi
               sleep 2
             done
-
-#https://istio.io/docs/setup/platform-setup/microk8s/
-fleet_script_microk8s_istio_tasks : &fleet_script_microk8s_istio_tasks #If you are running minikube within a VM, consider using --driver=none
-      script:
-          - sudo snap install microk8s --classic #Install the latest version of MicroK8s
-          - sudo microk8s.enable istio #Enable Istio
-          - watch microk8s.kubectl get all --all-namespaces #check deployment progress
+          - echo "===============================Install istio==========================================================="
+          # - 'curl -L https://istio.io/downloadIstio | sh -' #Download Istio
+          # -  cd istio-* #Move to the Istio package directory. For example, if the package is istio-1.6.0
+          # - export PATH=$PWD/bin:$PATH #Add the istioctl client to your path, The istioctl client binary in the bin/ directory.
+          #precheck inspects a Kubernetes cluster for Istio install requirements
+          - istioctl experimental precheck #https://istio.io/docs/reference/commands/istioctl/#istioctl-experimental-precheck
+          #Begin the Istio pre-installation verification check
+          # - istioctl verify-install #Error: could not load IstioOperator from cluster: the server could not find the requested resource.  Use --filename
+          - istioctl version
+          - istioctl manifest apply --set profile=demo #Install Istio, use the demo configuration profile
+          - kubectl label namespace default istio-injection=enabled #Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later
+          - kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml #Deploy the Bookinfo sample application:
+          - kubectl get service --all-namespaces #list all services in all namespace
+          - kubectl get services #The application will start. As each pod becomes ready, the Istio sidecar will deploy along with it.
+          - kubectl get pods
+          - |
+            for i in {1..60}; do # Timeout after 5 minutes, 60x2=120 secs, 2 mins
+              if kubectl get pods --namespace=istio-system |grep Running ; then
+                break
+              fi
+              sleep 2
+            done
+          - kubectl get service --all-namespaces #list all services in all namespace
 
 #https://istio.io/docs/setup/platform-setup/gardener/
 #https://github.com/gardener/gardener/blob/master/docs/development/local_setup.md
@@ -564,7 +605,7 @@ matrix:
         - source ~venvpy3/bin/activate
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
-      <<: *fleet_script_microk8s_istio_tasks
+      <<: *fleet_script_microk8s_tasks
       after_success:
         - deactivate
 
