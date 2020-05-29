@@ -153,12 +153,12 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           #Begin the Istio pre-installation verification check
           # - istioctl verify-install #Error: could not load IstioOperator from cluster: the server could not find the requested resource.  Use --filename
           - istioctl version
-          # - istioctl manifest apply --set profile=demo #Install Istio, use the demo configuration profile
-          # - kubectl label namespace default istio-injection=enabled #Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later
-          # - kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml #Deploy the Bookinfo sample application:
-          # - kubectl get service --all-namespaces #list all services in all namespace
-          # - kubectl get services #The application will start. As each pod becomes ready, the Istio sidecar will deploy along with it.
-          # - kubectl get pods
+          - istioctl manifest apply --set profile=demo #Install Istio, use the demo configuration profile
+          - kubectl label namespace default istio-injection=enabled #Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later
+          - kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml #Deploy the Bookinfo sample application:
+          - kubectl get service --all-namespaces #list all services in all namespace
+          - kubectl get services #The application will start. As each pod becomes ready, the Istio sidecar will deploy along with it.
+          - kubectl get pods
           # - |
           #   kubectl exec -it $(kubectl get pod \
           #                -l app=ratings \
