@@ -129,12 +129,12 @@ fleet_script_kind_istio_tasks : &fleet_script_kind_istio_tasks #If you are runni
           - echo "===============================Waiting for Dashboard to be ready==========================================================="
           - kubectl get service --all-namespaces #list all services in all namespace
           - |
-            for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+            for i in {1..60}; do # Timeout after 5 minutes, 60x3=180 secs
               if kubectl get pods --namespace=kubernetes-dashboard |grep Running && \
                  kubectl get pods --namespace=dashboard-metrics-scraper |grep Running ; then
                 break
               fi
-              sleep 2
+              sleep 3
             done
           - kubectl get pod -n kubernetes-dashboard #Verify that Dashboard is deployed and running
           - kubectl create clusterrolebinding default-admin --clusterrole cluster-admin --serviceaccount=default:default #Create a ClusterRoleBinding to provide admin access to the newly created cluster
