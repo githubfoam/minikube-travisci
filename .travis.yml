@@ -1094,6 +1094,8 @@ matrix:
       script:
         # - sudo snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
         # - snap install multipass --edge --beta # use the edge channel to get the latest development build
+        - multipass version
+        - microk8s status
       after_success:
         - deactivate
 
@@ -1173,13 +1175,18 @@ matrix:
       language: shell
       addons:
         homebrew:
-          # brewfile: Brewfile.travis
-          # packages:
-          #   - multipass
-          # taps: homebrew/cask-versions
-          casks: # Installing Casks
-            - multipass
+          packages:
+          - beanstalk
           update: true
+      # addons:
+      #   homebrew:
+      #     # brewfile: Brewfile.travis
+      #     # packages:
+      #     #   - multipass
+      #     # taps: homebrew/cask-versions
+      #     casks: # Installing Casks
+      #       - multipass
+      #     update: true
       before_install:
         - pip install virtualenv
         - virtualenv -p $(which python2) ~venvpy2
@@ -1189,8 +1196,44 @@ matrix:
       script:
         # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
         # - brew cask install multipass
-        - multipass version
+        # - multipass version
+        - brew list --versions
         # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
+      after_success:
+        - brew cask uninstall multipass
+        - deactivate
+
+    - name: "microk8s Multipass cluster Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
+      os: osx
+      osx_image: xcode11.5
+      language: shell
+      addons:
+        homebrew:
+          casks: #Installing Casks
+          - dotnet-sdk
+      # addons:
+      #   homebrew:
+      #     # brewfile: Brewfile.travis
+      #     # packages:
+      #     #   - multipass
+      #     # taps: homebrew/cask-versions
+      #     casks: # Installing Casks
+      #       - multipass
+      #     update: true
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      script:
+        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        # - brew cask install multipass
+        # - multipass version
+        # - sh-keygen -b 2048 -f ~/.ssh/multipass -t rsa -q -N "" #create a ssh key
+        # - cat ~/.ssh/multipass.pub >> cloud-init.yaml #provide the ssh public key to cloud-init file in order to ssh into multipass vm with ssh private key
+        # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
+        - brew list --versions
       after_success:
         - brew cask uninstall multipass
         - deactivate
@@ -1199,6 +1242,10 @@ matrix:
       os: osx
       osx_image: xcode11.3
       language: shell
+      addons:
+        homebrew:
+          taps: homebrew/cask-versions #Installing From Taps
+          casks: java8
       # addons:
       #   homebrew:
       #     casks:
@@ -1212,39 +1259,10 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       # <<: *fleet_script_microk8s_macos_tasks
-      after_success:
-        - deactivate
-
-    - name: "microk8s Multipass cluster Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
-      os: osx
-      osx_image: xcode11.5
-      language: shell
-      addons:
-        homebrew:
-          # brewfile: Brewfile.travis
-          # packages:
-          #   - multipass
-          # taps: homebrew/cask-versions
-          casks: # Installing Casks
-            - multipass
-          update: true
-      before_install:
-        - pip install virtualenv
-        - virtualenv -p $(which python2) ~venvpy2
-        - source ~venvpy2/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
       script:
-        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
-        # - brew cask install multipass
-        - multipass version
-        - sh-keygen -b 2048 -f ~/.ssh/multipass -t rsa -q -N "" #create a ssh key
-        - cat ~/.ssh/multipass.pub >> cloud-init.yaml #provide the ssh public key to cloud-init file in order to ssh into multipass vm with ssh private key
-        # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
+        - brew list --versions
       after_success:
-        - brew cask uninstall multipass
         - deactivate
-
 
 
     # - name: "Python 3.7.5 on macOS xcode10.2"
