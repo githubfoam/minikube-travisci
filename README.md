@@ -5,6 +5,16 @@ Travis (.com) dev branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=dev)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
 ~~~~
+Enabling NVIDIA GPU
+
+Aborting: NVIDIA kernel module not loaded.
+
+Please ensure you have CUDA capable hardware and the NVIDIA drivers installed.
+
+Failed to enable gpu
+https://travis-ci.com/github/githubfoam/minikube-travisci/jobs/341676820
+~~~~
+~~~~
 $ sudo microk8s status --wait-ready
 
 microk8s is running

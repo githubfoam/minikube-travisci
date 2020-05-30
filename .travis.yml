@@ -36,7 +36,7 @@ fleet_script_microk8s_linkerd_knative_tasks : &fleet_script_microk8s_linkerd_kna
           - sudo microk8s  kubectl create deployment my-dep --image=busybox
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
-          - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
           # - microk8s stop
           # - microk8s start
           # - sudo microk8s enable dns dashboard registry #Turn on standard services
@@ -74,7 +74,7 @@ fleet_script_microk8s_linkerd_tasks : &fleet_script_microk8s_linkerd_tasks #If y
           - sudo microk8s  kubectl create deployment my-dep --image=busybox
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
-          - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
           # - microk8s stop
           # - microk8s start
           # - sudo microk8s enable dns dashboard registry #Turn on standard services
@@ -112,7 +112,7 @@ fleet_script_microk8s_istio_tasks : &fleet_script_microk8s_istio_tasks #If you a
           - sudo microk8s  kubectl create deployment my-dep --image=busybox
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
-          -  sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          -  sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
           # - microk8s stop
           # - microk8s start
           # - sudo microk8s enable dns dashboard registry #Turn on standard services
@@ -147,9 +147,9 @@ fleet_script_microk8s_cilium_tasks : &fleet_script_microk8s_cilium_tasks #If you
           - sudo microk8s  kubectl create deployment my-dep --image=busybox
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
-          - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress jaeger kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
-          # - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
-          # - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
           # - microk8s stop
           # - microk8s start
           # - sudo microk8s enable dns dashboard registry #Turn on standard services
@@ -174,9 +174,15 @@ fleet_script_microk8s_cilium_tasks : &fleet_script_microk8s_cilium_tasks #If you
 #https://microk8s.io/docs/install-alternatives
 fleet_script_microk8s_win_tasks : &fleet_script_microk8s_win_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
-          - choco install wget
-          - wget https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe
-          - dir
+          # - choco install wget
+          # - wget https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe
+          # - dir
+          #PowerShell
+          - client = new-object System.Net.WebClient
+          - client.DownloadFile("https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe","C:\tmp\microk8s-installer.exe")
+          #PowerShell
+          - Invoke-WebRequest -OutFile microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
+          # - iwr -outf 1_microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
           # - bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
           # - bitsadmin /transfer myDownloadJob /download /priority normal https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe c:\microk8s-installer.exe
           # - microk8s status --wait-ready
@@ -188,11 +194,11 @@ fleet_script_microk8s_win_tasks : &fleet_script_microk8s_win_tasks #If you are r
 fleet_script_microk8s_macos_tasks : &fleet_script_microk8s_macos_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
           - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
-          - microk8s install
-          - microk8s status --wait-ready
-          - microk8s enable dashboard dns registry istio # enable add-ons, services
-          - microk8s kubectl get all --all-namespaces
-          - microk8s dashboard-proxy
+          # - microk8s install
+          # - microk8s status --wait-ready
+          # - microk8s enable dashboard dns registry istio # enable add-ons, services
+          # - microk8s kubectl get all --all-namespaces
+          # - microk8s dashboard-proxy
 
 fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
@@ -207,9 +213,9 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
           - sudo microk8s  kubectl create deployment my-dep --image=busybox
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
-          - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
-          # - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
-          # - sudo microk8s enable dns cilium dashboard fluentd gpu helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
           # - microk8s stop
           # - microk8s start
           # - sudo microk8s enable dns dashboard registry #Turn on standard services
