@@ -1537,6 +1537,9 @@ matrix:
 
   # =============================================windows=============================================
 
+# https://docs.docker.com/docker-for-windows/install/
+# Windows 10 64-bit: Pro, Enterprise, or Education (Build 15063 or later).
+# Hyper-V and Containers Windows features must be enabled.
     - name: "docker desktop choco k8s  Python 3.8 on Windows"
       os: windows
       language: shell
@@ -1550,8 +1553,10 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-          - choco install docker-desktop #https://docs.docker.com/docker-for-windows/kubernetes/
-          - docker --version
+          - choco install -y docker-desktop #https://docs.docker.com/docker-for-windows/kubernetes/
+          - pwsh  docker --version
+          - pwsh docker run hello-world
+          - pwsh docker image ls
       after_success:
         - deactivate
 
