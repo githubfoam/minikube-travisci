@@ -237,7 +237,11 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
           - sudo microk8s status --wait-ready
           - yes | sudo microk8s enable istio     #Enforce mutual TLS authentication (https://bit.ly/2KB4j04) between sidecars? If unsure, choose N. (y/N):
           #kubeflow hanging
-          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative metallb metrics-server prometheus rbac registry storage #Use add-ons,services
+          # Enabling MetalLB
+          # Enter the IP address range (e.g., 10.64.140.43-10.64.140.49):
+          # - echo"10.64.140.43-10.64.140.49" | sudo microk8s enable metallb
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative metrics-server prometheus rbac registry storage #Use add-ons,services
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative metallb metrics-server prometheus rbac registry storage #Use add-ons,services
           # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons,services
           # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
           # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
@@ -789,8 +793,8 @@ matrix:
       <<: *fleet_script_microk8s_istio_tasks
       script:
         # - snap install multipass --classic
-        - ls -l /var/snap/multipass/common/multipass_socket #
-        - groups | grep sudo
+        # - ls -l /var/snap/multipass/common/multipass_socket #
+        # - groups | grep sudo
         - snap info multipass
       after_success:
         - deactivate
@@ -814,7 +818,7 @@ matrix:
       script:
         # - snap install multipass --classic
         - ls -l /var/snap/multipass/common/multipass_socket #
-        - groups | grep sudo
+        # - groups | grep sudo
         - snap info multipass
       after_success:
         - deactivate
@@ -1189,9 +1193,9 @@ matrix:
         - brew cask uninstall multipass
         - deactivate
 
-    - name: "microk8s Python 2.7.17 on macOS xcode10.2"
+    - name: "microk8s Python 2.7.17 on macOS 10.14.6osx xcode11.3"
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.3
       language: shell
       # addons:
       #   homebrew:
