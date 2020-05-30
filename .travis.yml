@@ -1038,11 +1038,11 @@ matrix:
         #   - time
         snaps:
           - name: multipass
-            # confinement: classic # or devmode
+            confinement: classic # or devmode
             channel: latest/edge # will be passed to --channel flag
           - name: microk8s
             confinement: classic # or devmode
-            # channel: latest/edge # will be passed to --channel flag
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       # env:
@@ -1060,6 +1060,8 @@ matrix:
         # - snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
         # - sudo snap install multipass --edge --beta # use the edge channel to get the latest development build
         # - sudo snap install microk8s --classic --channel=edge
+        - snap info multipass
+        - snap info microk8s #All the currently available channels
       after_success:
         - deactivate
 
@@ -1071,11 +1073,11 @@ matrix:
       addons:
         snaps:
           - name: multipass
-            # confinement: classic # or devmode
+            confinement: classic # or devmode
             channel: latest/beta # will be passed to --channel flag
           - name: microk8s
             confinement: classic # or devmode
-            # channel: latest/edge # will be passed to --channel flag
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       # env:
@@ -1172,11 +1174,11 @@ matrix:
       addons:
         homebrew:
           # brewfile: Brewfile.travis
-          packages:
-            - multipass
+          # packages:
+          #   - multipass
           # taps: homebrew/cask-versions
-          # casks: # Installing Casks
-          #   - mactex
+          casks: # Installing Casks
+            - multipass
           update: true
       before_install:
         - pip install virtualenv
@@ -1213,6 +1215,35 @@ matrix:
       after_success:
         - deactivate
 
+    - name: "microk8s Multipass cluster Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
+      os: osx
+      osx_image: xcode11.5
+      language: shell
+      addons:
+        homebrew:
+          # brewfile: Brewfile.travis
+          # packages:
+          #   - multipass
+          # taps: homebrew/cask-versions
+          casks: # Installing Casks
+            - multipass
+          update: true
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      script:
+        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        # - brew cask install multipass
+        - multipass version
+        - sh-keygen -b 2048 -f ~/.ssh/multipass -t rsa -q -N "" #create a ssh key
+        - cat ~/.ssh/multipass.pub >> cloud-init.yaml #provide the ssh public key to cloud-init file in order to ssh into multipass vm with ssh private key
+        # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
+      after_success:
+        - brew cask uninstall multipass
+        - deactivate
 
 
 

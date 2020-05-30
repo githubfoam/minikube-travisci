@@ -14,6 +14,19 @@ Please ensure you have CUDA capable hardware and the NVIDIA drivers installed.
 Failed to enable gpu
 https://travis-ci.com/github/githubfoam/minikube-travisci/jobs/341676820
 
+Alternative installs - (MacOS/ Windows 10/Multipass)
+Raspberry Pi/ARM
+Multipass
+With multipass installed, you can now create a VM to run MicroK8s. At least 4
+Gigabytes of RAM and 40G of storage is recommended
+https://microk8s.io/docs/install-alternatives#heading--arm
+
+Installing Multipass for Windows
+https://multipass.run/docs/installing-on-windows
+
+Clustering with MicroK8s
+https://microk8s.io/docs/clustering
+
 #https://istio.io/docs/setup/platform-setup/microk8s/
 
 #https://microk8s.io/#get-started
