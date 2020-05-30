@@ -48,7 +48,7 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
           - |
             echo "Waiting for Kubernetes to be ready ..."
             for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-              if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running ; then
+              if microk8s kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running ; then
                 break
               fi
               sleep 2
