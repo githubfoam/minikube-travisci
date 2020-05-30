@@ -772,16 +772,19 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "microk8s istio Python 3.7 on bionic" #
+
+# https://microk8s.io/#get-started
+# https://multipass.run/docs/installing-on-linux
+    - name: "multipass VM microk8s Python 3.7 on bionic" #OK
       dist: bionic
       addons:
         snaps:
           - name: multipass
             confinement: classic # or devmode
-            # channel: latest/edge # will be passed to --channel flag
-          - name: microk8s
-            confinement: classic # or devmode
             channel: latest/stable # will be passed to --channel flag
+          # - name: microk8s
+          #   confinement: classic # or devmode
+          #   channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -792,36 +795,65 @@ matrix:
       <<: *fleet_script_tasks
       <<: *fleet_script_microk8s_istio_tasks
       script:
-        # - snap install multipass --classic
-        # - ls -l /var/snap/multipass/common/multipass_socket #
-        # - groups | grep sudo
         - snap info multipass
+        - sudo  multipass launch --name microk8s-vm --mem 4G --disk 40G #Launch a Multipass instance
+        - sudo multipass shell microk8s-vm #Enter the VM instance
+        - sudo snap install microk8s --classic --channel=1.18/stable
+        - sudo microk8s status --wait-ready
+        - sudo microk8s enable dns dashboard registry
+
       after_success:
         - deactivate
 
+    # - name: "multipass microk8s istio Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: multipass
+    #         confinement: classic # or devmode
+    #         # channel: latest/edge # will be passed to --channel flag
+    #       - name: microk8s
+    #         confinement: classic # or devmode
+    #         channel: latest/stable # will be passed to --channel flag
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_microk8s_istio_tasks
+    #   script:
+    #     # - snap install multipass --classic
+    #     # - ls -l /var/snap/multipass/common/multipass_socket #
+    #     # - groups | grep sudo
+    #     - snap info multipass
+    #   after_success:
+    #     - deactivate
 
-    - name: "microk8s multipass Python 3.7 on bionic" #
-      dist: bionic
-      addons:
-        snaps:
-          - name: multipass
-            confinement: classic # or devmode
-            # channel: latest/edge # will be passed to --channel flag
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      script:
-        # - snap install multipass --classic
-        - ls -l /var/snap/multipass/common/multipass_socket #
-        # - groups | grep sudo
-        - snap info multipass
-      after_success:
-        - deactivate
+
+    # - name: "multipass Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: multipass
+    #         confinement: classic # or devmode
+    #         # channel: latest/edge # will be passed to --channel flag
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   script:
+    #     - ls -l /var/snap/multipass/common/multipass_socket #
+    #     # - groups | grep sudo
+    #     - snap info multipass
+    #   after_success:
+    #     - deactivate
 
     - name: "microk8s Python 3.7 on bionic" #
       dist: bionic
@@ -842,24 +874,24 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "microk8s Python 3.7 on xenial" #
-      dist: xenial
-      addons:
-        snaps:
-          - name: microk8s
-            confinement: classic # or devmode
-            channel: latest/stable # will be passed to --channel flag
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_microk8s_tasks
-      after_success:
-        - deactivate
+    # - name: "microk8s Python 3.7 on xenial" #OK
+    #   dist: xenial
+    #   addons:
+    #     snaps:
+    #       - name: microk8s
+    #         confinement: classic # or devmode
+    #         channel: latest/stable # will be passed to --channel flag
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_microk8s_tasks
+    #   after_success:
+    #     - deactivate
 
 
 # - name: "minikube gardener istio  Python 3.7 on bionic" #
@@ -1062,6 +1094,14 @@ matrix:
         # - sudo snap install microk8s --classic --channel=edge
         - snap info multipass
         - snap info microk8s #All the currently available channels
+        - sudo microk8s stop
+        - sudo rm -rf /var/snap/microk8s/common/var/lib/containerd
+        - ls -l /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo sed 's%snapshotter = "overlayfs"%snapshotter = "zfs"%g' /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo zfs create -o mountpoint=/var/snap/microk8s/common/var/lib/containerd/io.containerd.snapshotter.v1.zfs $POOL/containerd
+        - sudo microk8s start
+        - sudo microk8s status
+
       after_success:
         - deactivate
 
@@ -1096,14 +1136,29 @@ matrix:
         # - snap install multipass --edge --beta # use the edge channel to get the latest development build
         - multipass version
         - sudo microk8s status
+        - snap info multipass
+        - snap info microk8s #All the currently available channels
+        - sudo microk8s stop
+        - sudo rm -rf /var/snap/microk8s/common/var/lib/containerd
+        - ls -l /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo sed 's%snapshotter = "overlayfs"%snapshotter = "zfs"%g' /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo zfs create -o mountpoint=/var/snap/microk8s/common/var/lib/containerd/io.containerd.snapshotter.v1.zfs $POOL/containerd
+        - sudo microk8s start
+        - sudo microk8s status
+
       after_success:
         - deactivate
 
      #Running MicroK8s on some ARM hardware,Raspberry Pi/ARM
-    - name: "MicroK8s Python 3.7 on xenial arm64"
+    - name: "MicroK8s Python 3.7 on xenial arm64" #OK
       os: linux
       arch: arm64
       dist: xenial
+      addons:
+        snaps:
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/beta # will be passed to --channel flag
       language: python
       python: 3.7
       # env:
@@ -1117,6 +1172,14 @@ matrix:
         - source ~venvpy3/bin/activate
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
+      script:
+        - sudo microk8s stop
+        - sudo rm -rf /var/snap/microk8s/common/var/lib/containerd
+        - ls -l /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo sed 's%snapshotter = "overlayfs"%snapshotter = "zfs"%g' /var/snap/microk8s/current/args/containerd-template.toml
+        - sudo zfs create -o mountpoint=/var/snap/microk8s/common/var/lib/containerd/io.containerd.snapshotter.v1.zfs $POOL/containerd
+        - sudo microk8s start
+        - sudo microk8s status
       after_success:
         - deactivate
 
@@ -1200,7 +1263,7 @@ matrix:
         - vagrant init
         - vagrant up
         - vagrant ssh -c "hostnamectl"
-        - vagrant destroy -f 
+        - vagrant destroy -f
         # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
       after_success:
         - brew cask uninstall multipass
@@ -1286,7 +1349,7 @@ matrix:
         - brew list --versions
         # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
       after_success:
-        - brew cask uninstall multipass
+        # - brew cask uninstall multipass
         - deactivate
 
     - name: "microk8s Multipass cluster1 Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
@@ -1323,6 +1386,47 @@ matrix:
       after_success:
         - brew cask uninstall multipass
         - deactivate
+#
+# https://multipass.run/docs/installing-on-macos
+# https://microk8s.io/#get-started
+    - name: "Installing Multipass on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
+      os: osx
+      osx_image: xcode11.5
+      language: shell
+      addons:
+        homebrew:
+          casks: #Installing Casks
+          # - dotnet-sdk #OK
+          - multipass
+      # addons:
+      #   homebrew:
+      #     # brewfile: Brewfile.travis
+      #     # packages:
+      #     #   - multipass
+      #     # taps: homebrew/cask-versions
+      #     casks: # Installing Casks
+      #       - multipass
+      #     update: true
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      script:
+        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        - brew cask install multipass
+        - multipass version
+        - sudo multipass launch --name microk8s-vm --mem 4G --disk 40G
+        - sudo multipass shell microk8s-vm #Enter the VM instance
+        - sudo snap install microk8s --classic
+        - sudo microk8s status --wait-ready
+        - sudo microk8s enable dns dashboard registry #Turn on standard services
+        - brew list --versions
+      after_success:
+        - brew cask uninstall multipass
+        - deactivate
+
 
     - name: "Multipass microk8s cluster2 Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
       os: osx
@@ -1489,6 +1593,32 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       <<: *fleet_script_microk8s_win_tasks
+      after_success:
+        - deactivate
+
+# https://multipass.run/docs/installing-on-windows
+# https://microk8s.io/#get-started
+    - name: "microk8s Python 3.8 on Windows"
+      os: windows
+      language: shell
+      env:
+        - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+      before_install:
+        - choco install python --version 3.8.1
+        - pip install virtualenv
+        - virtualenv $HOME/venv
+        - source $HOME/venv/Scripts/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      <<: *fleet_script_microk8s_win_tasks
+      script:
+        - choco install multipass
+        # - multipass set local.driver=virtualbox #Multipass defaults to using Hyper-V as it’s virtualization provider
+        - multipass launch --name microk8s-vm --mem 4G --disk 40G
+        - multipass shell microk8s-vm
+        - sudo snap install microk8s --classic
+        - sudo microk8s status --wait-ready
+        - sudo microk8s enable dns dashboard registry
       after_success:
         - deactivate
 
