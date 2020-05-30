@@ -42,7 +42,7 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
           # - watch microk8s.kubectl get all --all-namespaces #check deployment progress
           - echo "=========================================================================================="
           - sudo microk8s kubectl version
-          - sudp microk8s kubectl version --client #the version of the client
+          - sudo microk8s kubectl version --client #the version of the client
           - sudo microk8s kubectl cluster-info
           - echo "=========================================================================================="
           - |
