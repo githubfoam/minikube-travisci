@@ -1095,7 +1095,7 @@ matrix:
         # - sudo snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
         # - snap install multipass --edge --beta # use the edge channel to get the latest development build
         - multipass version
-        - microk8s status
+        - sudo microk8s status
       after_success:
         - deactivate
 
@@ -1237,6 +1237,60 @@ matrix:
       after_success:
         - brew cask uninstall multipass
         - deactivate
+
+    - name: "Multipass microk8s cluster Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
+      os: osx
+      osx_image: xcode11.5
+      language: shell
+      addons:
+        homebrew:
+          casks: #Installing Casks
+          - dotnet-sdk
+      # addons:
+      #   homebrew:
+      #     # brewfile: Brewfile.travis
+      #     # packages:
+      #     #   - multipass
+      #     # taps: homebrew/cask-versions
+      #     casks: # Installing Casks
+      #       - multipass
+      #     update: true
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      script:
+        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        - brew cask install multipass
+        - multipass version
+        - multipass find #returns a list of the available images
+        - sudo multipass launch ubuntu
+        - sudo multipass launch 16.04
+        - multipass list #list instances
+        # - multipass shell rewarded-stud #connect to a running instance,find its instance name with the list option
+        #run commands in an instance indirectly without connecting directly to the instance with the exec option, and the command separated with a double dash (--)
+        # install MicroK8s as a snap on your Multipass-hosted Ubuntu instance
+        # - multipass exec rewarded-stud -- ls -a
+        # - multipass exec rewarded-stud -- sudo snap install microk8s --classic #Alternatively,without connecting to the instance, install MicroK8
+        # - multipass exec rewarded-stud -- sudo microk8s.start  #Alternatively,without connecting to the instance,start MicroK8
+        # - multipass exec rewarded-stud -- /snap/bin/microk8s.start #Alternatively,without connecting to the instance,start MicroK8
+        # - multipass exec rewarded-stud -- sudo usermod -a -G microk8s multipass #Alternatively,without connecting to the instance, add the multipass user to the microk8s group, so it has permissions to run and access the services needed
+        # - multipass exec intrigued-kudu -- /snap/bin/microk8s.kubectl cluster-info #Alternatively,without connecting to the instance,see what services are running on the Kubernetes cluster,Replace “127.0.0.1” with the IP of the VM, and you should be able to access services as usual
+        # - multipass exec intrigued-kudu -- /snap/bin/microk8s.config > kubeconfig #Alternatively,without connecting to the instance,copy the kubeconfig file from the instance to the host multipass installed
+        # - kubectl --kubeconfig=kubeconfig get all --all-namespaces #use the new config to access Kubernetes running on the instance
+        # - sudo multipass stop rewarded-stud
+        # - sudo multipass delete rewarded-stud
+        # - sudo multipass purge #to completely remove all deleted instances and images
+        # - sh-keygen -b 2048 -f ~/.ssh/multipass -t rsa -q -N "" #create a ssh key
+        # - cat ~/.ssh/multipass.pub >> cloud-init.yaml #provide the ssh public key to cloud-init file in order to ssh into multipass vm with ssh private key
+        # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
+        - brew list --versions
+      after_success:
+        - brew cask uninstall multipass
+        - deactivate
+
 
     - name: "microk8s Python 2.7.17 on macOS 10.14.6osx xcode11.3"
       os: osx
