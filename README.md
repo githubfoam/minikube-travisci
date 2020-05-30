@@ -5,6 +5,51 @@ Travis (.com) dev branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=dev)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
 ~~~~
+$ sudo microk8s status --wait-ready
+
+microk8s is running
+
+addons:
+
+cilium: disabled
+
+dashboard: disabled
+
+dns: disabled
+
+fluentd: disabled
+
+gpu: disabled
+
+helm: disabled
+
+helm3: disabled
+
+ingress: disabled
+
+istio: disabled
+
+jaeger: disabled
+
+knative: disabled
+
+kubeflow: disabled
+
+linkerd: disabled
+
+metallb: disabled
+
+metrics-server: disabled
+
+prometheus: disabled
+
+rbac: disabled
+
+registry: disabled
+
+storage: disabled
+~~~~
+~~~~
 The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
 Install Minikube
