@@ -97,13 +97,9 @@ fleet_script_microk8s_linkerd_tasks : &fleet_script_microk8s_linkerd_tasks #If y
           - sudo microk8s kubectl get all --all-namespaces
 
 
-# #https://istio.io/docs/setup/platform-setup/microk8s/
-#https://microk8s.io/#get-started
-#https://microk8s.io/docs
-#https://istio.io/docs/setup/platform-setup/microk8s/
 fleet_script_microk8s_istio_tasks : &fleet_script_microk8s_istio_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
-          - sudo snap install microk8s --classic --channel=1.18/stable
+          # - sudo snap install microk8s --classic --channel=1.18/stable
           - sudo usermod -a -G microk8s $USER #add your current user to the group and gain access to the .kube caching directory
           # - sudo chown -f -R $USER ~/.kube
           # - su - $USER # re-enter the session for the group update to take place
@@ -228,7 +224,7 @@ fleet_script_microk8s_macos_tasks : &fleet_script_microk8s_macos_tasks #If you a
 
 fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
-          - sudo snap install microk8s --classic --channel=1.18/stable
+          # - sudo snap install microk8s --classic --channel=1.18/stable
           - sudo usermod -a -G microk8s $USER #add your current user to the group and gain access to the .kube caching directory
           # - sudo chown -f -R $USER ~/.kube
           # - su - $USER # re-enter the session for the group update to take place
@@ -774,6 +770,14 @@ matrix:
 
     - name: "microk8s istio Python 3.7 on bionic" #
       dist: bionic
+      addons:
+        snaps:
+          - name: multipass
+            confinement: classic # or devmode
+            # channel: latest/edge # will be passed to --channel flag
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -782,9 +786,9 @@ matrix:
         - source ~venvpy3/bin/activate
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
-      <<: *fleet_script_microk8s_istio_tasks  
+      <<: *fleet_script_microk8s_istio_tasks
       script:
-        - snap install multipass --classic
+        # - snap install multipass --classic
         - ls -l /var/snap/multipass/common/multipass_socket #
         - groups | grep sudo
         - snap info multipass
@@ -794,6 +798,11 @@ matrix:
 
     - name: "microk8s multipass Python 3.7 on bionic" #
       dist: bionic
+      addons:
+        snaps:
+          - name: multipass
+            confinement: classic # or devmode
+            # channel: latest/edge # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -803,7 +812,7 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-        - snap install multipass --classic
+        # - snap install multipass --classic
         - ls -l /var/snap/multipass/common/multipass_socket #
         - groups | grep sudo
         - snap info multipass
@@ -812,6 +821,11 @@ matrix:
 
     - name: "microk8s Python 3.7 on bionic" #
       dist: bionic
+      addons:
+        snaps:
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -826,6 +840,11 @@ matrix:
 
     - name: "microk8s Python 3.7 on xenial" #
       dist: xenial
+      addons:
+        snaps:
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -1003,6 +1022,23 @@ matrix:
       os: linux
       arch: arm64
       dist: xenial
+      addons:
+        # apt:
+        #   sources:
+        #     - deadsnakes
+        #     - sourceline: 'ppa:ubuntu-toolchain-r/test'
+        #     - sourceline: 'deb https://packagecloud.io/chef/stable/ubuntu/precise main'
+        #       key_url: 'https://packagecloud.io/gpg.key'
+        #   packages:
+        #   - cmake
+        #   - time
+        snaps:
+          - name: multipass
+            # confinement: classic # or devmode
+            channel: latest/edge # will be passed to --channel flag
+          - name: microk8s
+            confinement: classic # or devmode
+            # channel: latest/edge # will be passed to --channel flag
       language: python
       python: 3.7
       # env:
@@ -1018,8 +1054,8 @@ matrix:
       <<: *fleet_script_tasks
       script:
         # - snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
-        - sudo snap install multipass --edge --beta # use the edge channel to get the latest development build
-        - sudo snap install microk8s --classic --channel=edge
+        # - sudo snap install multipass --edge --beta # use the edge channel to get the latest development build
+        # - sudo snap install microk8s --classic --channel=edge
       after_success:
         - deactivate
 
@@ -1028,6 +1064,14 @@ matrix:
       os: linux
       arch: arm64
       dist: xenial
+      addons:
+        snaps:
+          - name: multipass
+            # confinement: classic # or devmode
+            channel: latest/beta # will be passed to --channel flag
+          - name: microk8s
+            confinement: classic # or devmode
+            # channel: latest/edge # will be passed to --channel flag
       language: python
       python: 3.7
       # env:
@@ -1042,7 +1086,7 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-        - sudo snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
+        # - sudo snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
         # - snap install multipass --edge --beta # use the edge channel to get the latest development build
       after_success:
         - deactivate
@@ -1116,17 +1160,20 @@ matrix:
     #The default backend on macOS is hyperkit, wrapping Apple’s Hypervisor.framework
     #You need macOS Yosemite, version 10.10.3 or later installed on a 2010 or newer Mac
     #https://multipass.run/docs/installing-on-macos
-    - name: "microk8s Multipass Python 2.7.17 on macOS xcode10.2"
+    #https://docs.travis-ci.com/user/reference/osx/#macos-version
+    - name: "microk8s Multipass Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.5
       language: shell
-      # addons:
-      #   homebrew:
-      #     casks:
-      #       - mactex
-      #     packages:
-      #       - multipass
-      #     update: true
+      addons:
+        homebrew:
+          # brewfile: Brewfile.travis
+          packages:
+            - multipass
+          # taps: homebrew/cask-versions
+          # casks: # Installing Casks
+          #   - mactex
+          update: true
       before_install:
         - pip install virtualenv
         - virtualenv -p $(which python2) ~venvpy2
@@ -1134,8 +1181,8 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-        - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
-        - brew cask install multipass
+        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        # - brew cask install multipass
         - multipass version
         # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
       after_success:

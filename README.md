@@ -13,6 +13,15 @@ Please ensure you have CUDA capable hardware and the NVIDIA drivers installed.
 
 Failed to enable gpu
 https://travis-ci.com/github/githubfoam/minikube-travisci/jobs/341676820
+
+#https://istio.io/docs/setup/platform-setup/microk8s/
+
+#https://microk8s.io/#get-started
+
+#https://microk8s.io/docs
+
+#https://istio.io/docs/setup/platform-setup/microk8s/
+
 ~~~~
 ~~~~
 $ sudo microk8s status --wait-ready
