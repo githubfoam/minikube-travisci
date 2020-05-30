@@ -174,16 +174,16 @@ fleet_script_microk8s_cilium_tasks : &fleet_script_microk8s_cilium_tasks #If you
 #https://microk8s.io/docs/install-alternatives
 fleet_script_microk8s_win_tasks : &fleet_script_microk8s_win_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
-          # - choco install wget
-          # - wget https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe
-          # - dir
+          - choco install wget
+          - wget https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe
+          - dir
           #PowerShell
-          - pwsh -c 'if(-not (Get-Module -ListAvailable -Name BadModuleName)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
-          - client = new-object System.Net.WebClient
-          - pwsh client.DownloadFile("https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe","C:\tmp\microk8s-installer.exe")
-          #PowerShell
-          - pwsh -c 'if(-not (Get-Module -ListAvailable -Name Invoke-WebRequest)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
-          - pwsh Invoke-WebRequest -OutFile microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
+          # - pwsh -c 'if(-not (Get-Module -ListAvailable -Name BadModuleName)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
+          # - client = new-object System.Net.WebClient
+          # - pwsh client.DownloadFile("https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe","C:\tmp\microk8s-installer.exe")
+          # #PowerShell
+          # - pwsh -c 'if(-not (Get-Module -ListAvailable -Name Invoke-WebRequest)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
+          # - pwsh Invoke-WebRequest -OutFile microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
           # - iwr -outf 1_microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
           # - bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
           # - bitsadmin /transfer myDownloadJob /download /priority normal https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe c:\microk8s-installer.exe
@@ -195,7 +195,7 @@ fleet_script_microk8s_win_tasks : &fleet_script_microk8s_win_tasks #If you are r
 #https://microk8s.io/docs/install-alternatives
 fleet_script_microk8s_macos_tasks : &fleet_script_microk8s_macos_tasks #If you are running minikube within a VM, consider using --driver=none
       script:
-          # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+          - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
           # - microk8s install
           # - microk8s status --wait-ready
           # - microk8s enable dashboard dns registry istio # enable add-ons, services
@@ -216,7 +216,9 @@ fleet_script_microk8s_tasks : &fleet_script_microk8s_tasks #If you are running m
           - sudo microk8s kubectl get pods #Check the status
           - sudo microk8s status --wait-ready
           - yes | sudo microk8s enable istio     #Enforce mutual TLS authentication (https://bit.ly/2KB4j04) between sidecars? If unsure, choose N. (y/N):
-          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
+          #kubeflow hanging
+          - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative metallb metrics-server prometheus rbac registry storage #Use add-ons,services
+          # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons,services
           # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress istio jaeger knative kubeflow metallb metrics-server prometheus rbac registry storage #Use add-ons istio
           # - sudo microk8s enable dns cilium dashboard fluentd helm helm3 ingress linkerd jaeger knative kubeflow metrics-server prometheus rbac registry storage#Use add-ons linkerd
           # - microk8s stop
@@ -994,8 +996,10 @@ matrix:
 
 #============================================================================ multiarch linux ============================================================================
 
+     #https://microk8s.io/docs/setting-snap-channel
+     # https://microk8s.io/docs/addons#list
      #https://multipass.run/docs/installing-on-linux
-    - name: "MicroK8s Multipass edge beta Python 3.7 on xenial arm64"
+    - name: "MicroK8s Multipass edge Python 3.7 on xenial arm64"
       os: linux
       arch: arm64
       dist: xenial
@@ -1014,7 +1018,8 @@ matrix:
       <<: *fleet_script_tasks
       script:
         # - snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
-        - snap install multipass --edge --beta # use the edge channel to get the latest development build
+        - sudo snap install multipass --edge --beta # use the edge channel to get the latest development build
+        - sudo snap install microk8s --classic --channel=edge
       after_success:
         - deactivate
 
@@ -1037,7 +1042,7 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-        - snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
+        - sudo snap install multipass --beta #For architectures other than amd64, you’ll need the beta channel at the moment
         # - snap install multipass --edge --beta # use the edge channel to get the latest development build
       after_success:
         - deactivate
@@ -1115,13 +1120,13 @@ matrix:
       os: osx
       osx_image: xcode10.2
       language: shell
-      addons:
-        homebrew:
-          casks:
-            - mactex
-          packages:
-            - multipass
-          update: true
+      # addons:
+      #   homebrew:
+      #     casks:
+      #       - mactex
+      #     packages:
+      #       - multipass
+      #     update: true
       before_install:
         - pip install virtualenv
         - virtualenv -p $(which python2) ~venvpy2
@@ -1129,8 +1134,8 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       script:
-        # - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
-        # - brew cask install multipass
+        - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
+        - brew cask install multipass
         - multipass version
         # - sudo multipass set local.driver=virtualbox #If you’d like to use VirtualBox, run the following in the terminal after installing Multipass
       after_success:
@@ -1146,7 +1151,7 @@ matrix:
       #     casks:
       #       - mactex
       #     packages:
-      #       - multipass      
+      #       - multipass
       before_install:
         - pip install virtualenv
         - virtualenv -p $(which python2) ~venvpy2
