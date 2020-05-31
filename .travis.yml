@@ -773,71 +773,70 @@ matrix:
   include:
 
 
-# https://microk8s.io/#get-started
-# https://multipass.run/docs/installing-on-linux
-    - name: "multipass VM microk8s Python 3.7 on bionic" #OK
-      dist: bionic
-      addons:
-        snaps:
-          - name: multipass
-            confinement: classic # or devmode
-            channel: latest/stable # will be passed to --channel flag
-          # - name: microk8s
-          #   confinement: classic # or devmode
-          #   channel: latest/stable # will be passed to --channel flag
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_microk8s_istio_tasks
-      script:
-        - snap info multipass
-        - sudo  multipass launch --name microk8s-vm --mem 4G --disk 40G #Launch a Multipass instance
-        - sudo multipass list
-        - sudo multipass exec microk8s-vm -- sudo snap install microk8s --classic --channel=1.18/stable
-        - sudo multipass exec microk8s-vm -- sudo microk8s status --wait-ready
-        - - sudo multipass exec microk8s-vm -- sudo microk8s enable dns dashboard registry
-        # - multipass launch -n bar --cloud-init cloud-config.yaml #Pass a cloud-init metadata file to an instance on launch
-        # - sudo multipass shell microk8s-vm #Enter the VM instance
-        # - sudo snap install microk8s --classic --channel=1.18/stable
-        # - sudo microk8s status --wait-ready
-        # - sudo microk8s enable dns dashboard registry
+# # https://microk8s.io/#get-started
+# # https://multipass.run/docs/installing-on-linux
+#     - name: "multipass VM microk8s Python 3.7 on bionic" #OK
+#       dist: bionic
+#       addons:
+#         snaps:
+#           - name: multipass
+#             confinement: classic # or devmode
+#             channel: latest/stable # will be passed to --channel flag
+#           # - name: microk8s
+#           #   confinement: classic # or devmode
+#           #   channel: latest/stable # will be passed to --channel flag
+#       language: python
+#       python: 3.7
+#       before_install:
+#         - pip3 install virtualenv
+#         - virtualenv -p $(which python3) ~venvpy3
+#         - source ~venvpy3/bin/activate
+#       <<: *fleet_install_tasks
+#       <<: *fleet_script_tasks
+#       <<: *fleet_script_microk8s_istio_tasks
+#       script:
+#         - snap info multipass
+#         - sudo  multipass launch --name microk8s-vm --mem 4G --disk 40G #Launch a Multipass instance
+#         - sudo multipass list
+#         - sudo multipass exec microk8s-vm -- sudo snap install microk8s --classic --channel=1.18/stable
+#         - sudo multipass exec microk8s-vm -- sudo microk8s status --wait-ready
+#         - - sudo multipass exec microk8s-vm -- sudo microk8s enable dns dashboard registry
+#         # - multipass launch -n bar --cloud-init cloud-config.yaml #Pass a cloud-init metadata file to an instance on launch
+#         # - sudo multipass shell microk8s-vm #Enter the VM instance
+#         # - sudo snap install microk8s --classic --channel=1.18/stable
+#         # - sudo microk8s status --wait-ready
+# #         # - sudo microk8s enable dns dashboard registry
+#       after_success:
+#         - deactivate
 
-      after_success:
-        - deactivate
+    # - name: "multipass microk8s istio Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: multipass
+    #         confinement: classic # or devmode
+    #         # channel: latest/edge # will be passed to --channel flag
+    #       - name: microk8s
+    #         confinement: classic # or devmode
+    #         channel: latest/stable # will be passed to --channel flag
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_microk8s_istio_tasks
+    #   script:
+    #     # - snap install multipass --classic
+    #     # - ls -l /var/snap/multipass/common/multipass_socket #
+    #     # - groups | grep sudo
+    #     - snap info multipass
+    #   after_success:
+    #     - deactivate
 
-#     # - name: "multipass microk8s istio Python 3.7 on bionic" #OK
-#     #   dist: bionic
-#     #   addons:
-#     #     snaps:
-#     #       - name: multipass
-#     #         confinement: classic # or devmode
-#     #         # channel: latest/edge # will be passed to --channel flag
-#     #       - name: microk8s
-#     #         confinement: classic # or devmode
-#     #         channel: latest/stable # will be passed to --channel flag
-#     #   language: python
-#     #   python: 3.7
-#     #   before_install:
-#     #     - pip3 install virtualenv
-#     #     - virtualenv -p $(which python3) ~venvpy3
-#     #     - source ~venvpy3/bin/activate
-#     #   <<: *fleet_install_tasks
-#     #   <<: *fleet_script_tasks
-#     #   <<: *fleet_script_microk8s_istio_tasks
-#     #   script:
-#     #     # - snap install multipass --classic
-#     #     # - ls -l /var/snap/multipass/common/multipass_socket #
-#     #     # - groups | grep sudo
-#     #     - snap info multipass
-#     #   after_success:
-#     #     - deactivate
-#
-#
+
 #     # - name: "multipass Python 3.7 on bionic" #OK
 #     #   dist: bionic
 #     #   addons:
