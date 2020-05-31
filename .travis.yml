@@ -809,32 +809,57 @@ matrix:
 #       after_success:
 #         - deactivate
 
-    # - name: "multipass microk8s istio Python 3.7 on bionic" #OK
-    #   dist: bionic
-    #   addons:
-    #     snaps:
-    #       - name: multipass
-    #         confinement: classic # or devmode
-    #         # channel: latest/edge # will be passed to --channel flag
-    #       - name: microk8s
-    #         confinement: classic # or devmode
-    #         channel: latest/stable # will be passed to --channel flag
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_microk8s_istio_tasks
-    #   script:
-    #     # - snap install multipass --classic
-    #     # - ls -l /var/snap/multipass/common/multipass_socket #
-    #     # - groups | grep sudo
-    #     - snap info multipass
-    #   after_success:
-    #     - deactivate
+    - name: "multipass VM microk8s istio Python 3.7 on bionic" #OK
+      dist: bionic
+      addons:
+        snaps:
+          - name: multipass
+            confinement: classic # or devmode
+            # channel: latest/edge # will be passed to --channel flag
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      <<: *fleet_script_microk8s_istio_tasks
+      script:
+        - snap info multipass
+        # primary                 Running           192.168.64.3     Ubuntu 18.04 LTS
+        # foo                     Running           192.168.64.2     Ubuntu 18.04 LTS
+        - sudo  multipass launch --primary
+        - sudo  multipass launch --name foo
+        # - root@192.168.64.3 #added my ~/.ssh/id_rsa.pub to the end of ~root/.ssh/authorized_keys and tested root access with ssh
+        - multipass list
+        - sudo multipass exec primary -- free -m
+        - sudo multipass exec primary -- cat /proc/meminfo
+        - sudo multipass exec primary-- uname -a
+        - sudo multipass exec primary -- 'curl -sfL https://get.k3s.io | sh -' #Installing k3s
+        - sudo multipass exec primary -- sudo kubectl get nodes
+        - sudo multipass exec primary -- cat /var/lib/rancher/k3s/server/node-token
+        # - sudo multipass exec foo -- 'curl -sfL https://get.k3s.io | K3S_URL=https://192.168.64.3:6443 K3S_TOKEN=`cat token` sh -' #Adding a new node
+        # - sudo multipass exec primary -- sudo kubectl get nodes
+        # - sudo multipass exec primary -- sudo cat /etc/rancher/k3s/k3s.yaml #get the kubeconfig
+        # - sed -i.bak -e 's/127.0.0.1:6443/192.168.64.3/g' myk3sconfig #save that locally and just change the “server” line to match our master node
+        # - "!cat"
+        # - export KUBECONFIG=$(pwd)/myk3sconfig
+        # - kubectl get nodes
+        # - kubectl api-resources --insecure-skip-tls-verify
+        # - sudo multipass exec foo -- 'sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config'
+        # - sudo multipass exec foo -- 'sudo chmod 644 ~/.kube/config
+        # - sudo multipass exec foo -- 'kubectl get pods --all-namespaces
+        # - sudo  multipass launch --name microk8s-vm --mem 4G --disk 40G #Launch a Multipass instance
+        # - sudo multipass list
+        # - sudo multipass exec microk8s-vm -- sudo snap install microk8s --classic --channel=1.18/stable
+        # - sudo multipass exec microk8s-vm -- sudo microk8s status --wait-ready
+        # - sudo multipass exec microk8s-vm -- sudo microk8s enable dns dashboard registry
+      after_success:
+        - deactivate
 
 
 #     # - name: "multipass Python 3.7 on bionic" #OK
