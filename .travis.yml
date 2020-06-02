@@ -832,7 +832,7 @@ matrix:
         - snap info multipass
         # primary                 Running           192.168.64.3     Ubuntu 18.04 LTS
         # foo                     Running           192.168.64.2     Ubuntu 18.04 LTS
-        - sudo  multipass launch --primary
+        - sudo  multipass launch --name primary
         - sudo  multipass launch --name foo
         # - root@192.168.64.3 #added my ~/.ssh/id_rsa.pub to the end of ~root/.ssh/authorized_keys and tested root access with ssh
         - multipass list
@@ -1651,7 +1651,7 @@ matrix:
 #
 # https://multipass.run/docs/installing-on-windows
 # https://microk8s.io/#get-started
-    - name: "microk8s Python 3.8 on Windows"
+    - name: "multipass microk8s Python 3.8 on Windows"
       os: windows
       language: shell
       env:
