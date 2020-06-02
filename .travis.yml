@@ -773,19 +773,19 @@ matrix:
   include:
 
 
-# - name: "minikube gardener istio  Python 3.7 on bionic" #
-#   dist: bionic
-#   language: python
-#   python: 3.7
-#   before_install:
-#     - pip3 install virtualenv
-#     - virtualenv -p $(which python3) ~venvpy3
-#     - source ~venvpy3/bin/activate
-#   <<: *fleet_install_tasks
-#   <<: *fleet_script_tasks
-#   <<: *fleet_script_minikube_gardener_tasks
-#   after_success:
-#     - deactivate
+    - name: "minikube gardener istio  Python 3.7 on bionic" #
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+      <<: *fleet_install_tasks
+      <<: *fleet_script_tasks
+      <<: *fleet_script_minikube_gardener_tasks
+      after_success:
+        - deactivate
 
 
     # - name: "minikube latest  Python 3.7 on bionic" #OK
