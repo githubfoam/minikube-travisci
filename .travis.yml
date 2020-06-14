@@ -16,6 +16,66 @@ env:
 notifications:
   slack:
     on_failure: always
+fleet_script_minikube_latest_canary_tasks : &fleet_script_minikube_latest_canary_tasks
+      script:
+          # - set -eox pipefail #safety for script
+          - |
+            if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
+                     echo "virtualization is not supported"
+            else
+                  echo "===================================="
+                  echo eval "$(egrep -c '(vmx|svm)' /proc/cpuinfo)" 2>/dev/null
+                  echo "===================================="
+                  echo "virtualization is supported"
+            fi
+          - sudo apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
+          - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
+          - curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
+          - mkdir -p $HOME/.kube $HOME/.minikube
+          - touch $KUBECONFIG
+          - sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+          - minikube update-context --profile=minikube
+          - "sudo chown -R travis: /home/travis/.minikube/"
+          - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
+          - echo "=========================================================================================="
+          - kubectl version --client #ensure the version
+          - kubectl cluster-info
+          - minikube status
+          - echo "=========================================================================================="
+          - |
+            echo "Waiting for Kubernetes to be ready ..."
+            for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+              if kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
+                break
+              fi
+              sleep 2
+            done
+          # - |
+          #   echo "Waiting for Kubernetes to be ready ..."
+          #   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+          #     if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running && \
+          #        kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
+          #       break
+          #     fi
+          #     sleep 2
+          #   done
+          - echo "============================status check=============================================================="
+          - minikube status
+          - kubectl cluster-info
+          - kubectl get pods --all-namespaces;
+          - kubectl get pods -n default;
+          - echo "=============================Inspection============================================================="
+          - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
+          - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
+          #linkerd
+          - sudo sh -c "curl -sL https://run.linkerd.io/install | sh" #Install the CLI
+          - export PATH=$PATH:$HOME/.linkerd2/bin
+          - linkerd version
+          - linkerd check --pre #Validate your Kubernetes cluster
+          - sudo sh -c "linkerd install | kubectl apply -f -" #Install Linkerd onto the cluster
+          -
+
+
 fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
       script:
           # - set -eox pipefail #safety for script
@@ -67,11 +127,66 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           - echo "=============================Inspection============================================================="
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
+          #openEBS
+          - pushd $(pwd) && cd app
           - sudo kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml #install OpenEBS
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces-
           - kubectl get pods -n openebs -l openebs.io/component-name=openebs-localpv-provisioner #Observe localhost provisioner pod
           - kubectl get sc #Check the storage Class
-          - Create a PVC
+          #Create a PVC
+          #Create an Nginx Pod which consumes OpenEBS Local PV Hospath Storage
+          #openEBS
+          #HPA
+          - pushd $(pwd) && cd hpa
+          - minikube addons list
+          - minikube addons enable metrics-server
+          - sudo kubectl top node
+          - sudo kubectl top pod
+          - sudo kubectl describe hpa
+          - |
+            sudo minikube start \
+            --extra-config=controller-manager.horizontal-pod-autoscaler-upscale-delay=1m \
+            --extra-config=controller-manager.horizontal-pod-autoscaler-downscale-delay=1m \
+            --extra-config=controller-manager.horizontal-pod-autoscaler-sync-period=10s \
+            --extra-config=controller-manager.horizontal-pod-autoscaler-downscale-stabilization=1m
+          - sudo kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+          - sudo kubectl run --generator=run-pod/v1 -it --rm load-generator --image=busybox /bin/sh #Load generator
+          - while true; do wget -q -O- http://php-apache; done
+          - kubectl get --raw /apis/metrics.k8s.io/v1beta1
+          - kubectl get pods -n kube-system | grep metrics-server
+          - kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes | jq '.'
+          - kubectl get --raw /apis/metrics.k8s.io/v1beta1/pods | jq '.'
+          - |
+            kubectl get --raw /apis/metrics.k8s.io/v1beta1/nodes \
+            | jq '[.items [] | {nodeName: .metadata.name, nodeCpu: .usage.cpu, nodeMemory: .usage.memory}]'
+          - popd
+          #HPA
+          #nfs-pv-storage
+          - pushd $(pwd) && cd nfs-pv-storage
+          - sudo apt install nfs-kernel-server
+          - sudo mkdir -p /pv/nfs/test-volume
+          - sudo chmod 777 /pv/nfs/test-volume
+          - sudo systemctl status nfs-server
+          - sudo systemctl stop nfs-server
+          - sudo systemctl start nfs-server
+          - sudo systemctl restart nfs-server
+          # - sudo vi /etc/exports
+          # /mnt/nfs/test-volume *(rw,sync,no_subtree_check,insecure)
+          # /pv/nfs/test-volume *(rw,sync,no_subtree_check,insecure)
+          # - sudo exportfs -a
+          # - sudo exportfs -v
+          # - sudo kubectl expose deploy nginx-deploy --port 80 --type NodePort
+          # - sudo apt-get update
+          # - sudo apt-get install -qqy curl
+          # - curl http://localhost/
+          - popd
+          #nfs-pv-storage
+          #NGINX as a sample application
+          - sudo kubectl create deployment nginx --image=nginx
+          - sudo kubectl get deployments
+          - sudo kubectl get pods
+          - sudo kubectl get all --all-namespaces
+          #NGINX as a sample application
 
 fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
       script:
@@ -303,7 +418,7 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       # <<: *fleet_script_minikube_latest_tasks
-      <<: *fleet_script_minikube_latest_app_tasks
+      <<: *fleet_script_minikube_latest_canary_tasks
       after_success:
         - deactivate
 
