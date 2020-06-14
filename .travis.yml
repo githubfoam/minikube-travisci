@@ -87,8 +87,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           # - sudo docker push "dockerfoam/bluerepo:$DOCKER_IMAGE"
           # - sudo docker run -d "dockerfoam/bluerepo:$DOCKER_IMAGE"
           - sudo docker run -p 8000:80 "dockerfoam/bluerepo:$DOCKER_IMAGE" &
-          - docker image ls && docker container ls
-          - sudo docker ps -a
+          - docker image ls
+          - sudo docker container ls
           - sudo docker logout
           - popd
           #BLUE
@@ -98,12 +98,13 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
           - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
           - git_sha="${TRAVIS_COMMIT}"
-          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/greenrepo:${git_sha}-${TRAVIS_BRANCH}"
           - sudo docker push "$DOCKER_USERNAME/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
-          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/bluerepo:$DOCKER_IMAGE" &
+          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/greenrepo:$DOCKER_IMAGE" &
           - docker image ls
-          - sudo docker ps -a
+          - sudo docker container ls
           - sudo docker logout
+          - popd          
           #GREEN
           - pushd $(pwd) && cd blue
           - sudo kubectl apply -f ./blue-controller.json #Create a replication controller blue pod
