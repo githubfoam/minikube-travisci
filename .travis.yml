@@ -61,7 +61,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - docker ps #Find the container ID or name of any container in the pod
-          - source run_k8s.sh          
+          - source run_k8s.sh
+          - kubectl get pods --all-namespaces;
           # - docker inspect --format '{{ .State.Pid }}' container-id-or-name #get the process ID of either container, take note of the container ID or name
           - echo "=========================================================================================="
 fleet_script_minikube_tasks : &fleet_script_minikube_tasks
@@ -157,8 +158,9 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    - name: "blue green minikube latest  Python 3.7 on bionic" #OK
+    - name: "blue green minikube latest  Python 3.7 on bionic amd64" #OK
       dist: bionic
+      arch: amd64
       addons:
            snaps:
              - name: kubectl
@@ -173,13 +175,17 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       <<: *fleet_script_minikube_latest_tasks
-      # script:
-      #   - source run_k8s.sh
       after_success:
         - deactivate
 
-    - name: "minikube latest  Python 3.7 on bionic" #OK
+    - name: "blue green minikube latest  Python 3.7 on bionic arm64" #OK
       dist: bionic
+      arch: arm64
+      addons:
+           snaps:
+             - name: kubectl
+               confinement: classic
+               channel: latest/stable
       language: python
       python: 3.7
       before_install:
