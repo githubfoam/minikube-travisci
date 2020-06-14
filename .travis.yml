@@ -61,12 +61,15 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - docker ps #Find the container ID or name of any container in the pod
-          - source blue/run_docker.sh #Build the blue image from the blue folder
+          - pushd $(pwd)
+          - source run_docker.sh #Build the blue image from the blue folder
+          - popd
           - export DOCKER_IMAGE="testblueimage"
           - export USER=$DOCKER_USERNAME
           - export REPO="bluerepo"
-          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_TOKEN" --password-stdin
+          # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          - docker tag $DOCKER_IMAGE $USER/$DOCKER_IMAGE
           - docker push $USER/$REPO
           # - source run_k8s.sh
           - kubectl get pods --all-namespaces;
