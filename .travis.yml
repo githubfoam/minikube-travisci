@@ -72,6 +72,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - pushd $(pwd) && cd blue
           - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
+          - export DOCKER_REPO="bluerepo"
           # - export IMAGE_TAG=$DOCKER_IMAGE:$TRAVIS_COMMIT
           - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
           # - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT
@@ -81,13 +82,13 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - echo $TRAVIS_COMMIT
           - echo $TRAVIS_TAG
           - git_sha="${TRAVIS_COMMIT}"
-          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
-          - sudo docker push "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/$DOCKER_REPO:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker push "$DOCKER_USERNAME/$DOCKER_REPO:${git_sha}-${TRAVIS_BRANCH}"
           # - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:$DOCKER_IMAGE"
           # - sudo docker push "dockerfoam/bluerepo:$DOCKER_IMAGE"
           # - sudo docker run -d "dockerfoam/bluerepo:$DOCKER_IMAGE"
-          - sudo docker run -p 8000:80 "dockerfoam/bluerepo:$DOCKER_IMAGE" &
-          - docker image ls
+          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/$DOCKER_REPO:$DOCKER_IMAGE" &
+          - sudo docker image ls
           - sudo docker container ls
           - sudo docker logout
           - popd
@@ -95,16 +96,17 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           #GREEN
           - pushd $(pwd) && cd green
           - export DOCKER_IMAGE="testgreenimage"
+          - export DOCKER_REPO="greenrepo"
           - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
           - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
           - git_sha="${TRAVIS_COMMIT}"
-          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/greenrepo:${git_sha}-${TRAVIS_BRANCH}"
-          - sudo docker push "$DOCKER_USERNAME/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
-          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/greenrepo:$DOCKER_IMAGE" &
-          - docker image ls
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/$DOCKER_REPO:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker push "$DOCKER_USERNAME/$DOCKER_REPO:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/$DOCKER_REPO:$DOCKER_IMAGE" &
+          - sudo docker image ls
           - sudo docker container ls
           - sudo docker logout
-          - popd          
+          - popd
           #GREEN
           - pushd $(pwd) && cd blue
           - sudo kubectl apply -f ./blue-controller.json #Create a replication controller blue pod
@@ -113,8 +115,9 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - sudo kubectl apply -f green-controller.json #Create a replication controller green pod
           - popd
           - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+          - echo $(minikube service bluegreenlb --url) #debug mode
           - minikube service bluegreenlb --url #Get the URL of the service by running
-          - curl $(minikube service bluegreenlb --url) #open the website blue in your browser by using the URL
+          # - curl $(minikube service bluegreenlb --url) #open the website blue in your browser by using the URL
           #Update the service to redirect to green by changing the selector to app=green??
           # - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
           # - minikube service bluegreenlb --url #Get the URL of the service by running
