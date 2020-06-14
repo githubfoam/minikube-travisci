@@ -60,18 +60,18 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - echo "=============================Inspection============================================================="
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
-          - docker ps #Find the container ID or name of any container in the pod
-          - pushd $(pwd) && cd blue
-          - source run_docker.sh #Build the blue image from the blue folder
-          - popd
           - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
-          - export USER=$DOCKER_USERNAME
-          - export REPO="bluerepo"
-          # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          - echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          - docker tag $DOCKER_IMAGE $USER/$DOCKER_IMAGE
-          - docker push $USER/$REPO
+          - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=blue/Dockerfile.nginx
+          - docker image ls && docker container ls
+          # - sudo docker run -p 8000:80 $DOCKER_IMAGE &
+          # - echo "$DOCKER_TOKEN" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
+          - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN"
+          # - sudo docker tag $DOCKER_IMAGE "$USER/$DOCKER_IMAGE"
+          - sudo docker push $DOCKER_IMAGE:$TRAVIS_COMMIT
+          - sudo docker run -d $DOCKER_IMAGE:$TRAVIS_COMMIT
+          - docker image ls && docker container ls
+          - sudo docker logout
           # - source run_k8s.sh
           - kubectl get pods --all-namespaces;
           # - docker inspect --format '{{ .State.Pid }}' container-id-or-name #get the process ID of either container, take note of the container ID or name
