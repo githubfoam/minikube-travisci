@@ -68,6 +68,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - echo "=============================Inspection============================================================="
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
+          #BLUE
           - pushd $(pwd) && cd blue
           - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
@@ -77,17 +78,46 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           # DOCKER_TOKEN DOCKER_USERNAME are defined on travisci environment variables section
           - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
           # - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN" #Login Succeeded
-          - echo $TRAVIS_COMMIT $TRAVIS_TAG
+          - echo $TRAVIS_COMMIT
+          - echo $TRAVIS_TAG
           - git_sha="${TRAVIS_COMMIT}"
           - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
           - sudo docker push "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
           # - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:$DOCKER_IMAGE"
           # - sudo docker push "dockerfoam/bluerepo:$DOCKER_IMAGE"
-          - sudo docker run -d "dockerfoam/bluerepo:$DOCKER_IMAGE"
+          # - sudo docker run -d "dockerfoam/bluerepo:$DOCKER_IMAGE"
+          - sudo docker run -p 8000:80 "dockerfoam/bluerepo:$DOCKER_IMAGE" &
           - docker image ls && docker container ls
           - sudo docker ps -a
           - sudo docker logout
           - popd
+          #BLUE
+          #GREEN
+          - pushd $(pwd) && cd green
+          - export DOCKER_IMAGE="testgreenimage"
+          - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
+          - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
+          - git_sha="${TRAVIS_COMMIT}"
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "$DOCKER_USERNAME/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker push "$DOCKER_USERNAME/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
+          - sudo docker run -p 8000:80 "$DOCKER_USERNAME/bluerepo:$DOCKER_IMAGE" &
+          - docker image ls
+          - sudo docker ps -a
+          - sudo docker logout
+          #GREEN
+          - pushd $(pwd) && cd blue
+          - sudo kubectl apply -f ./blue-controller.json #Create a replication controller blue pod
+          - popd
+          - pushd $(pwd) && cd green
+          - sudo kubectl apply -f green-controller.json #Create a replication controller green pod
+          - popd
+          - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+          - minikube service bluegreenlb --url #Get the URL of the service by running
+          - curl $(minikube service bluegreenlb --url) #open the website blue in your browser by using the URL
+          #Update the service to redirect to green by changing the selector to app=green??
+          # - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+          # - minikube service bluegreenlb --url #Get the URL of the service by running
+          # - curl $(minikube service bluegreenlb --url) #open the website blue in your browser by using the URL
           - kubectl get pods --all-namespaces;
           # - docker inspect --format '{{ .State.Pid }}' container-id-or-name #get the process ID of either container, take note of the container ID or name
           - echo "=========================================================================================="
