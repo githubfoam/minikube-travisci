@@ -71,13 +71,13 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - pushd $(pwd) && cd blue
           - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
-          - export IMAGE_TAG=$DOCKER_IMAGE:$TRAVIS_COMMIT
-          - sudo docker build tag $IMAGE_TAG . --file=Dockerfile.nginx
+          # - export IMAGE_TAG=$DOCKER_IMAGE:$TRAVIS_COMMIT
+          - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
           # - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT
           # DOCKER_TOKEN DOCKER_USERNAME are defined on travisci environment variables section
           - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
           # - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN" #Login Succeeded
-          - sudo docker tag $IMAGE_TAG "dockerfoam/bluerepo:$IMAGE_TAG"
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/$DOCKER_IMAGE:$TRAVIS_COMMIT"
           - sudo docker push $DOCKER_IMAGE:$TRAVIS_COMMIT
           - sudo docker run -d $DOCKER_IMAGE:$TRAVIS_COMMIT
           - docker image ls && docker container ls
