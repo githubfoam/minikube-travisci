@@ -115,8 +115,19 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - sudo kubectl apply -f green-controller.json #Create a replication controller green pod
           - popd
           - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
-          - echo $(minikube service bluegreenlb --url) #debug mode
+          - echo "=========================================================================================="
+          - |
+            echo "Waiting for Kubernetes to be ready ..."
+            for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+              if kubectl get pods --namespace=default -lk8s-app=blue |grep Running ; then
+                break
+              fi
+              sleep 2
+            done
+          - echo $(minikube service bluegreenlb --url) #debug mode http://10.30.0.90:31089
+          - serviceURL=$(minikube service bluegreenlb --url)
           - minikube service bluegreenlb --url #Get the URL of the service by running
+          - curl $serviceURL #open the website blue in your browser by using the URL
           # - curl $(minikube service bluegreenlb --url) #open the website blue in your browser by using the URL
           #Update the service to redirect to green by changing the selector to app=green??
           # - sudo kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
