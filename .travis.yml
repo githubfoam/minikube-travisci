@@ -75,8 +75,10 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - popd
           - docker image ls && docker container ls
           # - sudo docker run -p 8000:80 $DOCKER_IMAGE &
-          - echo $DOCKER_TOKEN | sudo docker login --username "$DOCKER_USERNAME" --password-stdin
-          # - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN"
+          - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin
+          - sudo docker logout
+          - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN"
+          - sudo docker logout
           # - sudo docker tag $DOCKER_IMAGE "$USER/$DOCKER_IMAGE"
           # - sudo docker push $DOCKER_IMAGE:$TRAVIS_COMMIT
           # - sudo docker run -d $DOCKER_IMAGE:$TRAVIS_COMMIT
