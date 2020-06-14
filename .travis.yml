@@ -77,7 +77,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           # DOCKER_TOKEN DOCKER_USERNAME are defined on travisci environment variables section
           - echo $DOCKER_TOKEN | sudo docker login --username $DOCKER_USERNAME --password-stdin #Login Succeeded
           # - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN" #Login Succeeded
-          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/$DOCKER_IMAGE:$TRAVIS_COMMIT"
+          - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:$DOCKER_IMAGE:$TRAVIS_COMMIT"
           - sudo docker push $DOCKER_IMAGE:$TRAVIS_COMMIT
           - sudo docker run -d $DOCKER_IMAGE:$TRAVIS_COMMIT
           - docker image ls && docker container ls
