@@ -62,7 +62,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
-          - pushd $(pwd)
+          - pushd $(pwd) && cd blue
           - sudo docker build -t $DOCKER_IMAGE:$TRAVIS_COMMIT . --file=Dockerfile.nginx
           - popd
           - docker image ls && docker container ls
