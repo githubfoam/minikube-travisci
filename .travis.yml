@@ -64,6 +64,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - pushd $(pwd) && cd blue
           - source run_docker.sh #Build the blue image from the blue folder
           - popd
+          - docker image ls && docker container ls
           - export DOCKER_IMAGE="testblueimage"
           - export USER=$DOCKER_USERNAME
           - export REPO="bluerepo"
