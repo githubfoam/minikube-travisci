@@ -80,7 +80,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - echo $TRAVIS_COMMIT $TRAVIS_TAG
           - git_sha="${TRAVIS_COMMIT}"
           - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
-          - sudo docker push "dockerfoam/bluerepo:$DOCKER_IMAGE"
+          - sudo docker push "dockerfoam/bluerepo:${git_sha}-${TRAVIS_BRANCH}"
           # - sudo docker tag $DOCKER_IMAGE:$TRAVIS_COMMIT "dockerfoam/bluerepo:$DOCKER_IMAGE"
           # - sudo docker push "dockerfoam/bluerepo:$DOCKER_IMAGE"
           - sudo docker run -d "dockerfoam/bluerepo:$DOCKER_IMAGE"
