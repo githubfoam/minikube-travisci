@@ -162,7 +162,7 @@ matrix:
            snaps:
              - name: kubectl
                confinement: classic
-               channel: stable/latest      
+               channel: latest/stable
       language: python
       python: 3.7
       before_install:
