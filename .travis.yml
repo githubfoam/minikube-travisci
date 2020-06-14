@@ -19,8 +19,8 @@ notifications:
 
 fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
       script:
+          - set -eox pipefail #safety for script
           - |
-            set -eox pipefail #safety for script
             if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
                      echo "virtualization is not supported"
             else
@@ -61,7 +61,7 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - docker ps #Find the container ID or name of any container in the pod
-          - pushd $(pwd)
+          - pushd $(pwd) && cd blue
           - source run_docker.sh #Build the blue image from the blue folder
           - popd
           - export DOCKER_IMAGE="testblueimage"
