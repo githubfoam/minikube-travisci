@@ -156,8 +156,13 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    - name: "minikube latest  Python 3.7 on bionic" #OK
+    - name: "blue green minikube latest  Python 3.7 on bionic" #OK
       dist: bionic
+      addons:
+           snaps:
+             - name: kubectl
+               confinement: classic
+               channel: stable/latest      
       language: python
       python: 3.7
       before_install:
