@@ -46,12 +46,20 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - |
             echo "Waiting for Kubernetes to be ready ..."
             for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-              if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running && \
-                 kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
+              if kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
                 break
               fi
               sleep 2
             done
+          # - |
+          #   echo "Waiting for Kubernetes to be ready ..."
+          #   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+          #     if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running && \
+          #        kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
+          #       break
+          #     fi
+          #     sleep 2
+          #   done
           - echo "============================status check=============================================================="
           - minikube status
           - kubectl cluster-info
@@ -67,8 +75,8 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - popd
           - docker image ls && docker container ls
           # - sudo docker run -p 8000:80 $DOCKER_IMAGE &
-          # - echo "$DOCKER_TOKEN" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
-          - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN"
+          - echo "$DOCKER_TOKEN" | sudo docker login -u "$DOCKER_USERNAME" --password-stdin
+          # - sudo docker login -u="$DOCKER_USERNAME" -p="$DOCKER_TOKEN"
           # - sudo docker tag $DOCKER_IMAGE "$USER/$DOCKER_IMAGE"
           - sudo docker push $DOCKER_IMAGE:$TRAVIS_COMMIT
           - sudo docker run -d $DOCKER_IMAGE:$TRAVIS_COMMIT
