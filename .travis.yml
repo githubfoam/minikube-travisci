@@ -19,7 +19,7 @@ notifications:
 
 fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
       script:
-          - set -eox pipefail #safety for script
+          # - set -eox pipefail #safety for script
           - |
             if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
                      echo "virtualization is not supported"
