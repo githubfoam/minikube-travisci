@@ -61,7 +61,14 @@ fleet_script_minikube_latest_tasks : &fleet_script_minikube_latest_tasks
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - docker ps #Find the container ID or name of any container in the pod
-          - source run_k8s.sh
+          - source blue/run_docker.sh #Build the blue image from the blue folder
+          - export DOCKER_IMAGE="testblueimage"
+          - export USER=$DOCKER_USERNAME
+          - export REPO="bluerepo"
+          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_TOKEN" --password-stdin
+          - docker push $USER/$REPO
+          # - source run_k8s.sh
           - kubectl get pods --all-namespaces;
           # - docker inspect --format '{{ .State.Pid }}' container-id-or-name #get the process ID of either container, take note of the container ID or name
           - echo "=========================================================================================="
@@ -178,25 +185,25 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "blue green minikube latest  Python 3.7 on bionic arm64" #OK
-      dist: bionic
-      arch: arm64
-      addons:
-           snaps:
-             - name: kubectl
-               confinement: classic
-               channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_tasks
-      after_success:
-        - deactivate
+    # - name: "blue green minikube latest  Python 3.7 on bionic arm64" #OK
+    #   dist: bionic
+    #   arch: arm64
+    #   addons:
+    #        snaps:
+    #          - name: kubectl
+    #            confinement: classic
+    #            channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_latest_tasks
+    #   after_success:
+    #     - deactivate
 
     # - name: "minikube latest  Python 3.7 on xenial" #OK
     #   dist: xenial
