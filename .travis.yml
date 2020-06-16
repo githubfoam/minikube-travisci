@@ -186,7 +186,7 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           #HPA
           - pushd $(pwd) && cd hpa
           - minikube addons list
-          - minikube addons enable metrics-server
+          - sudo minikube addons enable metrics-server
           - sudo kubectl top node
           - sudo kubectl top pod
           - sudo kubectl describe hpa
