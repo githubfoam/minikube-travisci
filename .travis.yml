@@ -175,7 +175,7 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           - echo "=============================Inspection============================================================="
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
-          - echo "###################### #openEBS ################################"
+          - echo " ####################### openEBS ################################ "
           - pushd $(pwd) && cd app
           - sudo kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml #install OpenEBS
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces-
@@ -192,15 +192,15 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           - |
             echo "Waiting for local storage to be ready ..."
             for i in {1..60}; do # Timeout after 2 minutes, 60x2=300 secs
-                if sudo kubectl get pods --namespace=local-path-storage | grep Running ; then
+                if sudo kubectl get pods --namespace=openebs | grep Running ; then
                   break
                 fi
                 sleep 2
             done
           - sudo kubectl get pods --all-namespaces
-          - sudo kubectl get pods --namespace=local-path-storage
+          - sudo kubectl get pods --namespace=openebs
           - popd
-          - echo "###################### #openEBS ################################"
+          - echo " ####################### openEBS ################################ "
           #Create a PVC #Create an Nginx Pod which consumes OpenEBS Local PV Hospath Storage #openEBS
           #HPA
           # - pushd $(pwd) && cd hpa
