@@ -5,6 +5,62 @@ Travis (.com) branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=master)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
 ~~~~
+$ minikube addons list
+
+|-----------------------------|----------|--------------|
+
+|         ADDON NAME          | PROFILE  |    STATUS    |
+
+|-----------------------------|----------|--------------|
+
+| ambassador                  | minikube | disabled     |
+
+| dashboard                   | minikube | disabled     |
+
+| default-storageclass        | minikube | enabled ✅   |
+
+| efk                         | minikube | disabled     |
+
+| freshpod                    | minikube | disabled     |
+
+| gvisor                      | minikube | disabled     |
+
+| helm-tiller                 | minikube | disabled     |
+
+| ingress                     | minikube | disabled     |
+
+| ingress-dns                 | minikube | disabled     |
+
+| istio                       | minikube | disabled     |
+
+| istio-provisioner           | minikube | disabled     |
+
+| logviewer                   | minikube | disabled     |
+
+| metallb                     | minikube | disabled     |
+
+| metrics-server              | minikube | disabled     |
+
+| nvidia-driver-installer     | minikube | disabled     |
+
+| nvidia-gpu-device-plugin    | minikube | disabled     |
+
+| olm                         | minikube | disabled     |
+
+| registry                    | minikube | disabled     |
+
+| registry-aliases            | minikube | disabled     |
+
+| registry-creds              | minikube | disabled     |
+
+| storage-provisioner         | minikube | enabled ✅   |
+
+| storage-provisioner-gluster | minikube | disabled     |
+
+|-----------------------------|----------|--------------|
+~~~~
+
+~~~~
 The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
 Install Minikube
