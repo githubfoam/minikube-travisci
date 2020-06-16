@@ -184,7 +184,7 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           # openesb component list
           #https://github.com/openebs/openebs/blob/master/k8s/openebs-operator.yaml
           - |
-            echo "Waiting for openebs-localpv-provisioner to be ready ..."
+            echo "Waiting for openebs-localpv-provisioner component to be ready ..."
             for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
                 if sudo kubectl get pods --namespace=openebs -l openebs.io/component-name=openebs-localpv-provisioner | grep Running ; then
                   break
