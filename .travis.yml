@@ -175,10 +175,10 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           - echo "=============================Inspection============================================================="
           - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
           - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
-          - echo " ####################### openEBS ################################ "
+          - echo "=============================openEBS============================================================="
           - pushd $(pwd) && cd app
           - sudo kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml #install OpenEBS
-          - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces-
+          - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
           - kubectl get pods -n openebs -l openebs.io/component-name=openebs-localpv-provisioner #Observe localhost provisioner pod
           - kubectl get sc #Check the storage Class
           - |
@@ -200,7 +200,7 @@ fleet_script_minikube_latest_app_tasks : &fleet_script_minikube_latest_app_tasks
           - sudo kubectl get pods --all-namespaces
           - sudo kubectl get pods --namespace=openebs
           - popd
-          - echo " ####################### openEBS ################################ "
+          - echo "=============================openEBS============================================================="
           #Create a PVC #Create an Nginx Pod which consumes OpenEBS Local PV Hospath Storage #openEBS
           #HPA
           # - pushd $(pwd) && cd hpa
@@ -467,46 +467,46 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "canary minikube latest  Python 3.7 on bionic amd64" #OK
-      dist: bionic
-      arch: amd64
-      addons:
-           snaps:
-             - name: kubectl
-               confinement: classic
-               channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      # <<: *fleet_script_minikube_latest_tasks
-      <<: *fleet_script_minikube_latest_canary_tasks
-      after_success:
-        - deactivate
+    # - name: "canary minikube latest  Python 3.7 on bionic amd64" #OK
+    #   dist: bionic
+    #   arch: amd64
+    #   addons:
+    #        snaps:
+    #          - name: kubectl
+    #            confinement: classic
+    #            channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   # <<: *fleet_script_minikube_latest_tasks
+    #   <<: *fleet_script_minikube_latest_canary_tasks
+    #   after_success:
+    #     - deactivate
 
-    - name: "blue green minikube latest  Python 3.7 on bionic amd64" #OK
-      dist: bionic
-      arch: amd64
-      addons:
-           snaps:
-             - name: kubectl
-               confinement: classic
-               channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_bluegreen_tasks
-      after_success:
-        - deactivate
+    # - name: "blue green minikube latest  Python 3.7 on bionic amd64" #OK
+    #   dist: bionic
+    #   arch: amd64
+    #   addons:
+    #        snaps:
+    #          - name: kubectl
+    #            confinement: classic
+    #            channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   <<: *fleet_install_tasks
+    #   <<: *fleet_script_tasks
+    #   <<: *fleet_script_minikube_latest_bluegreen_tasks
+    #   after_success:
+    #     - deactivate
 
     # - name: "minikube latest  Python 3.7 on xenial" #OK
     #   dist: xenial
