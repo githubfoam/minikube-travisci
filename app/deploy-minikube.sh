@@ -20,7 +20,7 @@ export KUBERNETES_VERSION=1.18.3
 export MINIKUBE_VERSION=1.18.3
 export MINIKUBE_HOME=$HOME #(string) sets the path for the .minikube directory that minikube uses for state/configuration. Please note: this is used only by minikube https://minikube.sigs.k8s.io/docs/handbook/config
 export KUBECONFIG=$HOME/.kube/config
-apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
+apt-get update && apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
 # install wo snap
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
