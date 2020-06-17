@@ -481,7 +481,9 @@ matrix:
       <<: *fleet_install_tasks
       <<: *fleet_script_tasks
       # <<: *fleet_script_minikube_latest_tasks
-      <<: *fleet_script_minikube_latest_app_tasks
+      # <<: *fleet_script_minikube_latest_app_tasks
+      script:
+        - sudo make deploy-openesb     
       after_success:
         - deactivate
 
