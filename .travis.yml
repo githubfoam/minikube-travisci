@@ -4,18 +4,19 @@ dist: bionic
 env:
   global:
   - VAGRANT_VERSION="2.2.9"
+  - MINIKUBE_WANTUPDATENOTIFICATION=false #(bool) sets whether the user wants an update notification for new minikube versions https://minikube.sigs.k8s.io/docs/handbook/config
+  - MINIKUBE_WANTREPORTERRORPROMPT=false
+  - CHANGE_MINIKUBE_NONE_USER=true #(bool) automatically change ownership of ~/.minikube to the value of $SUDO_USER https://minikube.sigs.k8s.io/docs/handbook/config/
   - KUBECTL_VERSION=1.18.3
   - KUBERNETES_VERSION=1.18.3
   - MINIKUBE_VERSION=1.8.3
-  - CHANGE_MINIKUBE_NONE_USER=true #(bool) automatically change ownership of ~/.minikube to the value of $SUDO_USER https://minikube.sigs.k8s.io/docs/handbook/config/
-  - MINIKUBE_WANTREPORTERRORPROMPT=false
-  - MINIKUBE_WANTUPDATENOTIFICATION=false #(bool) sets whether the user wants an update notification for new minikube versions https://minikube.sigs.k8s.io/docs/handbook/config
   - MINIKUBE_HOME=$HOME #(string) sets the path for the .minikube directory that minikube uses for state/configuration. Please note: this is used only by minikube https://minikube.sigs.k8s.io/docs/handbook/config
   - KUBECONFIG=$HOME/.kube/config
 
 notifications:
   slack:
     on_failure: always
+
 fleet_script_minikube_latest_canary_tasks : &fleet_script_minikube_latest_canary_tasks
       script:
           # - set -eox pipefail #safety for script #travisci beyond readable
@@ -464,14 +465,20 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "app minikube latest  Python 3.7 on bionic amd64" #OK
+    - name: "openebs minikube latest  Python 3.7 on bionic amd64" #OK
       dist: bionic
       arch: amd64
       addons:
-           snaps:
-             - name: kubectl
-               confinement: classic
-               channel: latest/stable
+        snaps:
+          - name: helm
+            confinement: classic
+            channel: latest/stable
+          # - name: kubectl
+          #   confinement: classic
+          #   channel: latest/stable
+          # - name: minikube
+          #   confinement: classic
+          #   channel: latest/stable
       language: python
       python: 3.7
       before_install:
@@ -483,7 +490,8 @@ matrix:
       # <<: *fleet_script_minikube_latest_tasks
       # <<: *fleet_script_minikube_latest_app_tasks
       script:
-        - sudo make deploy-openesb     
+        - sudo make deploy-minikube
+        # - sudo make deploy-openesb
       after_success:
         - deactivate
 
