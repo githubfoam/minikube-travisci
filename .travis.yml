@@ -491,7 +491,8 @@ matrix:
       # <<: *fleet_script_minikube_latest_app_tasks
       script:
         - sudo make deploy-minikube
-        - sudo make deploy-openesb
+        # - sudo make deploy-openesb #OK
+        - sudo make deploy-java-maven
       after_success:
         - deactivate
 

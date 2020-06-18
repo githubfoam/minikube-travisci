@@ -11,6 +11,8 @@ deploy-dashboard:
 	bash app/deploy-dashboard.sh
 deploy-minikube:
 	bash app/deploy-minikube.sh
+deploy-java-maven:
+	bash app/deploy-java-maven.sh	
 push-image:
 	docker push $(IMAGE)
 .PHONY: deploy-kind deploy-openesb deploy-dashboard deploy-minikube deploy-istio push-image
