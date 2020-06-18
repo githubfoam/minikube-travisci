@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eox pipefail #safety for script
 
 echo "=============================minikube============================================================="
 set -eox pipefail #safety for script

@@ -1,4 +1,7 @@
 #!/bin/bash
+set -eox pipefail #safety for script
+
+
 # https://github.com/kubernetes/dashboard
 # https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 # https://hub.helm.sh/charts/k8s-dashboard/kubernetes-dashboard
