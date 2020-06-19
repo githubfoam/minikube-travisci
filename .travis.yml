@@ -492,7 +492,7 @@ matrix:
       script:
         # - sudo make deploy-minikube
         # - sudo make deploy-openesb #OK
-        - travis_wait 15 time sudo make deploy-java-maven &
+        - travis_wait 15 sudo make deploy-java-maven &
       after_success:
         - deactivate
 
