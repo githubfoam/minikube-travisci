@@ -4,6 +4,83 @@ minikube pipeline
 Travis (.com) branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=master)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
+smoke tests openEBS
+~~~~
+$ sudo kubectl get pods --namespace=openebs
+
+NAME                                           READY   STATUS    RESTARTS   AGE
+
+maya-apiserver-5d87746c75-gjzlv                0/1     Running   2          29s
+
+openebs-admission-server-766f5d7c48-csscs      1/1     Running   0          28s
+
+openebs-localpv-provisioner-695ffd78d6-72gwj   1/1     Running   0          28s
+
+openebs-ndm-operator-58ccd48f9d-2lp7z          0/1     Running   1          28s
+
+openebs-ndm-pxcz5                              1/1     Running   0          28s
+
+openebs-provisioner-64c9565ccb-7pd8m           1/1     Running   0          28s
+
+openebs-snapshot-operator-cf5cc6c54-8lh7g      2/2     Running   0          28s
+~~~~
+
+~~~~
+$ minikube addons list
+
+|-----------------------------|----------|--------------|
+
+|         ADDON NAME          | PROFILE  |    STATUS    |
+
+|-----------------------------|----------|--------------|
+
+| ambassador                  | minikube | disabled     |
+
+| dashboard                   | minikube | disabled     |
+
+| default-storageclass        | minikube | enabled ✅   |
+
+| efk                         | minikube | disabled     |
+
+| freshpod                    | minikube | disabled     |
+
+| gvisor                      | minikube | disabled     |
+
+| helm-tiller                 | minikube | disabled     |
+
+| ingress                     | minikube | disabled     |
+
+| ingress-dns                 | minikube | disabled     |
+
+| istio                       | minikube | disabled     |
+
+| istio-provisioner           | minikube | disabled     |
+
+| logviewer                   | minikube | disabled     |
+
+| metallb                     | minikube | disabled     |
+
+| metrics-server              | minikube | disabled     |
+
+| nvidia-driver-installer     | minikube | disabled     |
+
+| nvidia-gpu-device-plugin    | minikube | disabled     |
+
+| olm                         | minikube | disabled     |
+
+| registry                    | minikube | disabled     |
+
+| registry-aliases            | minikube | disabled     |
+
+| registry-creds              | minikube | disabled     |
+
+| storage-provisioner         | minikube | enabled ✅   |
+
+| storage-provisioner-gluster | minikube | disabled     |
+
+|-----------------------------|----------|--------------|
+~~~~
+
 ~~~~
 $ minikube addons list
 
