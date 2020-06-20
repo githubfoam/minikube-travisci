@@ -73,7 +73,7 @@ matrix:
         - virtualenv -p $(which python3) ~venvpy3
         - source ~venvpy3/bin/activate
       script:
-        - sudo make deploy-minikube
-        - travis_wait 15 sudo make deploy-java-maven &
+        # - travis_wait 15 sudo make deploy-java-maven &
+        - sudo make deploy-java-maven &
       after_success:
         - deactivate
