@@ -74,6 +74,6 @@ matrix:
         - source ~venvpy3/bin/activate
       script:
         # - travis_wait 15 sudo make deploy-java-maven &
-        - sudo make deploy-java-maven &
+        - sudo make deploy-java-maven
       after_success:
         - deactivate
