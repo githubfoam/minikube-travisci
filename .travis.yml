@@ -3,7 +3,6 @@ sudo: required
 dist: bionic
 env:
   global:
-  - VAGRANT_VERSION="2.2.9"
   - KUBECTL_VERSION=1.18.3
   - KUBERNETES_VERSION=1.18.3
   - MINIKUBE_VERSION=1.8.3
@@ -115,48 +114,42 @@ fleet_script_minikube_tasks : &fleet_script_minikube_tasks
           - kubectl get pods --all-namespaces;
           - kubectl get pods -n default;
           - echo "============================================="
-fleet_script_tasks : &fleet_script_tasks
-      script:
-        - python --version
-fleet_install_tasks : &fleet_install_tasks
-      install:
-        - pip install -r requirements.txt
-
 
 matrix:
   fast_finish: true
   include:
 
-
-    # - name: "minikube 1.18.1 Python 3.7 on bionic" # not OK
-    #   dist: bionic
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_minikube_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "minikube 1.18.1 Python 3.7 on xenial" # not OK
-    #   dist: xenial
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_minikube_tasks
-    #   after_success:
-    #     - deactivate
-
     - name: "minikube latest  Python 3.7 on bionic" #OK
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - python --version
+        - pip install -r requirements.txt
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      <<: *fleet_script_minikube_latest_tasks
+      after_success:
+        - deactivate
+
+    - name: "minikube latest  Python 3.7 on xenial" #OK
+      dist: xenial
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      # <<: *fleet_script_minikube_tasks
+      after_success:
+        - deactivate
+
+    - name: "minikube 1.18.3 Python 3.7 on bionic" # not OK
       dist: bionic
       language: python
       python: 3.7
@@ -164,239 +157,182 @@ matrix:
         - pip3 install virtualenv
         - virtualenv -p $(which python3) ~venvpy3
         - source ~venvpy3/bin/activate
-      <<: *fleet_install_tasks
-      <<: *fleet_script_tasks
-      <<: *fleet_script_minikube_latest_tasks
+        - python --version
+        - pip install -r requirements.txt
+      # <<: *fleet_script_minikube_tasks
       after_success:
         - deactivate
 
-    # - name: "minikube latest  Python 3.7 on xenial" #OK
-    #   dist: xenial
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_minikube_tasks
-    #   after_success:
-    #     - deactivate
+    - name: "minikube 1.18.3 Python 3.7 on xenial" # not OK
+      dist: xenial
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      # <<: *fleet_script_minikube_tasks
+      after_success:
+        - deactivate
 
-    # - name: "Python 3.7 on bionic arm64" # package architecture (amd64) does not match system (arm64)
-    #   os: linux
-    #   arch: arm64
-    #   dist: bionic
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7 on bionic ppc64le" #Unable to locate package osquery
-    #   os: linux
-    #   arch: ppc64le
-    #   dist: bionic
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7 on bionic s390x" #Unable to locate package osquery
-    #   os: linux
-    #   arch: s390x
-    #   dist: bionic
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
+    - name: "Python 3.7 on bionic arm64" # package architecture (amd64) does not match system (arm64)
+      os: linux
+      arch: arm64
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
+
+    - name: "Python 3.7 on bionic ppc64le" #Unable to locate package osquery
+      os: linux
+      arch: ppc64le
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
+
+    - name: "Python 3.7 on bionic s390x" #Unable to locate package osquery
+      os: linux
+      arch: s390x
+      dist: bionic
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
 
-    # - name: "Python 2.7 on xenial amd64"
-    #   dist: xenial
-    #   language: python
-    #   python: 2.7
-    #   before_install:
-    #     - pip install virtualenv
-    #     - virtualenv -p $(which python2) ~venvpy2
-    #     - source ~venvpy2/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #
-    #   after_success:
-    #     - deactivate
+    - name: "Python 2.7 on xenial amd64"
+      dist: xenial
+      language: python
+      python: 2.7
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
-    # - name: "Python 3.7 on xenial arm64"
-    #   os: linux
-    #   arch: arm64
-    #   dist: xenial
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7 on xenial ppc64le" #Unable to locate package osquery
-    #   os: linux
-    #   arch: ppc64le
-    #   dist: xenial
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7 on xenial s390x" #Unable to locate package osquery
-    #   os: linux
-    #   arch: s390x
-    #   dist: xenial
-    #   language: python
-    #   python: 3.7
-    #   # env:
-    #   #   - LIB_PATH="/usr/bin/shared/x86_64/v1"
-    #   # compiler:
-    #   #  - gcc
-    #   #  - clang
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   <<: *fleet_script_vagrant_tasks
-    #   after_success:
-    #     - deactivate
+    - name: "Python 3.7 on xenial arm64"
+      os: linux
+      arch: arm64
+      dist: xenial
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
+    - name: "Python 3.7 on xenial ppc64le" #Unable to locate package osquery
+      os: linux
+      arch: ppc64le
+      dist: xenial
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
+    - name: "Python 3.7 on xenial s390x" #Unable to locate package osquery
+      os: linux
+      arch: s390x
+      dist: xenial
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
+    - name: "Python 2.7.17 on macOS xcode10.2"
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+      before_install:
+        - pip install virtualenv
+        - virtualenv -p $(which python2) ~venvpy2
+        - source ~venvpy2/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
-    # - name: "Python 2.7.17 on macOS xcode10.2"
-    #   os: osx
-    #   osx_image: xcode10.2
-    #   language: shell
-    #   before_install:
-    #     - pip install virtualenv
-    #     - virtualenv -p $(which python2) ~venvpy2
-    #     - source ~venvpy2/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    #
-    #
-    #
-    # - name: "Python 3.7.5 on macOS xcode10.2"
-    #   os: osx
-    #   osx_image: xcode10.2
-    #   language: shell
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7.5 on macOS xcode9.4 "
-    #   os: osx
-    #   osx_image: xcode9.4
-    #   language: shell
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
+    - name: "Python 3.7.5 on macOS xcode10.2"
+      os: osx
+      osx_image: xcode10.2
+      language: shell
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
 
+    - name: "Python 3.8 on Windows"
+      os: windows
+      language: shell
+      env:
+        - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+      before_install:
+        - choco install python --version 3.8.1
+        - pip install virtualenv
+        - virtualenv $HOME/venv
+        - source $HOME/venv/Scripts/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
 
-    # - name: "Python 3.8 on Windows"
-    #   os: windows
-    #   language: shell
-    #   env:
-    #     - PATH=/c/Python38:/c/Python38/Scripts:$PATH
-    #   before_install:
-    #     - choco install python --version 3.8.1
-    #     - pip install virtualenv
-    #     - virtualenv $HOME/venv
-    #     - source $HOME/venv/Scripts/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
-    #
-    # - name: "Python 3.7 on Windows"
-    #   os: windows
-    #   language: shell
-    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    #   before_install:
-    #     - choco install python --version 3.7.3
-    #     - python -m pip install virtualenv
-    #     - virtualenv $HOME/venv
-    #     - source $HOME/venv/Scripts/activate
-    #   <<: *fleet_install_tasks
-    #   <<: *fleet_script_tasks
-    #   after_success:
-    #     - deactivate
+    - name: "Python 3.7 on Windows"
+      os: windows
+      language: shell
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+      before_install:
+        - choco install python --version 3.7.3
+        - python -m pip install virtualenv
+        - virtualenv $HOME/venv
+        - source $HOME/venv/Scripts/activate
+        - python --version
+        - pip install -r requirements.txt
+      after_success:
+        - deactivate
