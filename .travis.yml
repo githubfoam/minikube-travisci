@@ -72,7 +72,16 @@ matrix:
         - pip3 install virtualenv
         - virtualenv -p $(which python3) ~venvpy3
         - source ~venvpy3/bin/activate
+      before_script:
+        - export MAVEN_MAJOR="3"
+        - export MAVEN_VERSION="3.5.0"
+        # - wget -nv https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz
+        - wget -nv https://archive.apache.org/dist/maven/maven-$MAVEN_MAJOR/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
+        - tar zxf apache-maven-3.5.0-bin.tar.gz
+        - export M2_HOME=$PWD/apache-maven-3.5.0
+        - export PATH=$M2_HOME/bin:$PATH
       script:
+        #https://github.com/travis-ci/travis-ci/issues/8932
         # - travis_wait 15 sudo make deploy-java-maven &
         - sudo make deploy-java-maven
       after_success:

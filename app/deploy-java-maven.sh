@@ -4,7 +4,7 @@ set -eox pipefail #safety for script
 # https://github.com/aws-samples/kubernetes-for-java-developers
 #a simple Java application built using Spring Boot. The application publishes a REST endpoint that can be invoked at http://{host}:{port}/hello.
 echo "=============================Java application built using Spring Boot============================================================="
-apt-get -qq update && sudo apt-get install -qqy maven && mvn -version
+# apt-get -qq update && sudo apt-get install -qqy maven && mvn -version
 java -version
 git clone https://github.com/aws-samples/kubernetes-for-java-developers.git
 cd kubernetes-for-java-developers/app/
