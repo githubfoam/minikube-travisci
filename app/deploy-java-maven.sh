@@ -8,7 +8,6 @@ echo "=============================Java application built using Spring Boot=====
 java -version
 git clone https://github.com/aws-samples/kubernetes-for-java-developers.git
 cd kubernetes-for-java-developers/app/
-ls -lai
 mvn org.springframework.boot:spring-boot-maven-plugin:run
 mvn spring-boot:run
 echo "127.0.0.1      localhost loopback" |sudo tee -a /etc/hosts

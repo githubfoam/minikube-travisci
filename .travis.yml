@@ -86,6 +86,10 @@ matrix:
         #https://github.com/travis-ci/travis-ci/issues/8932
         # - travis_wait 15 sudo make deploy-java-maven &
         - mvn -version
+        - git clone https://github.com/aws-samples/kubernetes-for-java-developers.git
+        - cd kubernetes-for-java-developers/app/
+        - mvn org.springframework.boot:spring-boot-maven-plugin:run
+        - mvn spring-boot:run
         # - sudo make deploy-java-maven
       after_success:
         - deactivate
