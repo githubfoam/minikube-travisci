@@ -51,7 +51,7 @@ export PATH=$PATH:kfctl
 
 mkdir -p /tmp/kubeflow/v1.0
 cd /tmp/kubeflow/v1.0
-wget https://github.com/kubeflow/kfctl/releases/download/v1.0/kfctl_v1.0-0-g94c35cf_linux.tar.gz
+wget -nv https://github.com/kubeflow/kfctl/releases/download/v1.0/kfctl_v1.0-0-g94c35cf_linux.tar.gz
 
 tar -xvf kfctl_v1.0-0-g94c35cf_linux.tar.gz
 export PATH=$PATH:/tmp/kubeflow/v1.0
@@ -64,6 +64,46 @@ mkdir -p ${KF_DIR}
 cd ${KF_DIR}
 kfctl apply -V -f ${CONFIG_URI}
 
+kubectl get pod -n kubeflow
+
+#access the Kubeflow dashboard using the istio-ingressgateway service
+#see settings for the istio-ingressgateway service
+# export INGRESS_HOST=$(minikube ip)
+# export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+
+# access the Kubeflow dashboard
+# http://<INGRESS_HOST>:<INGRESS_PORT>
+
+# The MNIST on-prem notebook builds a Docker image, launches a TFJob to train a model,
+# and creates an InferenceService (KFServing) to deploy the trained model.
+# Set up Python environment Python 3.5 or later
+# apt-get update && apt-get install -qqy wget bzip2
+# wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+# bash Miniconda3-latest-Linux-x86_64.sh
+#
+# Create a Python 3.7 environment named mlpipeline
+# conda create --name mlpipeline python=3.7
+# conda init
+# conda activate mlpipeline
+#
+# Install Jupyter Notebooks
+# pip install --upgrade pip
+# pip install jupyter
+
+# Create a Docker ID,need a Docker registry to store the images.
+# Create a namespace to run the MNIST on-prem notebook
+# kubectl create ns mnist
+# kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
+#
+# Download the MNIST on-prem notebook
+# cd /root/kubeflow
+# git clone https://github.com/kubeflow/fairing.git
+
+# Launch Jupyter Notebook
+# cd /root/kubeflow/fairing/examples/mnist
+# conda activate mlpipeline
+# docker login
+# jupyter notebook --allow-root
 
 # # kind create cluster --name openesb-testing
 # # kubectl config use-context kind-openesb-testing
