@@ -1,7 +1,7 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
-deploy-openesb:
+deploy-minikube:
 	bash app/deploy-minikube.sh
 deploy-openesb:
 	bash app/deploy-openesb.sh
