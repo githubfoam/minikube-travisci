@@ -13,7 +13,6 @@ matrix:
     - name: "minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
-      addons:
       language: python
       python: 3.7
       before_install:
@@ -30,7 +29,6 @@ matrix:
     - name: "openebs minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
-      addons:
       language: python
       python: 3.7
       before_install:

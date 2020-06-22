@@ -25,6 +25,14 @@ openebs-provisioner-64c9565ccb-7pd8m           1/1     Running   0          28s
 openebs-snapshot-operator-cf5cc6c54-8lh7g      2/2     Running   0          28s
 ~~~~
 
+smoke tests k8s dashboard
+~~~~
+NAMESPACE              NAME                                                                      READY   STATUS    RESTARTS   AGE
+kubernetes-dashboard   dashboard-metrics-scraper-6b4884c9d5-z7n86                                1/1     Running   0          12s
+
+kubernetes-dashboard   kubernetes-dashboard-7bfbb48676-fbp9g                                     1/1     Running   0          12s
+~~~~
+
 ~~~~
 $ minikube addons list
 
@@ -81,6 +89,83 @@ $ minikube addons list
 |-----------------------------|----------|--------------|
 ~~~~
 
+~~~~
+Enabling NVIDIA GPU
+
+Aborting: NVIDIA kernel module not loaded.
+
+Please ensure you have CUDA capable hardware and the NVIDIA drivers installed.
+
+Failed to enable gpu
+https://travis-ci.com/github/githubfoam/minikube-travisci/jobs/341676820
+
+Alternative installs - (MacOS/ Windows 10/Multipass)
+Raspberry Pi/ARM
+Multipass
+With multipass installed, you can now create a VM to run MicroK8s. At least 4
+Gigabytes of RAM and 40G of storage is recommended
+https://microk8s.io/docs/install-alternatives#heading--arm
+
+Installing Multipass for Windows
+https://multipass.run/docs/installing-on-windows
+
+Clustering with MicroK8s
+https://microk8s.io/docs/clustering
+
+#https://istio.io/docs/setup/platform-setup/microk8s/
+
+#https://microk8s.io/#get-started
+
+#https://microk8s.io/docs
+
+#https://istio.io/docs/setup/platform-setup/microk8s/
+
+~~~~
+~~~~
+$ sudo microk8s status --wait-ready
+
+microk8s is running
+
+addons:
+
+cilium: disabled
+
+dashboard: disabled
+
+dns: disabled
+
+fluentd: disabled
+
+gpu: disabled
+
+helm: disabled
+
+helm3: disabled
+
+ingress: disabled
+
+istio: disabled
+
+jaeger: disabled
+
+knative: disabled
+
+kubeflow: disabled
+
+linkerd: disabled
+
+metallb: disabled
+
+metrics-server: disabled
+
+prometheus: disabled
+
+rbac: disabled
+
+registry: disabled
+
+storage: disabled
+~~~~
 ~~~~
 The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters
 https://kubernetes.io/docs/tasks/tools/install-kubectl/
