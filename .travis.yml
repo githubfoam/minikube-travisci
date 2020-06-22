@@ -1,20 +1,7 @@
 ---
 sudo: required
 dist: bionic
-env:
-  global:
-  # # auto vagrant installation
-  # - VAGRANT_CURRENT_VERSION="$(curl -s https://checkpoint-api.hashicorp.com/v1/check/vagrant | jq -r -M '.current_version')"
-  # # auto vagrant installation
-  # - VAGRANT_VERSION="2.2.9"
-  # - KUBECTL_VERSION=1.18.3
-  # - KUBERNETES_VERSION=1.18.3
-  # - MINIKUBE_VERSION=1.8.3
-  # - CHANGE_MINIKUBE_NONE_USER=true #(bool) automatically change ownership of ~/.minikube to the value of $SUDO_USER https://minikube.sigs.k8s.io/docs/handbook/config/
-  # - MINIKUBE_WANTREPORTERRORPROMPT=false
-  # - MINIKUBE_WANTUPDATENOTIFICATION=false #(bool) sets whether the user wants an update notification for new minikube versions https://minikube.sigs.k8s.io/docs/handbook/config
-  # - MINIKUBE_HOME=$HOME #(string) sets the path for the .minikube directory that minikube uses for state/configuration. Please note: this is used only by minikube https://minikube.sigs.k8s.io/docs/handbook/config
-  # - KUBECONFIG=$HOME/.kube/config
+
 
 notifications:
   slack:
@@ -101,6 +88,23 @@ matrix:
       script:
         - sudo make deploy-minikube
         - sudo make deploy-dashboard
+      after_success:
+        - deactivate
+
+      # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
+    - name: "kubeflow minikube wo snaps Python 3.7 on bionic amd64"
+      dist: bionic
+      arch: amd64
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        # - sudo make deploy-minikube
+        - sudo make deploy-kubeflow
       after_success:
         - deactivate
 
