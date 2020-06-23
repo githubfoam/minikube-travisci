@@ -64,10 +64,6 @@ mkdir -p ${KF_DIR}
 cd ${KF_DIR}
 kfctl apply -V -f ${CONFIG_URI}
 
-kubectl get pod -n kubeflow
-kubectl get cs #check component status
-kubectl get nodes
-kubectl cluster-info
 
 #check for currently not ready pods
 # echo $(`kubectl get pods --all-namespaces -o json`  | `jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name`)
@@ -88,8 +84,14 @@ for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       fi
       sleep 10
 done
+
+kubectl get nodes --all-namespaces --show-label #list all labels
 kubectl get pod -n kubeflow
-kubectl get pods --namespace=kubeflow
+# kubectl get pods --namespace=kubeflow
+# kubectl get cs #check component status
+# kubectl get nodes
+# kubectl cluster-info
+
 
 
 #access the Kubeflow dashboard using the istio-ingressgateway service
