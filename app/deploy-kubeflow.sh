@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eox pipefail #safety for script
 
 # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
 echo "=============================kubeflow============================================================="
@@ -74,23 +75,21 @@ kfctl apply -V -f ${CONFIG_URI}
 echo echo "Waiting for kubeflowto be ready ..."
 for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
-      # kubectl get pods --field-selector=status.phase!=Running
-      # if kubectl get pods --namespace=kubeflow  | grep Running ; then
-      #   break
-      # fi
-      if [ "kubectl get pods --field-selector=status.phase" != "ContainerCreating" ] || [ "kubectl get pods --field-selector=status.phase" != "Pending" ]
-      then
-          break
+      if kubectl get pods --namespace=kubeflow  | grep ContainerCreating ; then
+        #break
+        sleep 10
+      else
+        break        
       fi
-      sleep 10
+      # sleep 10
 done
 
 # kubectl describe pod pod-name | grep 'Status\|State\|Reason'
-kubectl get pods --sort-by='.status.containerStatuses[0].restartCount' ## List pods Sorted by Restart Count
+
 echo "=============================Running kubeflow============================================================="
-kubectl get pods --field-selector=status.phase=Running ## Get all running pods in the namespace
+kubectl get pods --sort-by='.status.containerStatuses[0].restartCount' ## List pods Sorted by Restart Count
 echo "=============================NOT Runningkubeflow============================================================="
-kubectl get pods --field-selector=status.phase=!Running
+
 kubectl get pods -o wide
 kubectl get pod -n kubeflow
 # kubectl get pods --namespace=kubeflow
