@@ -91,6 +91,7 @@ matrix:
     #   after_success:
     #     - deactivate
 
+#==========================================================================================
       # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
     - name: "kubeflow minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
