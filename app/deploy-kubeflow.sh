@@ -108,15 +108,13 @@ wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b
 
 #https://docs.anaconda.com/anaconda/user-guide/troubleshooting/#conda-command-not-found-on-macos-or-linux
-# echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
-#source ~/.bash_profile
+echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
+source ~/.bash_profile
 
 # manually
 # anaconda/bin/conda create --name mlpipeline python=3.7
 
-which conda
-where conda 
-./anaconda3/bin/conda init
+# ./anaconda3/bin/conda init
 conda --version
 
 
