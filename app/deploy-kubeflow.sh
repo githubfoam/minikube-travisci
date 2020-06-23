@@ -65,12 +65,26 @@ cd ${KF_DIR}
 kfctl apply -V -f ${CONFIG_URI}
 
 kubectl get pod -n kubeflow
+kubectl get cs #check component status
+kubectl get nodes
+kubectl cluster-info
 
-echo echo "Waiting for maya-apiserver component to be ready ..."
+#check for currently not ready pods
+# echo $(`kubectl get pods --all-namespaces -o json`  | `jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name`)
+# echo $(kubectl get pods --namespace foo -l status=pending)
+#kubectl get pods -a --all-namespaces -o json  | jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .status == "False") ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
+# kubectl get pods --field-selector=status.phase!=Running
+
+echo echo "Waiting for kubeflowto be ready ..."
 for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
-      if kubectl get pods --namespace=kubeflow  | grep Running ; then
-        break
+      # kubectl get pods --field-selector=status.phase!=Running
+      # if kubectl get pods --namespace=kubeflow  | grep Running ; then
+      #   break
+      # fi
+      if [ kubectl get pods --field-selector=status.phase!=ContainerCreating ] || [ kubectl get pods --field-selector=status.phase!=Pending ]
+      then
+          break
       fi
       sleep 10
 done
