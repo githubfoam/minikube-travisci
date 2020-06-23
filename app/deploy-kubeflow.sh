@@ -114,6 +114,8 @@ bash Miniconda3-latest-Linux-x86_64.sh -b
 # manually
 # anaconda/bin/conda create --name mlpipeline python=3.7
 
+which conda
+where conda 
 ./anaconda3/bin/conda init
 conda --version
 
