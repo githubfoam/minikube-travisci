@@ -104,7 +104,8 @@ echo $(curl http://$INGRESS_HOST:$INGRESS_PORT)
 # Set up Python environment Python 3.5 or later
 apt-get update && apt-get install -qqy wget bzip2
 wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
+#bash Miniconda3-latest-Linux-x86_64.sh #requires license review
+bash Miniconda3-latest-Linux-x86_64.sh -b
 
 # Create a Python 3.7 environment named mlpipeline
 conda create --name mlpipeline python=3.7
