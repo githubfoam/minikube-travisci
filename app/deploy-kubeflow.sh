@@ -76,21 +76,12 @@ echo echo "Waiting for kubeflowto be ready ..."
 for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
       if kubectl get pods --namespace=kubeflow  | grep ContainerCreating ; then
-        #break
         sleep 10
       else
-        break        
+        break
       fi
-      # sleep 10
 done
 
-# kubectl describe pod pod-name | grep 'Status\|State\|Reason'
-
-echo "=============================Running kubeflow============================================================="
-kubectl get pods --sort-by='.status.containerStatuses[0].restartCount' ## List pods Sorted by Restart Count
-echo "=============================NOT Runningkubeflow============================================================="
-
-kubectl get pods -o wide
 kubectl get pod -n kubeflow
 # kubectl get pods --namespace=kubeflow
 # kubectl get cs #check component status
@@ -101,90 +92,40 @@ kubectl get pod -n kubeflow
 
 #access the Kubeflow dashboard using the istio-ingressgateway service
 #see settings for the istio-ingressgateway service
-# export INGRESS_HOST=$(minikube ip)
-# export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+export INGRESS_HOST=$(minikube ip)
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 
 # access the Kubeflow dashboard
 # http://<INGRESS_HOST>:<INGRESS_PORT>
+echo $(curl http://$INGRESS_HOST:$INGRESS_PORT)
 
 # The MNIST on-prem notebook builds a Docker image, launches a TFJob to train a model,
 # and creates an InferenceService (KFServing) to deploy the trained model.
 # Set up Python environment Python 3.5 or later
-# apt-get update && apt-get install -qqy wget bzip2
-# wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-# bash Miniconda3-latest-Linux-x86_64.sh
-#
+apt-get update && apt-get install -qqy wget bzip2
+wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
 # Create a Python 3.7 environment named mlpipeline
-# conda create --name mlpipeline python=3.7
-# conda init
-# conda activate mlpipeline
-#
+conda create --name mlpipeline python=3.7
+conda init
+conda activate mlpipeline
+
 # Install Jupyter Notebooks
-# pip install --upgrade pip
-# pip install jupyter
+pip install --upgrade pip
+pip install jupyter
 
 # Create a Docker ID,need a Docker registry to store the images.
 # Create a namespace to run the MNIST on-prem notebook
-# kubectl create ns mnist
-# kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
-#
+kubectl create ns mnist
+kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
+
 # Download the MNIST on-prem notebook
-# cd /root/kubeflow
-# git clone https://github.com/kubeflow/fairing.git
+cd /root/kubeflow
+git clone https://github.com/kubeflow/fairing.git
 
 # Launch Jupyter Notebook
-# cd /root/kubeflow/fairing/examples/mnist
-# conda activate mlpipeline
+cd /root/kubeflow/fairing/examples/mnist
+conda activate mlpipeline
 # docker login
 # jupyter notebook --allow-root
-
-# # kind create cluster --name openesb-testing
-# # kubectl config use-context kind-openesb-testing
-# kubectl cluster-info
-# kubectl get pods --all-namespaces;
-# kubectl get pods -n default;
-# kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
-# kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
-# kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml #install OpenEBS
-# kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces-
-# kubectl get pods -n openebs -l openebs.io/component-name=openebs-localpv-provisioner #Observe localhost provisioner pod
-# kubectl get sc #Check the storage Class
-# echo echo "Waiting for openebs-localpv-provisioner component to be ready ..."
-# for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
-#       if kubectl get pods --namespace=openebs -l openebs.io/component-name=openebs-localpv-provisioner | grep Running ; then
-#         break
-#       fi
-#       sleep 5
-# done
-# echo echo "Waiting for maya-apiserver component to be ready ..."
-# for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
-#       if kubectl get pods --namespace=openebs -l openebs.io/component-name=maya-apiserver | grep Running ; then
-#         break
-#       fi
-#       sleep 5
-# done
-# echo echo "Waiting for openebs-ndm component to be ready ..."
-# for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
-#       if kubectl get pods --namespace=openebs -l openebs.io/component-name=openebs-ndm | grep Running ; then
-#         break
-#       fi
-#       sleep 5
-# done
-# echo echo "Waiting for openebs-ndm-operator component to be ready ..."
-# for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
-#       if kubectl get pods --namespace=openebs -l openebs.io/component-name=openebs-ndm-operator | grep Running ; then
-#         break
-#       fi
-#       sleep 5
-# done
-# echo "Waiting for openesb to be ready ..."
-#   for i in {1..60}; do # Timeout after 2 minutes, 60x2=300 secs
-#       if kubectl get pods --namespace=openebs | grep Running ; then
-#         break
-#       fi
-#       sleep 5
-# done
-# kubectl get pods --all-namespaces
-# kubectl get pods --namespace=openebs
-# kubectl get pod -n default -o wide  --all-namespaces
-# # kind delete cluster --name openesb-testing
