@@ -85,9 +85,11 @@ for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       sleep 10
 done
 
-kubectl describe pod pod-name | grep 'Status\|State\|Reason'
+# kubectl describe pod pod-name | grep 'Status\|State\|Reason'
 kubectl get pods --sort-by='.status.containerStatuses[0].restartCount' ## List pods Sorted by Restart Count
+echo "=============================Running kubeflow============================================================="
 kubectl get pods --field-selector=status.phase=Running ## Get all running pods in the namespace
+echo "=============================NOT Runningkubeflow============================================================="
 kubectl get pods --field-selector=status.phase=!Running
 kubectl get pods -o wide
 kubectl get pod -n kubeflow
