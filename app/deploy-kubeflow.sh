@@ -82,14 +82,14 @@ for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       # if kubectl get pods --namespace=kubeflow  | grep Running ; then
       #   break
       # fi
-      if [ kubectl get pods --field-selector=status.phase!=ContainerCreating ] || [ kubectl get pods --field-selector=status.phase!=Pending ]
+      if [ "kubectl get pods --field-selector=status.phase" != "ContainerCreating" ] || [ "kubectl get pods --field-selector=status.phase" != "Pending" ]
       then
           break
       fi
       sleep 10
 done
 kubectl get pod -n kubeflow
-# kubectl get pods --namespace=kubeflow
+kubectl get pods --namespace=kubeflow
 
 
 #access the Kubeflow dashboard using the istio-ingressgateway service
