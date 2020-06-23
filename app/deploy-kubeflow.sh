@@ -67,16 +67,16 @@ kfctl apply -V -f ${CONFIG_URI}
 kubectl get pod -n kubeflow
 
 echo echo "Waiting for maya-apiserver component to be ready ..."
-for i in {1..60}; do # Timeout after 5 minutes, 150x5=300 secs
+for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
       # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
       if kubectl get pods --namespace=kubeflow  | grep Running ; then
         break
       fi
-      sleep 5
+      sleep 10
 done
 kubectl get pod -n kubeflow
-kubectl get pods --namespace=kubeflow
-kubectl get pods --namespace=kubeflow -l
+# kubectl get pods --namespace=kubeflow
+
 
 #access the Kubeflow dashboard using the istio-ingressgateway service
 #see settings for the istio-ingressgateway service
