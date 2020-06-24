@@ -119,7 +119,6 @@ apt-get update && apt-get install -qqy wget bzip2
 
 wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
-stat $HOME/miniconda/bin/activateadd
 echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
 source ~/.bash_rc
 conda --version # method1 - in $PATH
