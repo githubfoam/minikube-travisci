@@ -103,23 +103,30 @@ echo $(curl http://$INGRESS_HOST:$INGRESS_PORT)
 # and creates an InferenceService (KFServing) to deploy the trained model.
 # Set up Python environment Python 3.5 or later
 apt-get update && apt-get install -qqy wget bzip2
-wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+#wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 #bash Miniconda3-latest-Linux-x86_64.sh #requires license review
-bash Miniconda3-latest-Linux-x86_64.sh -b
 
+
+#bash Miniconda3-latest-Linux-x86_64.sh -b
 #https://docs.anaconda.com/anaconda/user-guide/troubleshooting/#conda-command-not-found-on-macos-or-linux
-echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
-source ~/.bash_profile
-
+# echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
+# echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_rc
+# source ~/.bash_rc
 # manually
 # anaconda/bin/conda create --name mlpipeline python=3.7
-
 # ./anaconda3/bin/conda init
-conda --version
 
+
+wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+bash ~/miniconda.sh -b -p $HOME/miniconda
+stat $HOME/miniconda/bin/activateadd
+echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
+source ~/.bash_rc
+conda --version # method1 - in $PATH
+$HOME/miniconda/bin/conda --version  # method2 - absolute path
 
 # Create a Python 3.7 environment named mlpipeline
-conda create --name mlpipeline python=3.7
+conda create --name mlpipeline python=3.7 -y
 conda init
 conda activate mlpipeline
 
