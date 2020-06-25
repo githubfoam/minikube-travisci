@@ -123,8 +123,9 @@ conda config --set always_yes yes --set changeps1 no
 conda update -q conda
 conda info -a
 
-# conda env create -n ~mlpipeline python=3.7  -f conda_environment.yml
-# source activate ~mlpipeline
+conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
+conda init
+source activate ~mlpipeline
 
 # conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
 # source activate ~venv-basic-anomaly-detection
@@ -135,9 +136,9 @@ conda info -a
 
 
 # Create a Python 3.7 environment named mlpipeline
-conda create --name mlpipeline python=3.7 -y
-conda init
-conda activate mlpipeline
+# conda create --name mlpipeline python=3.7 -y
+# conda init
+# conda activate mlpipeline
 
 #For changes to take effect, close and re-open your current shell
 # $HOME/miniconda/bin/conda --version  # method2 - absolute path
