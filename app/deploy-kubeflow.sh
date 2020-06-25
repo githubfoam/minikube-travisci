@@ -122,8 +122,10 @@ conda --version
 conda config --set always_yes yes --set changeps1 no
 conda update -q conda
 conda info -a
-conda env create -n mlpipeline python=3.7
-source activate mlpipeline
+
+conda env create -n ~mlpipeline python=3.7  -f conda_environment.yml
+source activate ~mlpipeline
+
 # conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
 # source activate ~venv-basic-anomaly-detection
 
