@@ -112,23 +112,24 @@ apt-get update && apt-get install -qqy wget bzip2
 # echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
 # echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_rc
 # source ~/.bash_rc
-# manually
-# anaconda/bin/conda create --name mlpipeline python=3.7
-# ./anaconda3/bin/conda init
-
 
 wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
-echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
-cat ~/.bash_rc
-source ~/.bash_rc
+export PATH="$HOME/miniconda/bin:$PATH"
+hash -r
+conda --version 
+# conda config --set always_yes yes --set changeps1 no
+# conda update -q conda
+# conda info -a
+# conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
+# source activate ~venv-basic-anomaly-detection
 
 #exec $SHELL && ls -lai
-$HOME/miniconda/bin/conda init bash
-conda --version # method1 - in $PATH , not working
+# $HOME/miniconda/bin/conda init bash
 
 
-Create a Python 3.7 environment named mlpipeline
+
+# Create a Python 3.7 environment named mlpipeline
 conda create --name mlpipeline python=3.7 -y
 conda init
 conda activate mlpipeline
