@@ -122,16 +122,21 @@ bash ~/miniconda.sh -b -p $HOME/miniconda
 echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
 cat ~/.bash_rc
 source ~/.bash_rc
-# conda --version # method1 - in $PATH , not working
-$HOME/miniconda/bin/conda --version  # method2 - absolute path
+exec bash
+conda --version # method1 - in $PATH , not working
 
-# Create a Python 3.7 environment named mlpipeline
-# conda create --name mlpipeline python=3.7 -y
-# conda init
-# conda activate mlpipeline
-$HOME/miniconda/bin/conda create --name mlpipeline python=3.7 -y
-$HOME/miniconda/bin/conda init
-$HOME/miniconda/bin/conda activate mlpipeline
+
+Create a Python 3.7 environment named mlpipeline
+conda create --name mlpipeline python=3.7 -y
+conda init
+conda activate mlpipeline
+
+#For changes to take effect, close and re-open your current shell
+# $HOME/miniconda/bin/conda --version  # method2 - absolute path
+# $HOME/miniconda/bin/conda create --name mlpipeline python=3.7 -y
+# $HOME/miniconda/bin/conda init
+# $HOME/miniconda/bin/conda activate mlpipeline
+#For changes to take effect, close and re-open your current shell
 
 # Install Jupyter Notebooks
 pip install --upgrade pip
