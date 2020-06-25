@@ -117,10 +117,13 @@ wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 bash ~/miniconda.sh -b -p $HOME/miniconda
 export PATH="$HOME/miniconda/bin:$PATH"
 hash -r
-conda --version 
-# conda config --set always_yes yes --set changeps1 no
-# conda update -q conda
-# conda info -a
+conda --version
+
+conda config --set always_yes yes --set changeps1 no
+conda update -q conda
+conda info -a
+conda env create -n mlpipeline python=3.7
+source activate mlpipeline
 # conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
 # source activate ~venv-basic-anomaly-detection
 
@@ -130,9 +133,9 @@ conda --version
 
 
 # Create a Python 3.7 environment named mlpipeline
-conda create --name mlpipeline python=3.7 -y
-conda init
-conda activate mlpipeline
+# conda create --name mlpipeline python=3.7 -y
+# conda init
+# conda activate mlpipeline
 
 #For changes to take effect, close and re-open your current shell
 # $HOME/miniconda/bin/conda --version  # method2 - absolute path
