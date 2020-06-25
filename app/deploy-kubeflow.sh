@@ -122,7 +122,8 @@ bash ~/miniconda.sh -b -p $HOME/miniconda
 echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
 cat ~/.bash_rc
 source ~/.bash_rc
-exec bash > /dev/null
+#exec bash > /dev/null
+exec $SHELL && ls -lai
 conda --version # method1 - in $PATH , not working
 
 
