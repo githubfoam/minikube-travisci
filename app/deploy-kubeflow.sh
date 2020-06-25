@@ -120,8 +120,9 @@ apt-get update && apt-get install -qqy wget bzip2
 wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
 echo "export PATH=$HOME/miniconda:$PATH" | sudo tee -a ~/.bash_rc
+cat ~/.bash_rc
 source ~/.bash_rc
-conda --version # method1 - in $PATH
+# conda --version # method1 - in $PATH
 $HOME/miniconda/bin/conda --version  # method2 - absolute path
 
 # Create a Python 3.7 environment named mlpipeline
