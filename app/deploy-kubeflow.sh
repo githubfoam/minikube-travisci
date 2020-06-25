@@ -124,7 +124,7 @@ cat ~/.bash_rc
 source ~/.bash_rc
 
 #exec $SHELL && ls -lai
-$HOME/miniconda/bin/conda init $SHELL 
+$HOME/miniconda/bin/conda init bash
 conda --version # method1 - in $PATH , not working
 
 
