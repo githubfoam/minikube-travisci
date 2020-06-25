@@ -123,7 +123,8 @@ conda config --set always_yes yes --set changeps1 no
 conda update -q conda
 conda info -a
 
-conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
+# conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
+conda create -n ~mlpipeline python=3.7 
 conda init
 source activate ~mlpipeline
 
