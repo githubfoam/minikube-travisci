@@ -1,5 +1,9 @@
 #!/bin/bash
-set -eox pipefail #safety for script
+set -o errexit
+set -o pipefail
+set -o nounset
+set -o xtrace
+# set -eox pipefail #safety for script
 
 # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
 echo "=============================kubeflow============================================================="
@@ -65,16 +69,8 @@ mkdir -p ${KF_DIR}
 cd ${KF_DIR}
 kfctl apply -V -f ${CONFIG_URI}
 
-
-#check for currently not ready pods
-# echo $(`kubectl get pods --all-namespaces -o json`  | `jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .state == false) ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name`)
-# echo $(kubectl get pods --namespace foo -l status=pending)
-#kubectl get pods -a --all-namespaces -o json  | jq -r '.items[] | select(.status.phase != "Running" or ([ .status.conditions[] | select(.type == "Ready" and .status == "False") ] | length ) == 1 ) | .metadata.namespace + "/" + .metadata.name'
-# kubectl get pods --field-selector=status.phase!=Running
-
 echo echo "Waiting for kubeflowto be ready ..."
 for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
-      # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
       if kubectl get pods --namespace=kubeflow  | grep ContainerCreating ; then
         sleep 10
       else
@@ -83,11 +79,6 @@ for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
 done
 
 kubectl get pod -n kubeflow
-# kubectl get pods --namespace=kubeflow
-# kubectl get cs #check component status
-# kubectl get nodes
-# kubectl cluster-info
-
 
 
 #access the Kubeflow dashboard using the istio-ingressgateway service
@@ -103,15 +94,7 @@ echo $(curl http://$INGRESS_HOST:$INGRESS_PORT)
 # and creates an InferenceService (KFServing) to deploy the trained model.
 # Set up Python environment Python 3.5 or later
 apt-get update && apt-get install -qqy wget bzip2
-#wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-#bash Miniconda3-latest-Linux-x86_64.sh #requires license review
 
-
-#bash Miniconda3-latest-Linux-x86_64.sh -b
-#https://docs.anaconda.com/anaconda/user-guide/troubleshooting/#conda-command-not-found-on-macos-or-linux
-# echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_profile
-# echo "export PATH=~/anaconda3/bin:$PATH" | sudo tee -a ~/.bash_rc
-# source ~/.bash_rc
 
 wget -nv https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
@@ -123,42 +106,19 @@ conda config --set always_yes yes --set changeps1 no
 conda update -q conda
 conda info -a
 
-# conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
 conda create -n mlpipeline python=3.7
 conda init
 source activate mlpipeline
-
-# conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
-# source activate ~venv-basic-anomaly-detection
-
-#exec $SHELL && ls -lai
-# $HOME/miniconda/bin/conda init bash
-
-
-
-# Create a Python 3.7 environment named mlpipeline
-# conda create --name mlpipeline python=3.7 -y
-# conda init
-# conda activate mlpipeline
-
-#For changes to take effect, close and re-open your current shell
-# $HOME/miniconda/bin/conda --version  # method2 - absolute path
-# $HOME/miniconda/bin/conda create --name mlpipeline python=3.7 -y
-# $HOME/miniconda/bin/conda init
-# $HOME/miniconda/bin/conda activate mlpipeline
-#For changes to take effect, close and re-open your current shell
 
 # Install Jupyter Notebooks
 pip install --upgrade pip
 pip install jupyter
 
-# Create a Docker ID,need a Docker registry to store the images.
 # Create a namespace to run the MNIST on-prem notebook
 kubectl create ns mnist
 kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
 
 # Download the MNIST on-prem notebook
-#cd /root/kubeflow
 cd /tmp/kubeflow
 git clone https://github.com/kubeflow/fairing.git
 
@@ -170,4 +130,3 @@ conda info --envs #list all discoverable environments
 conda activate mlpipeline #Could not find conda environment: mlpipeline
 # docker login
 jupyter notebook --allow-root &
- 

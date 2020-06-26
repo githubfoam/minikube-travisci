@@ -1,9 +1,0 @@
-name: mlpipeline
-channels:
-- defaults
-dependencies:
-- python
-- numpy
-- jupyter
-- pytest
-- matplotlib

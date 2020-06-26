@@ -6,6 +6,10 @@ Travis (.com) dev branch:
 
 smoke tests kubeflow
 ~~~~
+Minikube + kubectl + Docker + kubeflow
+
+
+
 [I 10:30:46.768 NotebookApp] Writing notebook server cookie secret to /home/travis/.local/share/jupyter/runtime/notebook_cookie_secret
 
 [I 10:30:47.075 NotebookApp] Serving notebooks from local directory: /tmp/kubeflow/fairing/examples/mnist
@@ -31,6 +35,11 @@ smoke tests kubeflow
         http://localhost:8888/?token=8a8108714c8244b4849d9233a0a7feab02b2d33937b24363
 
      or http://127.0.0.1:8888/?token=8a8108714c8244b4849d9233a0a7feab02b2d33937b24363
+
+
+  Kubeflow dashboard
+  http://10.30.1.35:31380
+
 ~~~~
 
 
