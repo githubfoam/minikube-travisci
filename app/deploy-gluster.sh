@@ -2,7 +2,7 @@
 # openesb component list
 #https://github.com/openebs/openebs/blob/master/k8s/openebs-operator.yaml
 
-echo "=============================openEBS============================================================="
+echo "=============================gluster============================================================="
 minikube dashboard & # the Kubernetes dashboard
 kubectl cluster-info
 kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
@@ -18,10 +18,10 @@ minikube addons list #List the currently supported addons
 minikube addons enable storage-provisioner-gluster #Enable an addon
 kubectl get pod,svc -n kube-system #View the created Pod and Service
 
-minikube addons disable  storage-provisioner-gluster
-minikube addons list
-# clean up the resources in the cluster
-kubectl delete service hello-node
-kubectl delete deployment hello-node
-minikube stop
-minikube delete #delete the Minikube VM
+# minikube addons disable  storage-provisioner-gluster
+# minikube addons list
+# # clean up the resources in the cluster
+# kubectl delete service hello-node
+# kubectl delete deployment hello-node
+# minikube stop
+# minikube delete #delete the Minikube VM

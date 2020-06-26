@@ -10,7 +10,14 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/l
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
 
+#https://minikube.sigs.k8s.io/docs/start/
+#https://github.com/kubernetes/minikube
 # Install Minikube
+# curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+# chmod +x minikube
+# cp minikube /usr/local/bin/ && rm minikube
+
+
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.2.0/minikube-linux-amd64
 chmod +x minikube
 cp minikube /usr/local/bin/ && rm minikube

@@ -58,6 +58,7 @@ matrix:
       script:
         - sudo make deploy-minikube-latest
         - sudo make deploy-gluster
+        - sudo make deploy-weavescope
       after_success:
         - deactivate
 
