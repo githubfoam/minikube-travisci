@@ -169,4 +169,5 @@ cd /tmp/kubeflow/fairing/examples/mnist
 conda info --envs #list all discoverable environments
 conda activate mlpipeline #Could not find conda environment: mlpipeline
 # docker login
-jupyter notebook --allow-root
+jupyter notebook --allow-root &
+ 
