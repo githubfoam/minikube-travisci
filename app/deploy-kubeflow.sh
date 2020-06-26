@@ -124,7 +124,7 @@ conda update -q conda
 conda info -a
 
 # conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
-conda create -n ~mlpipeline python=3.7 
+conda create -n ~mlpipeline python=3.7
 conda init
 source activate ~mlpipeline
 
@@ -158,7 +158,8 @@ kubectl create ns mnist
 kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
 
 # Download the MNIST on-prem notebook
-cd /root/kubeflow
+#cd /root/kubeflow
+ls -lai && cd ~/Kubeflow
 git clone https://github.com/kubeflow/fairing.git
 
 # Launch Jupyter Notebook
