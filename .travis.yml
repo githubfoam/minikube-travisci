@@ -48,14 +48,6 @@ matrix:
     - name: "storage gluster minikube w snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
-      addons:
-        snaps:
-          - name: minikube
-            confinement: classic # or devmode
-            channel: latest/stable # will be passed to --channel flag
-          - name: kubectl
-            confinement: classic # or devmode
-            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -64,16 +56,8 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - which minikube
-        #starts Minikube with 6 CPUs, 12288 memory, 120G disk size
-        - |
-          sudo minikube start --vm-driver=none \ 
-                              --cpus 6 --memory 12288 \
-                              --disk-size=120g \
-                              --extra-config=apiserver.authorization-mode=RBAC \
-                              --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
-                              --extra-config kubeadm.ignore-preflight-errors=SystemVerification
-        # - sudo make deploy-gluster
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-gluster
       after_success:
         - deactivate
 
