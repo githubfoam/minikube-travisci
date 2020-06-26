@@ -1,6 +1,8 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-weavescope:
+	bash app/deploy-weavescope.sh
 deploy-gluster:
 	bash app/deploy-gluster.sh
 deploy-minikube-latest:
