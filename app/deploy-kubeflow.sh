@@ -159,12 +159,13 @@ kubectl label namespace mnist serving.kubeflow.org/inferenceservice=enabled
 
 # Download the MNIST on-prem notebook
 #cd /root/kubeflow
+cd /tmp/kubeflow
 git clone https://github.com/kubeflow/fairing.git
-ls -lai && cd ~/Kubeflow
+
 
 
 # Launch Jupyter Notebook
-cd /root/kubeflow/fairing/examples/mnist
+cd /tmp/kubeflow/fairing/examples/mnist
 conda activate mlpipeline
 # docker login
-# jupyter notebook --allow-root
+jupyter notebook --allow-root
