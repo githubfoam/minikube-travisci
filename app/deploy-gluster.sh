@@ -14,8 +14,12 @@ kubectl config view
 kubectl expose deployment hello-node --type=LoadBalancer --port=8080 #Expose the Pod to the public internet
 kubectl get services
 minikube service hello-node
+
 minikube addons list #List the currently supported addons
 minikube addons enable storage-provisioner-gluster #Enable an addon
+minikube addons disable storage-provisioner #Enable an addon
+
+minikube addons list #List the currently supported addons
 kubectl get pod,svc -n kube-system #View the created Pod and Service
 kubectl get pvc,pv
 

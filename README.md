@@ -4,8 +4,62 @@ minikube pipeline
 Travis (.com) dev branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=dev)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
-minikube with snap installation
+storage-provisioner-gluster
+
 ~~~~
+- storage-provisioner: enabled
+
+- storage-provisioner-gluster: disabled
+
+* storage-provisioner-gluster was successfully enabled
+
+
+NAME                                   READY   STATUS    RESTARTS   AGE
+
+pod/coredns-5c98db65d4-2bnkf           1/1     Running   1          73s
+
+pod/coredns-5c98db65d4-lk6rw           1/1     Running   1          73s
+
+pod/etcd-minikube                      1/1     Running   0          14s
+
+pod/kube-addon-manager-minikube        1/1     Running   0          13s
+
+pod/kube-apiserver-minikube            1/1     Running   0          5s
+
+pod/kube-controller-manager-minikube   1/1     Running   0          19s
+
+pod/kube-proxy-fxq4q                   1/1     Running   0          73s
+
+pod/kube-scheduler-minikube            1/1     Running   0          4s
+
+pod/storage-provisioner                1/1     Running   0          71s
+~~~~
+~~~~
+There is a newer version of minikube available (v1.11.0).  Download it here:
+
+https://github.com/kubernetes/minikube/releases/tag/v1.11.0
+
+To disable this notification, add WantUpdateNotification: False to the json config file at /root/snap/minikube/4/.minikube/config
+F0626 12:24:45.845983    6085 cluster.go:391] Unsupported driver: none
+
+--cpus: command not found
+
+The command "sudo minikube start --vm-driver=none \
+
+                    --cpus 6 --memory 12288 \
+
+                    --disk-size=120g \
+
+                    --extra-config=apiserver.authorization-mode=RBAC \
+
+                    --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
+
+                    --extra-config kubeadm.ignore-preflight-errors=SystemVerification
+
+~~~~
+
+~~~~
+minikube with snap installation
 $ which minikube
 
 /snap/bin/minikube
