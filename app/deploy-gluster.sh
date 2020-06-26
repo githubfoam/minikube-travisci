@@ -18,6 +18,10 @@ minikube addons list #List the currently supported addons
 minikube addons enable storage-provisioner-gluster #Enable an addon
 kubectl get pod,svc -n kube-system #View the created Pod and Service
 
+# create  PVC -  provision and bind to a PV
+# kubectl apply -f https://gist.githubusercontent.com/bodom0015/d920e22df8ff78ee05929d4c3ae736f8/raw/edccc530bf6fa748892d47130a1311fce5513f37/test.pvc.default.yaml
+# kubectl get pvc,pv
+
 # minikube addons disable  storage-provisioner-gluster
 # minikube addons list
 # # clean up the resources in the cluster
