@@ -13,6 +13,11 @@ echo "=============================Weave Scope==================================
 #install Weave Scope on your Kubernetes cluster
 kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 echo echo "Waiting for Weave Scope to be ready ..."
+
+kubectl cluster-info
+kubectl get pods --all-namespaces;
+kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
+
 for i in {1..60}; do # Timeout after 3 minutes, 60x3=300 secs
   if kubectl get pods --namespace=weave  | grep Pending ; then
       sleep 3
