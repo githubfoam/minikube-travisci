@@ -166,6 +166,7 @@ git clone https://github.com/kubeflow/fairing.git
 
 # Launch Jupyter Notebook
 cd /tmp/kubeflow/fairing/examples/mnist
-conda activate mlpipeline
+conda info --envs #list all discoverable environments
+conda activate mlpipeline #Could not find conda environment: mlpipeline
 # docker login
 jupyter notebook --allow-root
