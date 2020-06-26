@@ -124,9 +124,9 @@ conda update -q conda
 conda info -a
 
 # conda create -n ~mlpipeline python=3.7  -f conda_environment.yml
-conda create -n ~mlpipeline python=3.7
+conda create -n mlpipeline python=3.7
 conda init
-source activate ~mlpipeline
+source activate mlpipeline
 
 # conda env create -n ~venv-basic-anomaly-detection python=$TRAVIS_PYTHON_VERSION  -f conda_environment.yml
 # source activate ~venv-basic-anomaly-detection
