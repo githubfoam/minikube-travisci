@@ -61,6 +61,26 @@ matrix:
       after_success:
         - deactivate
 
+    #https://kubernetes.io/docs/tutorials/hello-minikube/
+    - name: "storage gluster minikube w snaps Python 3.7 on bionic amd64"
+      dist: bionic
+      arch: amd64
+      addons:
+        snaps:
+          - name: minikube
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-gluster
+      after_success:
+        - deactivate
 
     # - name: "minikube wo snaps Python 3.7 on bionic amd64"
     #   dist: bionic
