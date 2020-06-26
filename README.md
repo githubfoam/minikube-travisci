@@ -89,6 +89,27 @@ $ minikube addons list
 |-----------------------------|----------|--------------|
 ~~~~
 
+minikube with snap installation
+~~~~
+$ which minikube
+
+/snap/bin/minikube
+
+/bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+
+There is a newer version of minikube available (v1.11.0).  Download it here:
+
+https://github.com/kubernetes/minikube/releases/tag/v1.11.0
+
+To disable this notification, add WantUpdateNotification: False to the json config file at /root/snap/minikube/4/.minikube/config
+
+(you may have to create the file config.json in this folder if you have no previous configuration)
+
+Starting local Kubernetes cluster...
+
+F0626 12:24:45.845983    6085 cluster.go:391] Unsupported driver: none
+~~~~
+
 smoke tests kubeflow
 ~~~~
 Minikube + kubectl + Docker + kubeflow
