@@ -26,7 +26,7 @@ for i in {1..60}; do # Timeout after 3 minutes, 60x3=300 secs
   fi
 done
 
-kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040
+kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040 &
 curl http://127.0.0.1:4040
 
 # Kubernetes (local clone) Minikube is a simple option
