@@ -28,8 +28,13 @@ done
 
 kubectl get pod -o wide
 
-kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040
+kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040 &
+cat /etc/hosts
+echo "127.0.0.1 localhost"| sudo tee -a /etc/hosts
+cat /etc/hosts
 curl http://127.0.0.1:4040
+
+
 
 # Kubernetes (local clone) Minikube is a simple option
 # git clone https://github.com/weaveworks/scope && cd scope
