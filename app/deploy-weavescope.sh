@@ -20,11 +20,13 @@ kubectl get pod -o wide #The IP column will contain the internal cluster IP addr
 
 for i in {1..60}; do # Timeout after 3 minutes, 60x3=300 secs
   if kubectl get pods --namespace=weave  | grep ContainerCreating ; then
-      sleep 5
+      sleep 10
   else
       break
   fi
 done
+
+kubectl get pod -o wide
 
 kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040
 curl http://127.0.0.1:4040
