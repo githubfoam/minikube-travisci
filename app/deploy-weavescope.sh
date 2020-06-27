@@ -27,13 +27,3 @@ for i in {1..60}; do # Timeout after 3 minutes, 60x3=300 secs
 done
 
 kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040 &
-cat /etc/hosts
-echo "127.0.0.1 localhost"| sudo tee -a /etc/hosts
-curl http://127.0.0.1:4040
-cat /etc/hosts
-
-# Kubernetes (local clone) Minikube is a simple option
-# git clone https://github.com/weaveworks/scope && cd scope
-# kubectl apply -f examples/k8s #deploy Scope
-# kubectl port-forward svc/weave-scope-app -n weave 4040:80 #Port-forward to access weave-scope-app
-# curl http://127.0.0.1:4040
