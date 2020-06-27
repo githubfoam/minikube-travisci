@@ -60,41 +60,8 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    # - name: "weavescope minikube w snaps Python 3.7 on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-minikube-latest
-    #     - sudo make deploy-weavescope
-    #   after_success:
-    #     - deactivate
-    #
-    # #https://kubernetes.io/docs/tutorials/hello-minikube/
-    # - name: "storage gluster minikube w snaps Python 3.7 on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-minikube-latest
-    #     - sudo make deploy-gluster
-    #   after_success:
-    #     - deactivate
-
-    #   # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
-    - name: "NOT installing minikubekubeflow minikube wo snaps Python 3.7 on bionic amd64"
+    #https://docs.cilium.io/en/latest/gettingstarted/minikube/
+    - name: "cilium minikube CNI plugin wo snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
       language: python
@@ -105,10 +72,65 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-minikube
-        - sudo make deploy-kubeflow #installing minikube
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-cilium
       after_success:
         - deactivate
+
+
+  # #################################################################
+
+    #https://kubernetes.io/docs/tutorials/hello-minikube/
+    - name: "storage gluster minikube w snaps Python 3.7 on bionic amd64"
+      dist: bionic
+      arch: amd64
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-gluster
+      after_success:
+        - deactivate
+
+
+    - name: "weavescope minikube w snaps Python 3.7 on bionic amd64"
+      dist: bionic
+      arch: amd64
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-weavescope
+      after_success:
+        - deactivate
+
+
+    # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
+    # - name: "Installing minikube kubeflow minikube wo snaps Python 3.7 on bionic amd64"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube
+    #     - sudo make deploy-kubeflow
+    #   after_success:
+    #     - deactivate
 
     # - name: "minikube wo snaps Python 3.7 on bionic amd64"
     #   dist: bionic
