@@ -32,7 +32,7 @@ kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope
 cat /etc/hosts
 echo "127.0.0.1 localhost"| sudo tee -a /etc/hosts
 cat /etc/hosts
-curl http://127.0.0.1:4040
+# curl http://127.0.0.1:4040 #Failed to connect to 127.0.0.1 port 4040: Connection refused
 
 
 
