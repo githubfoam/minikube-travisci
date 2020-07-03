@@ -1,6 +1,8 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-minikube-gardener:
+	bash app/deploy-minikube_gardener.sh
 deploy-cilium:
 	bash app/deploy-cilium.sh
 deploy-ebf:
