@@ -58,6 +58,15 @@ apt-get update -qq && apt-get install yq -yqq
 # https://github.com/ahmetb/kubectx/blob/master/kubens
 /bin/bash -c "$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)"
 
+# https://github.com/tektoncd/cli
+# Get the tar.xz
+curl -LO https://github.com/tektoncd/cli/releases/download/v0.10.0/tkn_0.10.0_Darwin_x86_64.tar.gz
+# Extract tkn to your PATH (e.g. /usr/local/bin)
+tar xvzf tkn_0.10.0_Darwin_x86_64.tar.gz -C /usr/local/bin tkn
+
+minikube addons enable registry
+# kubectl -n kube-system get pods -w
+git clone https://github.com/redhat-developer-demos/quarkus-pipeline-demo.git && cd minikube-helpers
 
 
 

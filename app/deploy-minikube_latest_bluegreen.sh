@@ -94,7 +94,12 @@ popd
 pushd $(pwd) && cd green
  kubectl apply -f green-controller.json #Create a replication controller green pod
 popd
- kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+
+
+kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+# kubectl apply -f app/blue-green-service.json #Create the service, redirect to blue and make it externally visible, specify "type": "LoadBalancer"
+
+
 echo "=========================================================================================="
 echo "Waiting for Kubernetes to be ready ..."
   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
