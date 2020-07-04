@@ -7,8 +7,10 @@ deploy-openesb:
 	bash app/deploy-openesb.sh
 deploy-minikube-latest-canary-linkerd:
 	bash app/deploy-minikube_latest_canary_linkerd.sh
-deploy-minikube-latest-canary:
+deploy-minikube-latest-knative:
 	bash app/deploy-minikube_latest_canary.sh
+deploy-minikube-latest-canary:
+	bash app/deploy-minikube_latest_knative.sh
 deploy-minikube-latest-bluegreen:
 	bash app/deploy-minikube_latest_bluegreen.sh
 deploy-dashboard:

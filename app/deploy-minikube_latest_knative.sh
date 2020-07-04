@@ -47,18 +47,16 @@ kubectl get pods --all-namespaces;
 kubectl get pods -n default;
 
 
-#https://kubernetes.io/blog/2020/04/two-phased-canary-rollout-with-gloo/
-echo "============================gloo=============================================================="
-curl -sL https://run.solo.io/gloo/install | sh
-export PATH=$HOME/.gloo/bin:$PATH
-glooctl version
-glooctl install gateway
-kubectl get pod -n gloo-system
-kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/echo.yaml
-kubectl get all -n echo
-kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/upstream.yaml
-kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/vs.yaml
-# curl $(glooctl proxy url)/
+#https://github.com/redhat-developer-demos/quarkus-pipeline-demo
+echo "============================Serverless and Pipelines=============================================================="
+
+# https://github.com/mikefarah/yq/
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+add-apt-repository ppa:rmescandon/yq
+apt-get update -qq && apt-get install yq -yqq
+
+# https://github.com/ahmetb/kubectx/blob/master/kubens
+/bin/bash -c "$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)"
 
 
 
