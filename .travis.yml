@@ -8,6 +8,11 @@ matrix:
 
     - name: "minikube consul vault latest  Python 3.7 on bionic" #OK
       dist: bionic
+      addons:
+        snaps:
+          - name: microk8s
+            confinement: classic # or devmode
+            channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -15,12 +20,34 @@ matrix:
         - virtualenv -p $(which python3) ~venvpy3
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
-      # <<: *fleet_install_tasks
-      # <<: *fleet_script_tasks
-      # <<: *fleet_script_minikube_vault_consul_tasks
       script:
         - sudo make deploy_minikube_latest
         - sudo make deploy_minikube_vault_consul
+      after_success:
+        - deactivate
+
+    - name: "minikube consul vault snapped Python 3.7 on bionic" #OK
+      dist: bionic
+      addons:
+        snaps:
+          - name: minikube
+            confinement: classic
+            channel: latest/stable
+          - name: kubectl
+            confinement: classic
+            channel: latest/stable
+          - name: helm
+            confinement: classic
+            channel: latest/stable
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy_minikube_snapped_vault_consul
       after_success:
         - deactivate
 

@@ -3,10 +3,15 @@ APP:="app/deploy-openesb.sh"
 
 deploy_minikube_latest:
 	bash scripts/deploy_minikube_latest.sh
+
 deploy_minikube:
 	bash scripts/deploy-minikube.sh
+
 deploy_minikube_vault_consul:
 	bash scripts/deploy_minikube_vault_consul.sh
+
+deploy_minikube_snapped_vault_consul:
+	bash scripts/deploy_minikube_snapped_vault_consul.sh
 
 push-image:
 	docker push $(IMAGE)
