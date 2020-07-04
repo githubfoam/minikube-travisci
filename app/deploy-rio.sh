@@ -50,21 +50,34 @@ kubectl get pod -o wide #The IP column will contain the internal cluster IP addr
 kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
 
 # https://rancher.com/blog/2019/introducing-rio/
+#https://github.com/rancher/rio
 echo "=============================rio============================================================="
 
 # Installing rio to /usr/local/bin/rio
 # command not found
 # app/deploy-rio.sh: line 54: [INFO]: command not found
-`curl -sfL https://get.rio.io | sh -`
-ls -lai /usr/local/bin
+# ls -lai /usr/local/bin
+# `curl -sfL https://get.rio.io | sh -` #Download the latest release
+# ls -lai /usr/local/bin
 
-# rio install
-# rio run https://github.com/rancher/rio-demo
-# rio ps
+export INSTALL_RIO_VERSION="v0.7.1"
+`curl -sfL https://get.rio.io | INSTALL_RIO_VERSION=${version} sh -`  #
+
+rio -n rio-system pods #Make sure all the pods are up and running
+
+ rio install
+ rio run https://github.com/rancher/rio-demo
+ rio ps
+ rio info
 # rio console
-#
+
+# Run a sample service
+rio run -p 80:8080 https://github.com/rancher/rio-demo
+rio ps
+rio info
+
 # https://rancher.com/blog/2019/rio-revolutionizing-the-way-you-deploy-apps
-# rio run https://github.com/ebauman/rio-demo
-# # rio run ebauman/demo-rio:v1
-# rio ps
-# rio endpoints
+rio run https://github.com/ebauman/rio-demo
+# rio run ebauman/demo-rio:v1
+rio ps
+rio endpoints
