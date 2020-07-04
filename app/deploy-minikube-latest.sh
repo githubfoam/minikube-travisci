@@ -1,5 +1,9 @@
 #!/bin/bash
-set -eox pipefail #safety for script
+set -o errexit
+set -o pipefail
+set -o nounset
+set -o xtrace
+# set -eox pipefail #safety for script
 
 echo "=============================minikube latest============================================================="
 if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
