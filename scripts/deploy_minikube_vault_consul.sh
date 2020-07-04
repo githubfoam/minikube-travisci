@@ -6,7 +6,11 @@ set -o xtrace
 
 
 echo "=============================minikube vault consul============================================================="
-
+source helper.sh
+sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+minikube status
+c1_kctx #helper.sh
 
 # echo "============================consul vault=============================================================="
 # echo $GOPATH

@@ -6,7 +6,18 @@ set -o xtrace
 
 
 echo "=============================minikube vault consul============================================================="
+kubectl version --client
+helm help
 
+ifconfig -a
+export HOST_IP=$(ipconfig getifaddr en0)
+export CONSUL_ADDR=https://$HOST_IP:8500
+
+# source helper.sh
+# sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+# sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+# minikube status
+# c1_kctx #helper.sh
 
 # echo "============================consul vault=============================================================="
 # echo $GOPATH
@@ -18,7 +29,7 @@ echo "=============================minikube vault consul========================
 # go get -u github.com/cloudflare/cfssl/cmd/cfssl # install the SSL ToolKit
 # go get -u github.com/cloudflare/cfssl/cmd/cfssljson
 # # make workstation
-- echo "============================consul vault=============================================================="
+# echo "============================consul vault=============================================================="
 # - echo "============================consul vault=============================================================="
 # - mkdir $HOME/go #create a workspace, configure the GOPATH and add the workspace's bin folder to your system path
 # - export GOPATH=$HOME/go
