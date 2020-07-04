@@ -24,14 +24,13 @@ kubectl version --client #ensure the version
 kubectl cluster-info
 minikube status
 echo "=========================================================================================="
-|
-  echo "Waiting for Kubernetes to be ready ..."
-  for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+echo "Waiting for Kubernetes to be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
     if kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
       break
     fi
     sleep 2
-  done
+done
 # |
 #   echo "Waiting for Kubernetes to be ready ..."
 #   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
