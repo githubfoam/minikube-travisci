@@ -358,20 +358,43 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "openebs minikube latest  Python 3.7 on bionic amd64" #OK
+    #TESTED OK
+    # - name: "openebs minikube latest  Python 3.7 on bionic amd64" #OK
+    #   dist: bionic
+    #   arch: amd64
+    #   addons:
+    #     snaps:
+    #       - name: helm
+    #         confinement: classic
+    #         channel: latest/stable
+    #       # - name: kubectl
+    #       #   confinement: classic
+    #       #   channel: latest/stable
+    #       # - name: minikube
+    #       #   confinement: classic
+    #       #   channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube
+    #     - sudo make deploy-openesb #OK
+    #     # - travis_wait 15 sudo make deploy-java-maven &
+    #   after_success:
+    #     - deactivate
+
+    - name: "canary minikube latest  Python 3.7 on bionic amd64" #OK
       dist: bionic
       arch: amd64
       addons:
-        snaps:
-          - name: helm
-            confinement: classic
-            channel: latest/stable
-          # - name: kubectl
-          #   confinement: classic
-          #   channel: latest/stable
-          # - name: minikube
-          #   confinement: classic
-          #   channel: latest/stable
+           snaps:
+             - name: kubectl
+               confinement: classic
+               channel: latest/stable
       language: python
       python: 3.7
       before_install:
@@ -380,13 +403,13 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        # - sudo make deploy-minikube
-        # - sudo make deploy-openesb #OK
-        - travis_wait 15 sudo make deploy-java-maven &
+        - sudo make deploy-minikube
+        - sudo make deploy-minikube-latest-canary
       after_success:
         - deactivate
 
-    - name: "canary minikube latest  Python 3.7 on bionic amd64" #OK
+    #https://docs.flagger.app/tutorials/linkerd-progressive-delivery#a-b-testing
+    - name: "linkerd flagger canary minikube latest  Python 3.7 on bionic amd64" #OK
       dist: bionic
       arch: amd64
       addons:
