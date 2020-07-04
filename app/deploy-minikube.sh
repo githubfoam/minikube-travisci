@@ -34,8 +34,10 @@ kubectl version --client
 wget -nv https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz && tar xvzf helm-v$HELM_VERSION-linux-amd64.tar.gz && mv linux-amd64/helm linux-amd64/tiller /usr/local/bin
 helm help
 mkdir -p $HOME/.kube $HOME/.minikube
-touch $KUBECONFIG
-sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+#touch $KUBECONFIG
+
+#the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 minikube update-context --profile=minikube
 `chown -R travis: /home/travis/.minikube/`
 eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
