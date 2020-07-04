@@ -56,7 +56,7 @@ add-apt-repository -y ppa:rmescandon/yq
 apt-get update -qq && apt-get install yq -yqq
 
 # https://github.com/ahmetb/kubectx/blob/master/kubens
-/bin/bash -c "$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)" # /bin/bash: Argument list too long
+# /bin/bash -c "$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)" # /bin/bash: Argument list too long
 /bin/bash -c '$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)'
 
 # https://github.com/tektoncd/cli

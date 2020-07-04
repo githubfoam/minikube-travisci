@@ -59,25 +59,25 @@ curl -sL https://run.linkerd.io/install | sh
 #     linkerd check                           # validate everything worked!
 #     linkerd dashboard                       # launch the dashboard
 
-export PATH=$PATH:$HOME/.linkerd2/bin
-linkerd check --pre
-linkerd check
-linkerd dashboard &
-
-linkerd version
-kubectl -n linkerd get deploy
+# export PATH=$PATH:$HOME/.linkerd2/bin
+# linkerd check --pre
+# linkerd check
+# linkerd dashboard &
+#
+# linkerd version
+# kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory
 
 
 #https://docs.flagger.app/tutorials/linkerd-progressive-delivery#a-b-testing
 echo "============================Linkerd Canary Deployments=============================================================="
-kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd
-kubectl -n linkerd rollout status deploy/flagger
-
-kubectl create ns test
-kubectl annotate namespace test linkerd.io/inject=enabled
-kubectl apply -k github.com/weaveworks/flagger//kustomize/tester
-kubectl apply -k github.com/weaveworks/flagger//kustomize/podinfo
+# kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd
+# kubectl -n linkerd rollout status deploy/flagger
+#
+# kubectl create ns test
+# kubectl annotate namespace test linkerd.io/inject=enabled
+# kubectl apply -k github.com/weaveworks/flagger//kustomize/tester
+# kubectl apply -k github.com/weaveworks/flagger//kustomize/podinfo
 
 
 

@@ -48,8 +48,10 @@ kubectl get pods -n default;
 
 # https://itnext.io/deploy-your-first-serverless-function-to-kubernetes-232307f7b0a9
 echo "============================OpenFaaS =============================================================="
-`curl -sSLf https://cli.openfaas.com | sudo sh`
-`curl -sSLf https://dl.get-arkade.dev | sudo sh`
+# `curl -sSLf https://cli.openfaas.com | sudo sh`
+# `curl -sSLf https://dl.get-arkade.dev | sudo sh`
+
+`curl -sSLf https://cli.openfaas.com | sh` #already running sudo
 arkade install openfaas
 arkade info openfaas
 

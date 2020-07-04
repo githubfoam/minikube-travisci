@@ -62,15 +62,15 @@ kubectl get pods --all-namespaces
 #     linkerd check                           # validate everything worked!
 #     linkerd dashboard                       # launch the dashboard
 
-export PATH=$PATH:$HOME/.linkerd2/bin
-linkerd check --pre
-linkerd check
-linkerd dashboard &
+# export PATH=$PATH:$HOME/.linkerd2/bin
+# linkerd check --pre
+# linkerd check
+# linkerd dashboard &
 
 # control plane installed on the cluster yet
 #see the CLI version, and also Server version: unavailable.
-linkerd version
-kubectl -n linkerd get deploy
+# linkerd version
+# kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory
 #
 #
