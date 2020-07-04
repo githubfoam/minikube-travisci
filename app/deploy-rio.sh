@@ -53,7 +53,7 @@ kubectl get service --all-namespaces # find a Service IP,list all services in al
 echo "=============================rio============================================================="
 `curl -sfL https://get.rio.io | sh -`
 
-app/deploy-rio.sh: line 54: [INFO]: command not found
+# app/deploy-rio.sh: line 54: [INFO]: command not found
 ls -lai /usr/local/bin/rio
 which  rio
 

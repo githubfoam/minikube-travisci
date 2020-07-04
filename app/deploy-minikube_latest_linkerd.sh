@@ -43,12 +43,15 @@ done
 echo "============================status check=============================================================="
 minikube status
 kubectl cluster-info
-kubectl get pods --all-namespaces;
-kubectl get pods -n default;
+kubectl get pods --all-namespaces #TODO kube-system   ContainerCreating
+kubectl get pods -n default
 
 echo "============================Install Linkerd=============================================================="
+
 # https://linkerd.io/2/getting-started/
 `curl -sL https://run.linkerd.io/install | sh`
+
+kubectl get pods --all-namespaces
 
 # Linkerd stable-2.8.1 was successfully installed
 # Add the linkerd CLI to your path with:
@@ -64,6 +67,8 @@ linkerd check --pre
 linkerd check
 linkerd dashboard &
 
+# control plane installed on the cluster yet
+#see the CLI version, and also Server version: unavailable.
 linkerd version
 kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory

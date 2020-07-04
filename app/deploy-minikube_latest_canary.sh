@@ -66,13 +66,14 @@ kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30
 # curl $(glooctl proxy url)/
 # Deploying echo v2
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/2-initial-subset-routing-to-v2/echo-v2.yaml
-kubectl get pod -n echo
+
+kubectl get pod -n echo # TODO echo-v1-5c7c8bbc97-252zt   0/1     ContainerCreating   0          5s
 
 # Adding a route to v2 for canary testing
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/2-initial-subset-routing-to-v2/vs-2.yaml
 # Canary testing
 # curl $(glooctl proxy url)/ version:v1
-curl $(glooctl proxy url)/ -H "stage: canary" #version:v2
+# curl $(glooctl proxy url)/ -H "stage: canary" #version:v2 # TODO Failed to connect to 10.30.0.73 port 31154: Connection refused
 
 
 

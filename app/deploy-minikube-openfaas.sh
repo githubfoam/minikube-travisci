@@ -10,7 +10,7 @@ if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualizati
           echo "===================================="
           echo "virtualization is supported"
 fi
-apt-get -qq && apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
+apt-get update -qq && apt-get -qqy install conntrack #http://conntrack-tools.netfilter.org/
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
 mkdir -p $HOME/.kube $HOME/.minikube
