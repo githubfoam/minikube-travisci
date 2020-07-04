@@ -7,6 +7,9 @@ deploy-rio:
 deploy-minikube:
 	bash app/deploy-minikube.sh
 
+deploy-minikube-latest:
+	bash app/deploy-minikube-latest.sh
+
 deploy-openesb:
 	bash app/deploy-openesb.sh
 
@@ -30,9 +33,6 @@ deploy-minikube-latest-bluegreen:
 
 deploy-dashboard:
 	bash app/deploy-dashboard.sh
-
-deploy-minikube:
-	bash app/deploy-minikube.sh
 
 deploy-java-maven:
 	bash app/deploy-java-maven.sh
