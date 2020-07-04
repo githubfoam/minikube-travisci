@@ -25,22 +25,14 @@ kubectl version --client #ensure the version
 kubectl cluster-info
 minikube status
 echo "=========================================================================================="
-echo "Waiting for Kubernetes to be ready ..."
-for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-    if kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
-      break
-    fi
-    sleep 2
+echo echo "Waiting for kubeflowto be ready ..."
+for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=kube-system  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
 done
-# |
-#   echo "Waiting for Kubernetes to be ready ..."
-#   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-#     if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running && \
-#        kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
-#       break
-#     fi
-#     sleep 2
-#   done
 echo "============================status check=============================================================="
 minikube status
 kubectl cluster-info
@@ -75,7 +67,10 @@ curl -sL https://run.linkerd.io/install | sh
 # Flagger requires a Kubernetes cluster v1.11 or newer and Linkerd 2.4 or newer
 echo "============================Linkerd Flagger Canary Deployments=============================================================="
 kubectl get pods --all-namespaces
+#Error from server (NotFound): error when creating "github.com/weaveworks/flagger//kustomize/linkerd": namespaces "linkerd" not found
 kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
+kubectl get pods --all-namespaces
+
 # kubectl -n linkerd rollout status deploy/flagger
 #
 # kubectl create ns test
