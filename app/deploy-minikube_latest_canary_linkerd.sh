@@ -14,6 +14,7 @@ apt-get update -qq && apt-get -qqy install conntrack #http://conntrack-tools.net
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
 mkdir -p $HOME/.kube $HOME/.minikube
+echo $KUBECONFIG
 touch $KUBECONFIG
 sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
 minikube update-context --profile=minikube
@@ -43,8 +44,8 @@ done
 echo "============================status check=============================================================="
 minikube status
 kubectl cluster-info
-kubectl get pods --all-namespaces;
-kubectl get pods -n default;
+kubectl get pods --all-namespaces
+kubectl get pods -n default
 
 echo "============================Install Linkerd=============================================================="
 # https://linkerd.io/2/getting-started/
@@ -70,8 +71,11 @@ curl -sL https://run.linkerd.io/install | sh
 
 
 #https://docs.flagger.app/tutorials/linkerd-progressive-delivery#a-b-testing
-echo "============================Linkerd Canary Deployments=============================================================="
-# kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd
+# Prerequisites
+# Flagger requires a Kubernetes cluster v1.11 or newer and Linkerd 2.4 or newer
+echo "============================Linkerd Flagger Canary Deployments=============================================================="
+kubectl get pods --all-namespaces
+kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
 # kubectl -n linkerd rollout status deploy/flagger
 #
 # kubectl create ns test
