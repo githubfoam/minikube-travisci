@@ -22,27 +22,20 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/miniku
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod 700 get_helm.sh && bash get_helm.sh #Download helm
 helm help
 mkdir -p $HOME/.kube $HOME/.minikube
-# touch $KUBECONFIG
-# source helper.sh
-# sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
-# sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
-#c1_kctx
-# sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
-# minikube update-context --profile=minikube
-# "sudo chown -R travis: /home/travis/.minikube/"
-# eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
-echo "=========================================================================================="
-kubectl cluster-info
 
 echo "=========================================================================================="
-echo "Waiting for Kubernetes to be ready ..."
-for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-    if kubectl get pods --namespace=kube-system -lcomponent=kube-addon-manager|grep Running && \
-       kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
-      break
-    fi
-    sleep 2
+# kubectl cluster-info #The connection to the server localhost:8080 was refused - did you specify the right host or port?
+echo "=========================================================================================="
+echo echo "Waiting for Kubernetes be ready ..."
+for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
+      # if kubectl get pods --namespace=kubeflow -l openebs.io/component-name=centraldashboard | grep Running ; then
+      if kubectl get pods --namespace=kube-system  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
 done
+
 echo "============================status check=============================================================="
 minikube status
 kubectl cluster-info

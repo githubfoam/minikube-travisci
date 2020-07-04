@@ -9,15 +9,14 @@ echo "=============================minikube vault consul========================
 kubectl version --client
 helm help
 
-ifconfig -a
-export HOST_IP=$(ipconfig getifaddr en0)
-export CONSUL_ADDR=https://$HOST_IP:8500
-
-# source helper.sh
+source helper.sh
+#KUBERNETES_VERSION from snapped minikube?
 # sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 # sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
-# minikube status
-# c1_kctx #helper.sh
+sudo minikube start --profile=cluster-1 --vm-driver=none
+sudo minikube start --profile=cluster-2 --vm-driver=none 
+minikube status
+c1_kctx #helper.sh
 
 # echo "============================consul vault=============================================================="
 # echo $GOPATH

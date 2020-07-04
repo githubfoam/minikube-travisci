@@ -8,11 +8,11 @@ matrix:
 
     - name: "minikube consul vault latest  Python 3.7 on bionic" #OK
       dist: bionic
-      addons:
-        snaps:
-          - name: microk8s
-            confinement: classic # or devmode
-            channel: latest/stable # will be passed to --channel flag
+      # addons:
+      #   snaps:
+      #     - name: microk8s
+      #       confinement: classic # or devmode
+      #       channel: latest/stable # will be passed to --channel flag
       language: python
       python: 3.7
       before_install:
@@ -26,7 +26,7 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "minikube consul vault snapped Python 3.7 on bionic" #OK
+    - name: "consul mesh vault snapped w minikube kubectl helm Python 3.7 on bionic" #OK
       dist: bionic
       addons:
         snaps:
