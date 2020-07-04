@@ -52,13 +52,18 @@ kubectl get service --all-namespaces # find a Service IP,list all services in al
 # https://rancher.com/blog/2019/introducing-rio/
 echo "=============================rio============================================================="
 `curl -sfL https://get.rio.io | sh -`
-rio install
-rio run https://github.com/rancher/rio-demo
-rio ps
-rio console
 
-https://rancher.com/blog/2019/rio-revolutionizing-the-way-you-deploy-apps
-rio run https://github.com/ebauman/rio-demo
-# rio run ebauman/demo-rio:v1
-rio ps
-rio endpoints
+app/deploy-rio.sh: line 54: [INFO]: command not found
+ls -lai /usr/local/bin/rio
+which  rio
+
+# rio install
+# rio run https://github.com/rancher/rio-demo
+# rio ps
+# rio console
+#
+# https://rancher.com/blog/2019/rio-revolutionizing-the-way-you-deploy-apps
+# rio run https://github.com/ebauman/rio-demo
+# # rio run ebauman/demo-rio:v1
+# rio ps
+# rio endpoints

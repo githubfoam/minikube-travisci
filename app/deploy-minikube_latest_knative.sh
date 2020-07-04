@@ -52,7 +52,7 @@ echo "============================Serverless and Pipelines======================
 
 # https://github.com/mikefarah/yq/
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-add-apt-repository ppa:rmescandon/yq
+add-apt-repository -y ppa:rmescandon/yq
 apt-get update -qq && apt-get install yq -yqq
 
 # https://github.com/ahmetb/kubectx/blob/master/kubens

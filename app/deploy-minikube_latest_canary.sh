@@ -60,6 +60,21 @@ kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/vs.yaml
 # curl $(glooctl proxy url)/
 
+# Two-Phased Rollout Strategy
+# Phase 1: Initial canary rollout of v2
+kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/2-initial-subset-routing-to-v2/vs-1.yaml
+# curl $(glooctl proxy url)/
+# Deploying echo v2
+kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/2-initial-subset-routing-to-v2/echo-v2.yaml
+kubectl get pod -n echo
+
+# Adding a route to v2 for canary testing
+kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/2-initial-subset-routing-to-v2/vs-2.yaml
+# Canary testing
+# curl $(glooctl proxy url)/ version:v1
+curl $(glooctl proxy url)/ -H "stage: canary" #version:v2
+
+
 
 
 

@@ -10,6 +10,9 @@ deploy-minikube:
 deploy-openesb:
 	bash app/deploy-openesb.sh
 
+deploy-minikube-openfaas:
+	bash app/deploy-minikube-openfaas.sh
+
 deploy-minikube-latest-linkerd:
 	bash app/deploy-minikube_latest_linkerd.sh
 
