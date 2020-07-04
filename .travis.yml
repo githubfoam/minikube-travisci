@@ -1,85 +1,18 @@
 ---
 sudo: required
 dist: bionic
-
-
 notifications:
   slack:
     on_failure: always
-
-#https://microk8s.io/docs/install-alternatives
-fleet_script_microk8s_win_tasks : &fleet_script_microk8s_win_tasks #If you are running minikube within a VM, consider using --driver=none
-      script:
-          - choco install wget
-          - wget https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe
-          - dir
-          #PowerShell
-          # - pwsh -c 'if(-not (Get-Module -ListAvailable -Name BadModuleName)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
-          # - client = new-object System.Net.WebClient
-          # - pwsh client.DownloadFile("https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe","C:\tmp\microk8s-installer.exe")
-          # #PowerShell
-          # - pwsh -c 'if(-not (Get-Module -ListAvailable -Name Invoke-WebRequest)){ exit 1 }' && echo yes || echo no #check if Powershell has a certain module installed
-          # - pwsh Invoke-WebRequest -OutFile microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
-          # - iwr -outf 1_microk8s-installer.exe https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe #PowerShell >= 3.0
-          # - bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
-          # - bitsadmin /transfer myDownloadJob /download /priority normal https://github.com/ubuntu/microk8s/releases/download/installer-v2.0.0/microk8s-installer.exe c:\microk8s-installer.exe
-          # - microk8s status --wait-ready
-          # - microk8s enable dashboard dns registry istio # enable add-ons, services
-          # - microk8s kubectl get all --all-namespaces
-          # - microk8s dashboard-proxy
-
-#https://microk8s.io/docs/install-alternatives
-fleet_script_microk8s_macos_tasks : &fleet_script_microk8s_macos_tasks #If you are running minikube within a VM, consider using --driver=none
-      script:
-          - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" #Install Homebrew
-          # - microk8s install
-          # - microk8s status --wait-ready
-          # - microk8s enable dashboard dns registry istio # enable add-ons, services
-          # - microk8s kubectl get all --all-namespaces
-          # - microk8s dashboard-proxy
-
-
 matrix:
   fast_finish: true
   include:
 
-    # ############################PROBLEM#####################################
-    #https://minikube.sigs.k8s.io/docs/tutorials/ebpf_tools_in_minikube/
-    # - name: "eBPF Tools minikube w snaps Python 3.7 on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-ebf
-    #   after_success:
-    #     - deactivate
-
-    #https://docs.cilium.io/en/latest/gettingstarted/minikube/
-    # - name: "cilium minikube CNI plugin wo snaps Python 3.7 on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-minikube-latest
-    #     - sudo make deploy-cilium
-    #   after_success:
-    #     - deactivate
 
 
-
-    - name: "Local Gardener minikube wo snaps Python 3.7 on bionic amd64"
+   # TESTED OK
+    # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
+    - name: "Installing kubeflow minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
       language: python
@@ -90,29 +23,10 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        # - sudo make deploy-minikube
-        - sudo make deploy-minikube-gardener
+        - sudo make deploy-minikube
+        - sudo make deploy-kubeflow
       after_success:
         - deactivate
-
-  # #################################################################
-    # TESTED OK
-    #https://www.kubeflow.org/docs/started/workstation/minikube-linux/
-    # - name: "Installing kubeflow minikube wo snaps Python 3.7 on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-minikube
-    #     - sudo make deploy-kubeflow
-    #   after_success:
-    #     - deactivate
 
     # TESTED OK
     #https://kubernetes.io/docs/tutorials/hello-minikube/
