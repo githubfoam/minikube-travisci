@@ -1,24 +1,28 @@
-SHELL = /bin/bash
+IMAGE := alpine/fio
+APP:="app/deploy-openesb.sh"
 
-.PHONY: workstation deps certs consul clean destroy
-
-workstation: deps certs consul vault
-
-deps:
-	(cd scripts && ./check_deps.sh)
-
-certs:
-	(cd scripts && ./create_certs.sh)
-
-consul:
-	(cd scripts && ./deploy_consul.sh)
-
-vault:
-	(cd scripts && ./deploy_vault.sh)
-
-clean:
-	(cd scripts && ./cleanup.sh)
-
-destroy: clean
-	$(info --- Deleting Minikube ---)
-	minikube delete
+deploy-kind:
+	bash deploy-kind.sh
+deploy-microservices:
+	bash app/deploy-microservices.sh
+deploy-cilium-cluster-mesh:
+	bash app/deploy-cilium-cluster-mesh.sh
+deploy-cilium-hubble-dist:
+	bash app/deploy-cilium-hubble-dist.sh
+deploy-cilium-hubble-local:
+	bash app/deploy-cilium-hubble-local.sh
+deploy-cilium:
+	bash app/deploy-cilium.sh
+deploy-kubeflow:
+	bash app/deploy-kubeflow.sh
+deploy-openesb:
+	bash app/deploy-openesb.sh
+deploy-weavescope:
+	bash app/deploy-weavescope.sh
+deploy-istio:
+	bash app/deploy-istio.sh
+deploy-dashboard:
+	bash app/deploy-dashboard.sh
+push-image:
+	docker push $(IMAGE)
+.PHONY: deploy-kind deploy-openesb deploy-dashboard deploy-dashboard-helm deploy-istio push-image
