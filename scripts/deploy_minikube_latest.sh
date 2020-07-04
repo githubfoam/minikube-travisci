@@ -16,11 +16,15 @@ else
 fi
 apt-get update -qq && apt-get -qq -y install conntrack #X Sorry, Kubernetes v1.18.3 requires conntrack to be installed in root's path
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
+kubectl version --client
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/ # Download minikube
+minikube status
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod 700 get_helm.sh && bash get_helm.sh #Download helm
+helm help
 mkdir -p $HOME/.kube $HOME/.minikube
-touch $KUBECONFIG
-source helper.sh
-sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+# touch $KUBECONFIG
+# source helper.sh
+# sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 # sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 #c1_kctx
 # sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
@@ -28,9 +32,8 @@ sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$
 # "sudo chown -R travis: /home/travis/.minikube/"
 # eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 echo "=========================================================================================="
-kubectl version --client #ensure the version
 kubectl cluster-info
-minikube status
+
 echo "=========================================================================================="
 echo "Waiting for Kubernetes to be ready ..."
 for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
