@@ -229,23 +229,25 @@ matrix:
       # <<: *fleet_install_tasks
       # <<: *fleet_script_tasks
       # <<: *fleet_script_minikube_vault_consul_tasks
+      script:
+        - sudo make deploy_minikube_vault_consul
       after_success:
         - deactivate
 
-    - name: "minikube consul  Python 3.7 on xenial" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      # <<: *fleet_install_tasks
-      # <<: *fleet_script_tasks
-      # <<: *fleet_script_minikube_latest_tasks
-      after_success:
-        - deactivate
+    # - name: "minikube consul  Python 3.7 on xenial" #OK
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   # <<: *fleet_install_tasks
+    #   # <<: *fleet_script_tasks
+    #   # <<: *fleet_script_minikube_latest_tasks
+    #   after_success:
+    #     - deactivate
 
     # - name: "minikube 1.18.1 Python 3.7 on bionic"
     #   dist: bionic
