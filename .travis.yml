@@ -404,12 +404,9 @@ matrix:
         - virtualenv -p $(which python3) ~venvpy3
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
-      # <<: *fleet_install_tasks
-      # <<: *fleet_script_tasks
-      # <<: *fleet_script_minikube_latest_tasks
       script:
         - sudo make deploy-minikube
-      # <<: *fleet_script_minikube_latest_canary_tasks
+        - sudo make deploy-minikube-latest-canary
       after_success:
         - deactivate
 
