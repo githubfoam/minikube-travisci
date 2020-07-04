@@ -61,7 +61,11 @@ apt-get update -qq && apt-get install yq -yqq
 
 # https://github.com/ahmetb/kubectx/blob/master/kubens
 # /bin/bash -c "$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)" # /bin/bash: Argument list too long
-/bin/bash -c '$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)'
+# /bin/bash -c '$(curl -fsSL https://github.com/ahmetb/kubectx/blob/master/kubens)'
+# https://github.com/ahmetb/kubectx
+git clone https://github.com/ahmetb/kubectx /opt/kubectx
+ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
 # https://github.com/tektoncd/cli
 # Get the tar.xz

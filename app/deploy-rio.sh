@@ -64,8 +64,8 @@ echo "=============================rio==========================================
 # `curl -sfL https://get.rio.io | sh -` #Download the latest release
 # ls -lai /usr/local/bin
 
-export INSTALL_RIO_VERSION="v0.7.1"
-`curl -sfL https://get.rio.io | INSTALL_RIO_VERSION=${version} sh -`  #
+export version="v0.7.1"
+`curl -sfL https://get.rio.io | INSTALL_RIO_VERSION=${version} sh -`
 
 rio -n rio-system pods #Make sure all the pods are up and running
 
