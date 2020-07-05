@@ -72,7 +72,7 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube
-        - sudo make deploy-rio
+        # - sudo make deploy-rio
       after_success:
         - deactivate
 
