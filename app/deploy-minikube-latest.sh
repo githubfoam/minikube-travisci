@@ -17,7 +17,6 @@ fi
 
 apt-get update -qq && apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && mv minikube /usr/local/bin/ # Download minikube
-minikube status
 minikube help
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/ # Download kubectl
 kubectl version --client
@@ -27,6 +26,7 @@ mkdir -p $HOME/.kube $HOME/.minikube
 
 # minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
 minikube start --profile=minikube --vm-driver=none #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+minikube status #* There is no local cluster named "minikube"
 minikube update-context --profile=minikube
 `chown -R travis: /home/travis/.minikube/`
 eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
