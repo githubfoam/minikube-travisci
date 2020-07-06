@@ -36,8 +36,8 @@ helm version
 #mkdir -p $HOME/.kube $HOME/.minikube
 touch $KUBECONFIG
 
-minikube start --profile=minikube --vm-driver=none 
-# minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+# minikube start --profile=minikube --vm-driver=none
+minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 minikube update-context --profile=minikube
 minikube status
 `chown -R travis: /home/travis/.minikube/`
