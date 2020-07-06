@@ -38,7 +38,8 @@ mkdir -p $HOME/.kube $HOME/.minikube
 touch $KUBECONFIG
 
 #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
-minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+#minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+minikube start --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 minikube update-context --profile=minikube
 `chown -R travis: /home/travis/.minikube/`
 eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
