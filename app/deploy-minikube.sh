@@ -32,7 +32,7 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v$MINIKUBE_VE
 curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
 kubectl version --client
 wget -nv https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz && tar xvzf helm-v$HELM_VERSION-linux-amd64.tar.gz && mv linux-amd64/helm linux-amd64/tiller /usr/local/bin
-helm help
+helm version
 # `mkdir -p $HOME/.kube $HOME/.minikube`
 mkdir -p $HOME/.kube $HOME/.minikube
 touch $KUBECONFIG
