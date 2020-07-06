@@ -107,13 +107,22 @@ kubectl apply -f ./blue-green-service.json #Create the service, redirect to blue
 
 
 echo "=========================================================================================="
-echo "Waiting for Kubernetes to be ready ..."
-  for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-    if kubectl get pods --namespace=default -lk8s-app=blue |grep Running ; then
-      break
-    fi
-    sleep 2
+# echo "Waiting for Kubernetes to be ready ..."
+#   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
+#     if kubectl get pods --namespace=default -lk8s-app=blue |grep Running ; then
+#       break
+#     fi
+#     sleep 2
+# done
+echo echo "Waiting for kubernetes be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=default | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
 done
+
 echo $(minikube service bluegreenlb --url) #debug mode http://10.30.0.90:31089
 serviceURL=$(minikube service bluegreenlb --url)
 minikube service bluegreenlb --url #Get the URL of the service by running
