@@ -23,21 +23,21 @@ export MINIKUBE_HOME=$HOME #(string) sets the path for the .minikube directory t
 export KUBECONFIG=$HOME/.kube/config
 export HELM_VERSION="2.16.9"
 
-# apt-get update && apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
 apt-get update -qq && apt-get -qqy install conntrack #http://conntrack-tools.netfilter.org/
 # curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/ # Download kubectl
 # curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && mv minikube /usr/local/bin/ # Download minikube
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v$MINIKUBE_VERSION/minikube-linux-amd64 && chmod +x minikube && mv minikube /usr/local/bin/ # Download minikube
+minikube version
 curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/ # Download kubectl
 kubectl version --client
 wget -nv https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz && tar xvzf helm-v$HELM_VERSION-linux-amd64.tar.gz && mv linux-amd64/helm linux-amd64/tiller /usr/local/bin
 helm version
-# `mkdir -p $HOME/.kube $HOME/.minikube`
-mkdir -p $HOME/.kube $HOME/.minikube
+`mkdir -p $HOME/.kube $HOME/.minikube`
+#mkdir -p $HOME/.kube $HOME/.minikube
 touch $KUBECONFIG
 
-#the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
-minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+minikube start --profile=minikube --vm-driver=none 
+# minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 minikube update-context --profile=minikube
 minikube status
 `chown -R travis: /home/travis/.minikube/`
