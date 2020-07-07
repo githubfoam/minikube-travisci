@@ -111,7 +111,9 @@ done
 
 # check the minikube vm’s /etc/hosts file for the registry aliases entries
 # the daemonset has added the registryAliases from the ConfigMap pointing to the internal registry’s CLUSTER-IP.
-minikube ssh -- sudo cat /etc/hosts
+# minikube ssh -- sudo cat /etc/hosts #none' driver does not support 'minikube ssh' command
+
+
 # Update the Kubernetes' coredns to have rewrite rules for aliases.
 bash patch-coredns.sh
 # verify
