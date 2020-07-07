@@ -10,7 +10,9 @@ minikube
 kubectl version --client
 helm version
 
-source helper.sh
+# source helper.sh
+source scripts/helper.sh
+
 #KUBERNETES_VERSION from snapped minikube?
 # sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 # sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION

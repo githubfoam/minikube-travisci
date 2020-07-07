@@ -38,7 +38,6 @@ for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
 done
 
 echo "============================status check=============================================================="
-minikube status
 kubectl cluster-info
 kubectl get pods --all-namespaces;
 kubectl get pods -n default;

@@ -7,6 +7,7 @@ set -o xtrace
 
 echo "=============================minikube vault consul============================================================="
 # source helper.sh
+export KUBERNETES_VERSION=1.18.3
 sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 minikube status
