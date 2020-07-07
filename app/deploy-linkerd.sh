@@ -18,12 +18,12 @@ curl -sL https://run.linkerd.io/install | sh
 #     linkerd check                           # validate everything worked!
 #     linkerd dashboard                       # launch the dashboard
 
-# export PATH=$PATH:$HOME/.linkerd2/bin
-# linkerd check --pre
-# linkerd check
-# linkerd dashboard &
-#
-# linkerd version
+export PATH=$PATH:$HOME/.linkerd2/bin
+linkerd check --pre
+linkerd check
+linkerd dashboard &
+
+linkerd version
 # kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory
 
@@ -34,7 +34,7 @@ curl -sL https://run.linkerd.io/install | sh
 echo "============================Linkerd Flagger Canary Deployments=============================================================="
 kubectl get pods --all-namespaces
 kubectl create ns linkerd #Create a namespace called Linkerd
-linkerd install | kubectl apply -f - #install Linkerd with the Cli tool
+# linkerd install | kubectl apply -f - #install Linkerd with the Cli tool
 #Error from server (NotFound): error when creating "github.com/weaveworks/flagger//kustomize/linkerd": namespaces "linkerd" not found
 kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
 kubectl get pods --all-namespaces

@@ -10,8 +10,9 @@ echo "============================OpenFaaS =====================================
 # `curl -sSLf https://cli.openfaas.com | sudo sh`
 # `curl -sSLf https://dl.get-arkade.dev | sudo sh`
 
-curl -sSLf https://cli.openfaas.com | sh #already running sudo
-arkade install openfaas
+curl -sSLf https://cli.openfaas.com | sh # install the OpenFaaS CLI
+curl -sSLf https://dl.get-arkade.dev | sh # install arkade
+arkade install openfaas #use arkade to install OpenFaaS
 arkade info openfaas
 
 # Forward the gateway to your machine
