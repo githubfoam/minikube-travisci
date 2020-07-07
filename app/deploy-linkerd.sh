@@ -28,9 +28,12 @@ linkerd check --pre --linkerd-namespace linkerd
 # configmaps "linkerd-config" not found
 # see https://linkerd.io/checks/#l5d-existence-linkerd-config for hints
 linkerd check --pre
+linkerd install | kubectl apply -f -
+linkerd check
+linkerd dashboard &
 
 # Ensure the Linkerd ConfigMap exists
-kubectl -n linkerd get configmap/linkerd-config
+# kubectl -n linkerd get configmap/linkerd-config
  # ensure you have permission to create ConfigMaps
 kubectl -n linkerd auth can-i create configmap
 
