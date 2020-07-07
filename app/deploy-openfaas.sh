@@ -10,7 +10,7 @@ echo "============================OpenFaaS =====================================
 # `curl -sSLf https://cli.openfaas.com | sudo sh`
 # `curl -sSLf https://dl.get-arkade.dev | sudo sh`
 
-`curl -sSLf https://cli.openfaas.com | sh` #already running sudo
+curl -sSLf https://cli.openfaas.com | sh #already running sudo
 arkade install openfaas
 arkade info openfaas
 

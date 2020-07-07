@@ -10,10 +10,11 @@ set -o xtrace
 #https://github.com/rancher/rio
 echo "=============================rio============================================================="
 
-`curl -sfL https://get.rio.io | sh -` #Download the latest release
+# `curl -sfL https://get.rio.io | sh -` # command not found
+curl -sfL https://get.rio.io | sh - #Download the latest release
 
 # export version="v0.7.1"
-# `curl -sfL https://get.rio.io | INSTALL_RIO_VERSION=${version} sh -`
+# curl -sfL https://get.rio.io | INSTALL_RIO_VERSION=${version} sh -
 
 rio -n rio-system pods #Make sure all the pods are up and running
 

@@ -33,6 +33,8 @@ curl -sL https://run.linkerd.io/install | sh
 # Flagger requires a Kubernetes cluster v1.11 or newer and Linkerd 2.4 or newer
 echo "============================Linkerd Flagger Canary Deployments=============================================================="
 kubectl get pods --all-namespaces
+kubectl create ns linkerd #Create a namespace called Linkerd
+linkerd install | kubectl apply -f - #install Linkerd with the Cli tool
 #Error from server (NotFound): error when creating "github.com/weaveworks/flagger//kustomize/linkerd": namespaces "linkerd" not found
 kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
 kubectl get pods --all-namespaces

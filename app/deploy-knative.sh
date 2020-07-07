@@ -87,7 +87,7 @@ done
 # Configure registry aliases
 # push and pull images from internal registry
 # make the registry entry in minikube node’s hosts file and make them resolvable via coredns
-https://github.com/kameshsampath/minikube-helpers.git && cd cd registry
+git clone https://github.com/kameshsampath/minikube-helpers.git && cd cd registry
 # Add entries to host file
 # All the registry aliases are configured using the configmap registry-aliases-config.yaml
 # create the configmap in kube-system namespace:

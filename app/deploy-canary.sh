@@ -5,12 +5,12 @@ set -o nounset
 set -o xtrace
 # set -eox pipefail #safety for script
 
-https://kubernetes.io/blog/2020/04/two-phased-canary-rollout-with-gloo/
+# https://kubernetes.io/blog/2020/04/two-phased-canary-rollout-with-gloo/
 echo "============================gloo=============================================================="
 # Deploying Gloo
 # install gloo with the glooctl command line tool
 #curl -sL https://run.solo.io/gloo/install | sh #No versions of glooctl found.
-`curl -sL https://run.solo.io/gloo/install | sh`
+curl -sL https://run.solo.io/gloo/install | sh
 
 export PATH=$HOME/.gloo/bin:$PATH
 glooctl version
