@@ -106,7 +106,7 @@ for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
         break
       fi
 done
-
+kubectl get pods --all-namespaces
 
 
 # check the minikube vm’s /etc/hosts file for the registry aliases entries
