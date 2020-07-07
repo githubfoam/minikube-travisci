@@ -6,15 +6,16 @@ set -o xtrace
 
 
 echo "=============================minikube vault consul============================================================="
+minikube
 kubectl version --client
-helm help
+helm version
 
 source helper.sh
 #KUBERNETES_VERSION from snapped minikube?
 # sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 # sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
 sudo minikube start --profile=cluster-1 --vm-driver=none
-sudo minikube start --profile=cluster-2 --vm-driver=none 
+sudo minikube start --profile=cluster-2 --vm-driver=none
 minikube status
 c1_kctx #helper.sh
 
