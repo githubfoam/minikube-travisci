@@ -17,7 +17,7 @@ fi
 
 apt-get update -qq && apt-get -qq -y install conntrack #http://conntrack-tools.netfilter.org/
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && mv minikube /usr/local/bin/ # Download minikube
-minikube version 
+minikube version
 curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod +x kubectl && mv kubectl /usr/local/bin/ # Download kubectl
 kubectl version --client
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod 700 get_helm.sh && bash get_helm.sh
@@ -32,9 +32,7 @@ minikube update-context --profile=minikube
 eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 
 echo "=========================================================================================="
-kubectl version --client #ensure the version
 minikube status
-helm help
 kubectl cluster-info
 
 echo "=========================================================================================="

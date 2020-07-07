@@ -126,61 +126,97 @@ for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
 done
 
 
-# echo "=============================Inspection============================================================="
-# - kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
-# - kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
-# #linkerd
-# - sudo sh -c "curl -sL https://run.linkerd.io/install | sh" #Install the CLI
-# - export PATH=$PATH:$HOME/.linkerd2/bin
-# - linkerd version
-# - linkerd check --pre #Validate your Kubernetes cluster
-# - sudo sh -c "linkerd install | kubectl apply -f -" #Install Linkerd onto the cluster
-# - linkerd check
-# - sudo kubectl -n linkerd get deploy
-# - linkerd dashboard &
-# # - linkerd -n linkerd top deploy/linkerd-web
-# #Install the demo app
-# - sudo sh -c "curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -"
-# - sudo kubectl -n emojivoto port-forward svc/web-svc 8080:80 #forward web-svc locally to port 8080
-# #add Linkerd to emojivoto
-# - sudo sh -c "kubectl get -n emojivoto deploy -o yaml | linkerd inject - | kubectl apply -f -"
-# #Just as with the control plane, it is possible to verify that everything worked the way it should with the data plane
-# - linkerd -n emojivoto check --proxy
-# - linkerd -n emojivoto stat deploy #see live traffic metrics by running
-# - linkerd -n emojivoto top deploy #get a real-time view of which paths are being called:
-# - linkerd -n emojivoto tap deploy/web #use tap shows the stream of requests across a single pod, deployment, or even everything in the emojivoto namespace
-# #Install Flagger in the linkerd namespace
-# - sudo kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd
-# #Create a test namespace and enable Linkerd proxy injection
-# - sudo kubectl create ns test
-# - sudo kubectl annotate namespace test linkerd.io/inject=enabled
-# #Install the load testing service to generate traffic during the canary analysis
-# - sudo kubectl apply -k github.com/weaveworks/flagger//kustomize/tester
-# #Create a deployment and a horizontal pod autoscaler:
-# - sudo kubectl apply -k github.com/weaveworks/flagger//kustomize/podinfo
-# #Create a canary custom resource for the podinfo deploymen
-# - sudo kubectl apply -f canary/podinfo-canary.yaml
-# #Trigger a canary deployment by updating the container image
-# - sudo kubectl -n test set image deployment/podinfo podinfod=stefanprodan/podinfo:3.1.1
-# - sudo kubectl -n test describe canary/podinfo
-# # monitor all canaries
-# - watch kubectl get canaries --all-namespaces
-# #Automated rollback
-# #Trigger another canary deployment
-# - sudo kubectl -n test set image deployment/podinfo podinfod=stefanprodan/podinfo:3.1.2
-# #Exec into the load tester pod
-# # - sudo kubectl -n test exec -it flagger-loadtester-xx-xx sh
-# #Generate HTTP 500 errors
-# # - watch -n 1 curl http://podinfo-canary.test:9898/status/500
-# #Generate latency
-# - watch -n 1 curl http://podinfo-canary.test:9898/delay/1
-# - kubectl -n test describe canary/podinfo
-# #Trigger a canary deployment by updating the container image
-# - sudo kubectl -n test set image deployment/podinfo podinfod=stefanprodan/podinfo:3.1.3
-# #Generate 404s
-# - watch -n 1 curl http://podinfo-canary:9898/status/404
-# #Watch Flagger logs
-# - sudo kubectl -n linkerd logs deployment/flagger -f | jq .msg
-# #There are two ingress controllers that are compatible with both Flagger and Linkerd: NGINX and Gloo
-# #Install NGINX
-# - sudo helm upgrade -i nginx-ingress stable/nginx-ingress --namespace ingress-nginx
+# Install Knative Serving
+# `curl -L  https://raw.githubusercontent.com/knative/serving/release-0.6/third_party/istio-1.1.3/istio-lean.yaml \
+#   | sed 's/LoadBalancer/NodePort/' \
+#   | kubectl apply --filename -`
+# curl -L  https://raw.githubusercontent.com/knative/serving/release-0.6/third_party/istio-1.1.3/istio-lean.yaml | \
+#   sed 's/LoadBalancer/NodePort/' | \
+#   kubectl apply --filename -
+curl -L  https://raw.githubusercontent.com/knative/serving/release-0.6/third_party/istio-1.1.3/istio-lean.yaml \
+  | sed 's/LoadBalancer/NodePort/' \
+  | kubectl apply --filename -
+  echo echo "Waiting for the Istio Pods to be ready ..."
+  for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+        if kubectl get pods --namespace=isito-system  | grep ContainerCreating ; then
+          sleep 10
+        else
+          break
+        fi
+  done
+
+  kubectl apply --selector knative.dev/crd-install=true \
+  --filename https://github.com/knative/serving/releases/download/v0.6.0/serving.yaml \
+  --filename https://github.com/knative/serving/releases/download/v0.6.0/serving.yaml --selector networking.knative.dev/certificate-provider!=cert-manager
+
+  echo echo "Waiting for the Knative Serving Pods to be ready ..."
+  for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+        if kubectl get pods --namespace=knative-serving  | grep ContainerCreating ; then
+          sleep 10
+        else
+          break
+        fi
+  done
+
+
+
+# Configure Pipelines
+# Download the demo sources and lets call the folder as $PROJECT_HOME
+# As the build need to be run with service account that needs permissions to create resources, a new service account 'build-robot' needs to be created with required permissions
+git clone https://redhat-developer-demos/quarkus-pipeline-demo &&\
+cd quarkus-pipeline-demo &&\
+export PROJECT_HOME=`pwd`
+
+# All the objects will be created in the namespace called demos, if you wish to change it please edit the file build/build-roles.yaml and update the namespace name.
+kubectl apply -f $PROJECT_HOME/build/build-roles.yaml
+# Change to the demos namespace
+kubens demos
+
+
+# The build uses resources called PipelineResource that helps to configure the git repo url, the final container image name etc.
+# create the resources
+kubectl apply -f $PROJECT_HOME/build/build-resources.yaml
+
+
+# The Pipeline consists of multiple tasks that needs to be executed in order.
+# create the pipeline tasks
+kubectl apply --recursive -f $PROJECT_HOME/build/tasks
+# list the created tasks.
+tkn task list
+
+
+# create the pipeline that uses the tasks  in the previous step
+kubectl apply --recursive -f $PROJECT_HOME/build/pipelines
+# list the created tasks
+tkn pipeline list
+
+
+
+# make the pipeline run, we need to create the PipelineRun
+# https://github.com/tektoncd/pipeline/blob/master/docs/pipelineruns.md
+# create the pipelinerun that uses the one of pipelines e.g. greeter-pipeline-jvm created in the previous step
+kubectl apply  -f $PROJECT_HOME/build/pipelinerun/greeter-pipeline-run.yaml
+# to do a native build then update the pipelineRef in greeter-pipeline-run.yaml to be greeter-pipeline-native
+# list the created tasks
+tkn pipelinerun list
+#view the logs of the pipeline
+tkn pipelinerun logs -f -a greeter-pipeline-run
+
+
+# a local maven repo manager like Nexus then you can configure the pipeline to use it via the param mavenMirrorUrl e.g.
+# Assuming your nexus repository is running in http://192.168.99.1:8081
+#  params:
+#     - name: mavenMirrorUrl
+#       value: http://192.168.99.1:8081/nexus/content/groups/public #(1)
+
+
+# deploy an application called "greeter"
+kubectl get -n demos deployments
+# a correponding service called greeter-service
+kubectl get -n demos services
+
+
+
+
+# Deploying Knative Service
+# deploy Knative service using the same pipelines, edit the ./build/pipelinerun/greeter-pipeline-run.yaml and update
