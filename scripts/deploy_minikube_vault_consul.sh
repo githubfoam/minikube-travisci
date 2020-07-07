@@ -7,10 +7,10 @@ set -o xtrace
 
 echo "=============================minikube vault consul============================================================="
 # source helper.sh
-# sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
-# sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
-# minikube status
-# c1_kctx #helper.sh
+sudo minikube start --profile=cluster-1 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+sudo minikube start --profile=cluster-2 --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION
+minikube status
+c1_kctx #helper.sh
 
 # sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
 # minikube update-context --profile=minikube
