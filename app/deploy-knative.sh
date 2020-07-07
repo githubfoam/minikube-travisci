@@ -75,8 +75,55 @@ tar xvzf tkn_0.10.0_Darwin_x86_64.tar.gz -C /usr/local/bin tkn
 
 minikube addons enable registry
 # kubectl -n kube-system get pods -w
-git clone https://github.com/redhat-developer-demos/quarkus-pipeline-demo.git && cd minikube-helpers
+echo echo "Waiting for the registry pod to be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=kube-system  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
+done
 
+# Configure registry aliases
+# push and pull images from internal registry
+# make the registry entry in minikube node’s hosts file and make them resolvable via coredns
+https://github.com/kameshsampath/minikube-helpers.git && cd cd registry
+# Add entries to host file
+# All the registry aliases are configured using the configmap registry-aliases-config.yaml
+# create the configmap in kube-system namespace:
+kubectl apply -n kube-system -f registry-aliases-config.yaml
+# run the dameonset node-etc-hosts-update.yaml
+# add entries to the minikube node’s /etc/hosts file with all aliases pointing to internal registrys' CLUSTER_IP
+kubectl apply -n kube-system -f node-etc-hosts-update.yaml
+echo echo "Waiting for the daemonset pod to be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=kube-system  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
+done
+
+# check the minikube vm’s /etc/hosts file for the registry aliases entries
+# the daemonset has added the registryAliases from the ConfigMap pointing to the internal registry’s CLUSTER-IP.
+minikube ssh -- sudo cat /etc/hosts
+# Update the Kubernetes' coredns to have rewrite rules for aliases.
+bash patch-coredns.sh
+# verify
+# Once successfully patched push and pull from the registry using suffix dev.local, example.com
+kubectl get cm -n kube-system coredns -o yaml
+
+
+# Install Tekton Pipelines
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/latest/release.yaml
+echo echo "Waiting for the Tekton Pipelines Pods to be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=tekton-pipelines  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
+done
 
 
 # echo "=============================Inspection============================================================="

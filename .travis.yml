@@ -135,7 +135,7 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-minikube
+        - sudo make deploy-minikube-latest
         - sudo make deploy-linkerd
       after_success:
         - deactivate
@@ -157,7 +157,7 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-minikube
+        - sudo make deploy-minikube-latest
         - sudo make deploy-canary-linkerd
       after_success:
         - deactivate
@@ -197,18 +197,18 @@ matrix:
         - deactivate
 
     ##PROBLEM#################
-    - name: "minikube KUBERNETES_VERSION=1.18.3 Python 3.7 on xenial" #OK
-      dist: bionic
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-      script:
-        - sudo make deploy-minikube
-      after_success:
-        - deactivate
+    # - name: "minikube KUBERNETES_VERSION=1.18.3 Python 3.7 on xenial" #OK
+    #   dist: bionic
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #   script:
+    #     - sudo make deploy-minikube
+    #   after_success:
+    #     - deactivate
 
     - name: "minikube kubectl helm snapped Python 3.7 on bionic amd64"
       dist: bionic
@@ -233,7 +233,9 @@ matrix:
         - pip install -r requirements.txt
       script:
         # - sudo make deploy-minikube
-        - sudo make deploy-openesb
+        - minikube version
+        - kubectl version --client
+        - helm version
         # - travis_wait 15 sudo make deploy-java-maven &
       after_success:
         - deactivate
