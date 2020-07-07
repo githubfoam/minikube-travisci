@@ -18,7 +18,7 @@ curl -sfL https://get.rio.io | sh - #Download the latest release
 
 rio -n rio-system pods #Make sure all the pods are up and running
 
-rio install #Please provide your Let's Encrypt email
+# rio install #Please provide your Let's Encrypt email
 
 # https://github.com/rancher/rio-demo
 # rio run https://github.com/rancher/rio-demo

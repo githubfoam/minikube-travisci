@@ -19,10 +19,14 @@ curl -sL https://run.linkerd.io/install | sh
 #     linkerd dashboard                       # launch the dashboard
 
 export PATH=$PATH:$HOME/.linkerd2/bin
-linkerd check --pre
+
+# 'linkerd-config' config map exists
+# configmaps "linkerd-config" not found
+# see https://linkerd.io/checks/#l5d-existence-linkerd-config for hints
+# linkerd check --pre
+
 linkerd check
 linkerd dashboard &
-
 linkerd version
 # kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory

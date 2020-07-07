@@ -16,8 +16,22 @@ export PATH=$HOME/.gloo/bin:$PATH
 glooctl version
 glooctl install gateway
 kubectl get pod -n gloo-system
+kubectl get pods --all-namespaces
+echo echo "Waiting for gloo to be ready ..."
+for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=gloo-system  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
+done
+kubectl get pods --all-namespaces
+
+
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/echo.yaml
 kubectl get all -n echo
+kubectl get pods --all-namespaces
+
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/upstream.yaml
 kubectl apply -f https://raw.githubusercontent.com/solo-io/gloo-ref-arch/blog-30-mar-20/platform/prog-delivery/two-phased-with-os-gloo/1-setup/vs.yaml
 # curl $(glooctl proxy url)/

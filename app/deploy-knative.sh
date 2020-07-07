@@ -75,6 +75,7 @@ tar xvzf tkn_0.10.0_Darwin_x86_64.tar.gz -C /usr/local/bin tkn
 
 minikube addons enable registry
 # kubectl -n kube-system get pods -w
+kubectl get pods --all-namespaces
 echo echo "Waiting for the registry pod to be ready ..."
 for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
       if kubectl get pods --namespace=kube-system  | grep ContainerCreating ; then
@@ -83,11 +84,13 @@ for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
         break
       fi
 done
+kubectl get pods --all-namespaces
+
 
 # Configure registry aliases
 # push and pull images from internal registry
 # make the registry entry in minikube node’s hosts file and make them resolvable via coredns
-git clone https://github.com/kameshsampath/minikube-helpers.git && cd cd registry
+git clone https://github.com/kameshsampath/minikube-helpers.git && cd registry
 # Add entries to host file
 # All the registry aliases are configured using the configmap registry-aliases-config.yaml
 # create the configmap in kube-system namespace:
@@ -103,6 +106,8 @@ for i in {1..150}; do # Timeout after 5 minutes, 60x5=300 secs
         break
       fi
 done
+
+
 
 # check the minikube vm’s /etc/hosts file for the registry aliases entries
 # the daemonset has added the registryAliases from the ConfigMap pointing to the internal registry’s CLUSTER-IP.
