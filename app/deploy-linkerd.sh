@@ -20,14 +20,23 @@ curl -sL https://run.linkerd.io/install | sh
 
 export PATH=$PATH:$HOME/.linkerd2/bin
 
+# By default linkerd install will create a linkerd namespace.
+# Prior to installation, that namespace should not exist
+linkerd check --pre --linkerd-namespace linkerd
+
 # 'linkerd-config' config map exists
 # configmaps "linkerd-config" not found
 # see https://linkerd.io/checks/#l5d-existence-linkerd-config for hints
-# linkerd check --pre
+linkerd check --pre
 
-linkerd check
-linkerd dashboard &
-linkerd version
+# Ensure the Linkerd ConfigMap exists
+kubectl -n linkerd get configmap/linkerd-config
+ # ensure you have permission to create ConfigMaps
+kubectl -n linkerd auth can-i create configmap
+
+# linkerd check
+# linkerd dashboard &
+# linkerd version
 # kubectl -n linkerd get deploy
 # `linkerd install | kubectl apply -f -` #namespace/linkerd: No such file or directory
 
@@ -36,12 +45,12 @@ linkerd version
 # Prerequisites
 # Flagger requires a Kubernetes cluster v1.11 or newer and Linkerd 2.4 or newer
 echo "============================Linkerd Flagger Canary Deployments=============================================================="
-kubectl get pods --all-namespaces
-kubectl create ns linkerd #Create a namespace called Linkerd
+# kubectl get pods --all-namespaces
+# kubectl create ns linkerd #Create a namespace called Linkerd
 # linkerd install | kubectl apply -f - #install Linkerd with the Cli tool
 #Error from server (NotFound): error when creating "github.com/weaveworks/flagger//kustomize/linkerd": namespaces "linkerd" not found
-kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
-kubectl get pods --all-namespaces
+# kubectl apply -k github.com/weaveworks/flagger//kustomize/linkerd #Install Flagger in the linkerd namespace
+# kubectl get pods --all-namespaces
 
 # kubectl -n linkerd rollout status deploy/flagger
 #
