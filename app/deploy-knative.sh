@@ -115,7 +115,7 @@ kubectl get pods --all-namespaces
 
 
 # Update the Kubernetes' coredns to have rewrite rules for aliases.
-bash patch-coredns.sh
+# bash patch-coredns.sh
 # verify
 # Once successfully patched push and pull from the registry using suffix dev.local, example.com
 kubectl get cm -n kube-system coredns -o yaml
