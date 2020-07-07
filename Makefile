@@ -13,23 +13,23 @@ deploy-minikube-latest:
 deploy-openesb:
 	bash app/deploy-openesb.sh
 
-deploy-minikube-openfaas:
-	bash app/deploy-minikube-openfaas.sh
+deploy-openfaas:
+	bash app/deploy-openfaas.sh
 
-deploy-minikube-latest-linkerd:
-	bash app/deploy-minikube_latest_linkerd.sh
+deploy-linkerd:
+	bash app/deploy-linkerd.sh
 
-deploy-minikube-latest-canary-linkerd:
-	bash app/deploy-minikube_latest_canary_linkerd.sh
+deploy-canary-linkerd:
+	bash app/deploy-canary-linkerd.sh
 
-deploy-minikube-latest-canary:
-	bash app/deploy-minikube_latest_canary.sh
+deploy-canary:
+	bash app/deploy-canary.sh
 
-deploy-minikube-latest-knative:
-	bash app/deploy-minikube_latest_knative.sh
+deploy-knative:
+	bash app/deploy-knative.sh
 
-deploy-minikube-latest-bluegreen:
-	bash app/deploy-minikube_latest_bluegreen.sh
+deploy-bluegreen:
+	bash app/deploy-bluegreen.sh
 
 deploy-dashboard:
 	bash app/deploy-dashboard.sh
