@@ -6,10 +6,6 @@ set -o xtrace
 
 
 echo "=============================minikube vault consul============================================================="
-minikube
-kubectl version --client
-helm version
-
 # source helper.sh
 source scripts/helper.sh
 

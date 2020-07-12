@@ -2,7 +2,7 @@
 # export CONSUL_ADDR=https://$HOST_IP:8500
 
 # export HOST_IP=ip -o -4 addr list ens4 | awk '{print $4}' | cut -d/ -f1 #ens4 picked up off the host
-export HOST_IP=/sbin/ifconfig eth0 | awk -F ' *|:' '/inet addr/{print $4}'
+export HOST_IP=ifconfig ens4 | awk -F ' *|:' '/inet addr/{print $4}'
 export CONSUL_ADDR=https://$HOST_IP:8500
 
 function c1_kctl {
