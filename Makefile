@@ -1,6 +1,15 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-boxes:
+	bash scripts/deploy-boxes.sh
+
+deploy-libvirt:
+	bash scripts/deploy-libvirt.sh
+
+deploy-vagrant:
+	bash scripts/deploy-vagrant.sh
+	
 deploy-minikube-gardener:
 	bash app/deploy-minikube_gardener.sh
 

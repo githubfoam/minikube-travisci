@@ -1,0 +1,48 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  
+  config.vm.box = "bento/ubuntu-19.10" 
+  
+  
+  config.vm.network "private_network", ip: "192.168.50.4"
+
+  # docker daemon
+  config.vm.network "forwarded_port", guest: 2375, host: 2375, auto_correct: false
+  # registry
+  config.vm.network "forwarded_port", guest: 5000, host: 5000, auto_correct: false
+  # kubernetes dashboard
+  config.vm.network "forwarded_port", guest: 5080, host: 5080, auto_correct: false
+  # openfaas gateway
+  config.vm.network "forwarded_port", guest: 8080, host: 5180, auto_correct: false
+
+    config.vm.provider "virtualbox" do |vb|
+    vb.memory = "8192"
+  	vb.cpus = 4
+    # vb.memory = "1024"
+  	# vb.cpus = 2    
+  end
+  
+  config.vm.provision "shell", inline: <<-SHELL
+    export VAGRANT_USER_HOME=/home/vagrant
+    export MINIKUBE_WANTUPDATENOTIFICATION=false
+    export MINIKUBE_WANTREPORTERRORPROMPT=false
+    export MINIKUBE_HOME=$VAGRANT_USER_HOME
+    export CHANGE_MINIKUBE_NONE_USER=true
+    export KUBECONFIG=$VAGRANT_USER_HOME/.kube/config
+    mkdir -p $VAGRANT_USER_HOME/.kube
+    mkdir -p $VAGRANT_USER_HOME/.minikube
+    touch $KUBECONFIG
+    cd /vagrant/vagrant
+    chmod +x *.sh
+    ./provision.sh
+    # ./provision-docker.sh
+    # ./provision-kubectl.sh       
+    # ./provision-minikube.sh
+    # ./provision-helm.sh
+    # ./provision-openfaas.sh
+    # ./provision-registry.sh
+  SHELL
+end
