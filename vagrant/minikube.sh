@@ -24,14 +24,14 @@ touch $KUBECONFIG
 apt-get install conntrack socat -qqy
 
 # Install Minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && \
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 > /dev/null
 install minikube-linux-amd64 /usr/local/bin/minikube 
 minikube version
 
-minikube start --vm-driver=none --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf
+# minikube start --vm-driver=none --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf
 
 # Interact with your cluster If you already have kubectl installed
-kubectl get po -A
+# kubectl get po -A
 
 # minikube kubectl -- get po -A
 
