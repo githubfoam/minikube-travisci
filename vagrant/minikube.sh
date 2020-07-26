@@ -30,19 +30,19 @@ minikube version
 
 # minikube start --vm-driver=none --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf
 
-# Interact with your cluster If you already have kubectl installed
-# kubectl get po -A
 
-# minikube kubectl -- get po -A
+#starts Minikube with 6 CPUs, 12288 memory, 120G disk size
+minikube start --vm-driver=none \
+                --cpus 6 \
+                --memory 12288 \
+                --disk-size=120g \
+                --extra-config=apiserver.authorization-mode=RBAC \
+                --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
+                --extra-config kubeadm.ignore-preflight-errors=SystemVerification
 
-# #starts Minikube with 6 CPUs, 12288 memory, 120G disk size
-# minikube start --vm-driver=none \
-#                 --cpus 6 \
-#                 --memory 12288 \
-#                 --disk-size=120g \
-#                 --extra-config=apiserver.authorization-mode=RBAC \
-#                 --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
-#                 --extra-config kubeadm.ignore-preflight-errors=SystemVerification
+Interact with your cluster If you already have kubectl installed
+kubectl get po -A
 
+minikube kubectl -- get po -A
 
 # echo "============================Install kubectl finished =============================================================="
