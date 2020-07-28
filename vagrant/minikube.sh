@@ -40,9 +40,9 @@ minikube start --vm-driver=none \
                 --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
                 --extra-config kubeadm.ignore-preflight-errors=SystemVerification
 
-Interact with your cluster If you already have kubectl installed
-kubectl get po -A
+# Interact with your cluster If you already have kubectl installed
+# kubectl get po -A
 
-minikube kubectl -- get po -A
+# minikube kubectl -- get po -A
 
 # echo "============================Install kubectl finished =============================================================="
