@@ -30,6 +30,10 @@ minikube version
 
 # minikube start --vm-driver=none --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf
 
+# [WARNING Swap]: running with swap on is not supported. Please disable swap
+swapoff -a
+# [WARNING Service-Kubelet]: kubelet service is not enabled, please run 'systemctl enable kubelet.service'
+systemctl enable kubelet.service
 
 #starts Minikube with 6 CPUs, 12288 memory, 120G disk size
 minikube start --vm-driver=none \
@@ -40,7 +44,7 @@ minikube start --vm-driver=none \
                 --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
                 --extra-config kubeadm.ignore-preflight-errors=SystemVerification \
                 --extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 1 #Requested cpu count 1 is less than the minimum allowed of 2
-
+                --v=5 #verbose
 # Interact with your cluster If you already have kubectl installed
 # kubectl get po -A
 
