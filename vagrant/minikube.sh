@@ -35,10 +35,11 @@ minikube version
 minikube start --vm-driver=none \
                 --cpus 6 \
                 --memory 12288 \
-                --disk-size=120g \
+                --disk-size=20g \
                 --extra-config=apiserver.authorization-mode=RBAC \
                 --extra-config=kubelet.resolv-conf=/run/systemd/resolve/resolv.conf \
-                --extra-config kubeadm.ignore-preflight-errors=SystemVerification
+                --extra-config kubeadm.ignore-preflight-errors=SystemVerification \
+                --extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 1 #Requested cpu count 1 is less than the minimum allowed of 2
 
 # Interact with your cluster If you already have kubectl installed
 # kubectl get po -A
