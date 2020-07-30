@@ -38,7 +38,11 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/miniku
 mkdir -p $HOME/.kube $HOME/.minikube
 touch $KUBECONFIG
 
-sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+sudo minikube start --profile=minikube \
+                    --vm-driver=none \
+                    --kubernetes-version=v$KUBERNETES_VERSION #the none driver, the kubectl config and credentials generated are owned by root in the root user’s home directory
+                    --extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 1 #Requested cpu count 1 is less than the minimum allowed of 2
+                    --v=5 #verbose
 minikube update-context --profile=minikube
 chown -R travis: /home/travis/.minikube/
 
