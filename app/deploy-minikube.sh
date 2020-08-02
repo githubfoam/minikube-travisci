@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eox pipefail #safety for script
 
-echo "=============================minikube============================================================="
+echo "=============================Install minikube started ============================================================="
 set -eox pipefail #safety for script
 if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualization is supported on Linux, xenial fails w 0, bionic works w 2
            echo "virtualization is not supported"

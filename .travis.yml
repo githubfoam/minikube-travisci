@@ -8,8 +8,34 @@ matrix:
   fast_finish: true
   include:
 
-# TESTING
-    - name: "boxing snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    - name: "EFK  snapped minikube kubectl helm Python 3.7 on bionic" #OK
+      dist: bionic
+      addons:
+        snaps:
+          - name: minikube
+            confinement: classic
+            channel: latest/stable
+          - name: kubectl
+            confinement: classic
+            channel: latest/stable
+          - name: helm
+            confinement: classic
+            channel: latest/stable
+      language: python
+      python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - minikube version
+        - helm version
+        - kubectl version --client
+      after_success:
+        - deactivate
+
+    - name: "EFK wo snaps ython 3.7 on bionic" #OK
       dist: bionic
       # addons:
       #   snaps:
@@ -30,11 +56,39 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-libvirt
-        - sudo make deploy-vagrant
-        - sudo make deploy-boxes
+        - sudo make provision-minikube
+        - sudo make provision-kubectl
+        - sudo make provision-helm
       after_success:
         - deactivate
+    
+# TESTING
+    # - name: "boxing snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   # addons:
+    #   #   snaps:
+    #   #     - name: minikube
+    #   #       confinement: classic
+    #   #       channel: latest/stable
+    #   #     - name: kubectl
+    #   #       confinement: classic
+    #   #       channel: latest/stable
+    #   #     - name: helm
+    #   #       confinement: classic
+    #   #       channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-libvirt
+    #     - sudo make deploy-vagrant
+    #     - sudo make deploy-boxes
+    #   after_success:
+    #     - deactivate
 
     # - name: "vegeta snapped minikube kubectl helm Python 3.7 on bionic" #OK
     #   dist: bionic
@@ -65,35 +119,66 @@ matrix:
     #     - deactivate
 
 
-    - name: "locust snapped minikube kubectl helm Python 3.7 on bionic" #OK
-      dist: bionic
-      addons:
-        snaps:
-          - name: minikube
-            confinement: classic
-            channel: latest/stable
-          - name: kubectl
-            confinement: classic
-            channel: latest/stable
-          - name: helm
-            confinement: classic
-            channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - minikube version
-        - helm version
-        - kubectl version --client
-        - sudo make deploy-minikube-latest
-        - sudo make deploy-locust
-      after_success:
-        - deactivate
+    # - name: "locust snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: minikube
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: kubectl
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: helm
+    #         confinement: classic
+    #         channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - minikube version
+    #     - helm version
+    #     - kubectl version --client
+    #     - sudo make deploy-minikube-latest
+    #     - sudo make deploy-locust
+    #   after_success:
+    #     - deactivate
 
+    # - name: "benchmark the API using locust" #
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: minikube
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: kubectl
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: helm
+    #         confinement: classic
+    #         channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #     - pip install locust
+    #     - pip list
+    #   script:
+    #     - minikube version
+    #     - helm version
+    #     - kubectl version --client
+    #     - sudo locust --host http://127.0.0.1:3000 &
+    #     # - locust --host http://127.0.0.1:3000 --master & #use master slave mode
+    #     - curl http://localhost:8089 #Locust UI
+    #   after_success:
+    #     - deactivate
 
    # TESTED OK
     # https://www.kubeflow.org/docs/started/workstation/minikube-linux/
