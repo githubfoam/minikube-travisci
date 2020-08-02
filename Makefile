@@ -1,6 +1,21 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-elk:
+	bash scripts/deploy-elk.sh
+
+deploy-efk:
+	bash scripts/deploy-efk.sh
+
+provision-helm:
+	bash scripts/provision-helm.sh
+
+provision-kubectl:
+	bash scripts/provision-kubectl.sh
+
+provision-minikube:
+	bash scripts/provision-minikube.sh
+
 deploy-boxes:
 	bash scripts/deploy-boxes.sh
 
