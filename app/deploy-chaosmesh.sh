@@ -9,7 +9,8 @@ set -o xtrace
 echo "===============================Install Chaos Mesh==========================================================="
 
 # Check whether the helm tiller pod is running
-kubectl -n kube-system get pods -l app=helm
+# The connection to the server localhost:8080 was refused - did you specify the right host or port?
+# kubectl -n kube-system get pods -l app=helm
 
 /bin/sh -c 'curl -sSL https://raw.githubusercontent.com/chaos-mesh/chaos-mesh/master/install.sh | bash' 
 # curl -sSL https://raw.githubusercontent.com/chaos-mesh/chaos-mesh/master/install.sh | bash
