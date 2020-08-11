@@ -32,7 +32,7 @@ matrix:
         - minikube version
         - helm version
         - kubectl version --client
-        - sudo make deploy-elk
+        - sudo make deploy-chaosmesh
       after_success:
         - deactivate
 
@@ -151,7 +151,7 @@ matrix:
     
 
 
-    
+
 
 # TESTING
     # - name: "boxing snapped minikube kubectl helm Python 3.7 on bionic" #OK
