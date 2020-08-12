@@ -8,19 +8,11 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "chaos mesh  snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    
+    #https://kubernetes.io/docs/tutorials/hello-minikube/
+    - name: "kong minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
-      addons:
-        snaps:
-          - name: minikube
-            confinement: classic
-            channel: latest/stable
-          - name: kubectl
-            confinement: classic
-            channel: latest/stable
-          - name: helm
-            confinement: classic
-            channel: latest/stable
+      arch: amd64
       language: python
       python: 3.7
       before_install:
@@ -29,13 +21,10 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - minikube version
-        - helm version
-        - kubectl version --client
-        - sudo make deploy-chaosmesh
+        - sudo make deploy-minikube-latest
+        - sudo make provision-helm
       after_success:
         - deactivate
-
 
     # - name: "ELK  snapped minikube kubectl helm Python 3.7 on bionic" #OK
     #   dist: bionic
