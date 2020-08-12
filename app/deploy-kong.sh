@@ -48,13 +48,14 @@ kubectl apply -f https://bit.ly/kong-ingress-dbless
 
 
 # echo "=========================================================================================="
-# echo "Waiting for  the Kong control plane to be ready ..."
-#   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
-#     if kubectl get pods --namespace=kube-system -lk8s-app=kube-dns|grep Running ; then
-#       break
-#     fi
-#     sleep 2
-#   done
+echo "Waiting for  the Kong control plane to be ready ..."
+for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs
+      if kubectl get pods --namespace=kong  | grep ContainerCreating ; then
+        sleep 10
+      else
+        break
+      fi
+done
 
 echo "============================status check=============================================================="
 minikube status
