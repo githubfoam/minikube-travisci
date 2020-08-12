@@ -22,7 +22,8 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-latest
-        - sudo make provision-helm
+        # - sudo make provision-helm
+        - sudo make deploy-kong
       after_success:
         - deactivate
 
