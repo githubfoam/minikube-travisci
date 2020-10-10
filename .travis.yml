@@ -8,9 +8,8 @@ matrix:
   fast_finish: true
   include:
 
-    
-    #https://kubernetes.io/docs/tutorials/hello-minikube/
-    - name: "kong minikube wo snaps Python 3.7 on bionic amd64"
+    # https://kubernetes.io/docs/tutorials/hello-minikube/
+    - name: "voting-app minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
       language: python
@@ -22,10 +21,27 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-latest
-        # - sudo make provision-helm
-        - sudo make deploy-kong
+        - sudo make deploy-voting-app
       after_success:
         - deactivate
+
+    #https://kubernetes.io/docs/tutorials/hello-minikube/
+    # - name: "kong minikube wo snaps Python 3.7 on bionic amd64"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-latest
+    #     # - sudo make provision-helm
+    #     - sudo make deploy-kong
+    #   after_success:
+    #     - deactivate
 
     # - name: "ELK  snapped minikube kubectl helm Python 3.7 on bionic" #OK
     #   dist: bionic
