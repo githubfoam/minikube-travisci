@@ -8,8 +8,7 @@ set -o xtrace
 # https://github.com/yosoyvilla/k8s-demo
 echo "===============================deploy voting app==========================================================="
 
-# git clone https://github.com/yosoyvilla/k8s-demo.git && cd k8s-demo
-cd app/voting
+git clone https://github.com/yosoyvilla/k8s-demo.git && cd k8s-demo
 kubectl create namespace vote
 kubectl create -f deployments/
 kubectl create -f services/
