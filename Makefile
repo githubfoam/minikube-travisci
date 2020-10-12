@@ -1,6 +1,12 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-sonarqube:
+	bash app/deploy-sonarqube.sh
+
+deploy-promethues-demo:
+	bash app/deploy-promethues-demo.sh
+
 deploy-voting-app:
 	bash app/deploy-voting-app.sh
 

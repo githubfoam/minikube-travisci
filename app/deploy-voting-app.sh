@@ -26,11 +26,18 @@ kubectl get service --all-namespaces #list all services in all namespace
 kubectl get services #The application will start. As each pod becomes ready, the Istio sidecar will deploy along with it.
 kubectl get pods
 
-for i in {1..60}; do # Timeout after 5 minutes, 60x2=120 secs, 2 mins
+# for i in {1..60}; do # Timeout after 5 minutes, 60x2=120 secs, 2 mins
+#     if kubectl get pods --namespace=vote |grep Running ; then
+#       break
+#     fi
+#     sleep 2
+# done
+
+for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs, 3 mins
     if kubectl get pods --namespace=vote |grep Running ; then
-      break
+      sleep 5
     fi
-    sleep 2
+    break
 done
 
 kubectl get service --all-namespaces #list all services in all namespace
