@@ -36,8 +36,9 @@ kubectl get pods
 for i in {1..60}; do # Timeout after 5 minutes, 60x5=300 secs, 3 mins
     if kubectl get pods --namespace=vote |grep ContainerCreating ; then
       sleep 5
+    else
+        break
     fi
-    break
 done
 
 kubectl get service --all-namespaces #list all services in all namespace
