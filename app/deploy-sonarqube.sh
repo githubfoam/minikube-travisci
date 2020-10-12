@@ -10,8 +10,8 @@ echo "===============================deploy SonarQube===========================
 
 git clone https://github.com/mcaimi/k8s-demo-app.git && cd k8s-demo-app
 
-# run everything locally (eg. no secure Ingresses in place), add the url of the registry as an insecure source:
-minikube start --cpus=4 --memory=8GB --disk-size=20G --insecure-registry registry.apps.kubernetes.local
+# # run everything locally (eg. no secure Ingresses in place), add the url of the registry as an insecure source:
+# minikube start --cpus=4 --memory=8GB --disk-size=20G --insecure-registry registry.apps.kubernetes.local
 
 # Enable all needed k8s addons
 for item in registry ingress istio-provisioner istio dashboard helm-tiller; do

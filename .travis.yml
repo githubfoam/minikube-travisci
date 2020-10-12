@@ -20,37 +20,37 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-latest
-        - sudo make deploy-promethues-demo
-      after_success:
-        - deactivate
-
-    - name: "deploy SonarQube  snapped minikube kubectl helm Python 3.7 on bionic" #OK
-      dist: bionic
-      addons:
-        snaps:
-          - name: minikube
-            confinement: classic
-            channel: latest/stable
-          - name: kubectl
-            confinement: classic
-            channel: latest/stable
-          - name: helm
-            confinement: classic
-            channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - minikube version
-        - helm version
-        - kubectl version --client
         - sudo make deploy-sonarqube
       after_success:
         - deactivate
+
+    # - name: "deploy SonarQube  snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: minikube
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: kubectl
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: helm
+    #         confinement: classic
+    #         channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - minikube version
+    #     - helm version
+    #     - kubectl version --client
+    #     - sudo make deploy-sonarqube
+    #   after_success:
+    #     - deactivate
 
     - name: "deploy Prometheus Grafana  wo snaps on bionic" #OK
       dist: bionic
@@ -64,7 +64,7 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-latest
-        - sudo make deploy-promethues-demo
+        - sudo make deploy-prometheus-demo
       after_success:
         - deactivate
 
