@@ -5,10 +5,8 @@ set -o nounset
 set -o xtrace
 # set -eox pipefail #safety for script
 
-# https://github.com/yosoyvilla/k8s-demo
 echo "===============================deploy voting app==========================================================="
 
-# git clone https://github.com/yosoyvilla/k8s-demo.git && cd k8s-demo
 cd app/voting
 kubectl create namespace vote
 kubectl create -f deployments/

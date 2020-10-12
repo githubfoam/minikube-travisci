@@ -63,13 +63,39 @@ matrix:
     #     - sudo make deploy-promethues-demo
     #   after_success:
     #     - deactivate
-    
-    # https://kubernetes.io/docs/tutorials/hello-minikube/
-    - name: "voting-app minikube wo snaps Python 3.7 on bionic amd64"
+
+    - name: "voting-app minikube w snaps Python 3.7 on bionic amd64"
       dist: bionic
       arch: amd64
+      addons:
+          snaps:
+            - name: minikube
+              confinement: classic
+              channel: latest/stable
+            - name: kubectl
+              confinement: classic
+              channel: latest/stable
+            - name: helm
+              confinement: classic
+              channel: latest/stable    
       language: python
       python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        # - sudo make deploy-minikuböe-latest
+        - sudo make deploy-voting-app
+      after_success:
+        - deactivate
+
+    - name: "voting-app minikube wo snaps Python 3.7 on focal amd64"
+      dist: focal
+      arch: amd64
+      language: python
+      # python: 3.7
       before_install:
         - pip3 install virtualenv
         - virtualenv -p $(which python3) ~venvpy3
@@ -80,6 +106,39 @@ matrix:
         - sudo make deploy-voting-app
       after_success:
         - deactivate
+        
+    - name: "voting-app minikube wo snaps Python 3.7 on bionic arm64"
+      dist: bionic
+      arch: arm64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-voting-app
+      after_success:
+        - deactivate
+
+    # TESTED OK
+    # - name: "voting-app minikube wo snaps Python 3.7 on bionic amd64"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-latest
+    #     - sudo make deploy-voting-app
+    #   after_success:
+    #     - deactivate
 
     #https://kubernetes.io/docs/tutorials/hello-minikube/
     # - name: "kong minikube wo snaps Python 3.7 on bionic amd64"
