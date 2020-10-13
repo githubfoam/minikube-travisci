@@ -11,6 +11,16 @@ Travis (.com) feature weavescope branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_weavescope)](https://travis-ci.com/githubfoam/minikube-travisci) 
 
 
+Travis (.com) feature_openebs branch:
+[![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_openebs)](https://travis-ci.com/githubfoam/minikube-travisci)
+
+Travis (.com) feature_kubeflow branch:
+[![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_kubeflow)](https://travis-ci.com/githubfoam/minikube-travisci)
+
+Travis (.com)  feature_k8s_dashboard  branch:
+[![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_k8s_dashboard)](https://travis-ci.com/githubfoam/minikube-travisci)
+
+
 ~~~~
 minikube with snap installation
 
