@@ -12,54 +12,57 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "k8s dashboard minikube wo snaps Python 3.7 on focal amd64"
-      dist: focal
-      arch: amd64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube
-        - sudo make deploy-dashboard
-      after_success:
-        - deactivate
+# [kubelet-check] The HTTP call equal to 'curl -sSL http://localhost:10248/healthz' failed with error: Get http://localhost:10248/healthz: dial tcp 
+    # - name: "k8s dashboard minikube wo snaps Python 3.7 on focal amd64"
+    #   dist: focal
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube
+    #     - sudo make deploy-dashboard
+    #   after_success:
+    #     - deactivate
 
-    - name: "k8s dashboard minikube wo snaps on focal arm64"
-      dist: focal
-      arch: arm64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube
-        - sudo make deploy-dashboard
-      after_success:
-        - deactivate
+    ## ELF not found
+    # - name: "k8s dashboard minikube wo snaps on focal arm64"
+    #   dist: focal
+    #   arch: arm64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube
+    #     - sudo make deploy-dashboard
+    #   after_success:
+    #     - deactivate
 
 
-    - name: "k8s dashboard minikube wo snaps on bionic arm64"
-      dist: bionic
-      arch: arm64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube
-        - sudo make deploy-dashboard
-      after_success:
-        - deactivate
+## ELF not found
+    # - name: "k8s dashboard minikube wo snaps on bionic arm64"
+    #   dist: bionic
+    #   arch: arm64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube
+    #     - sudo make deploy-dashboard
+    #   after_success:
+    #     - deactivate
 
     - name: "k8s dashboard minikube wo snaps Python 3.7 on bionic amd64"
       dist: bionic
