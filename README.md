@@ -7,8 +7,13 @@ Travis (.com) branch:
 Travis (.com) feature voting app branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_votingapp)](https://travis-ci.com/githubfoam/minikube-travisci) 
 
-minikube with snap installation
+Travis (.com) feature weavescope branch:
+[![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_weavescope)](https://travis-ci.com/githubfoam/minikube-travisci) 
+
+
 ~~~~
+minikube with snap installation
+
 $ which minikube
 
 /snap/bin/minikube
