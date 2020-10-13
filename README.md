@@ -4,6 +4,9 @@ minikube pipeline
 Travis (.com) branch:
 [![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=master)](https://travis-ci.com/githubfoam/minikube-travisci)  
 
+Travis (.com) feature voting app branch:
+[![Build Status](https://travis-ci.com/githubfoam/minikube-travisci.svg?branch=feature_votingapp)](https://travis-ci.com/githubfoam/minikube-travisci) 
+
 minikube with snap installation
 ~~~~
 $ which minikube

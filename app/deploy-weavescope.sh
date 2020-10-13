@@ -26,4 +26,5 @@ for i in {1..60}; do # Timeout after 3 minutes, 60x3=300 secs
   fi
 done
 
+kubectl get pods --all-namespaces;
 kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040 &
