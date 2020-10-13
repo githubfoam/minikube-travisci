@@ -11,13 +11,6 @@ if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]]; then #check if virtualizati
         echo "===================================="
         echo "virtualization is supported"
 fi
-# overriding travisci global env variables
-# export MINIKUBE_WANTUPDATENOTIFICATION=false
-# export MINIKUBE_WANTREPORTERRORPROMPT=false
-# export CHANGE_MINIKUBE_NONE_USER=true
-# export KUBECTL_VERSION=1.18.3
-# export KUBERNETES_VERSION=1.18.3
-# export MINIKUBE_VERSION=1.18.3
 
 export MINIKUBE_HOME=$HOME #(string) sets the path for the .minikube directory that minikube uses for state/configuration. Please note: this is used only by minikube https://minikube.sigs.k8s.io/docs/handbook/config
 export KUBECONFIG=$HOME/.kube/config
