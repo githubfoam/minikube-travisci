@@ -23,6 +23,6 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-minikube-latest
+        - sudo make deploy-minikube
       after_success:
         - deactivate
