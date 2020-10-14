@@ -8,7 +8,23 @@ matrix:
   fast_finish: true
   include:
 
-    - name: "deploy SonarQube  wo snaps on bionic"
+    - name: "deploy argo cd  wo snaps on focal amd64"
+      dist: focal
+      arch: amd64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-argocd
+      after_success:
+        - deactivate
+
+    - name: "deploy argo cd  wo snaps on bionic amd64"
       dist: bionic
       arch: amd64
       language: python
@@ -20,9 +36,25 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-latest
-        - sudo make deploy-sonarqube
+        - sudo make deploy-argocd
       after_success:
         - deactivate
+
+    # - name: "deploy SonarQube  wo snaps on bionic"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-latest
+    #     - sudo make deploy-sonarqube
+    #   after_success:
+    #     - deactivate
 
     # - name: "deploy SonarQube  snapped minikube kubectl helm Python 3.7 on bionic" #OK
     #   dist: bionic
@@ -52,49 +84,49 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    - name: "deploy Prometheus Grafana  wo snaps on bionic" #OK
-      dist: bionic
-      arch: amd64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube-latest
-        - sudo make deploy-prometheus-demo
-      after_success:
-        - deactivate
+    # - name: "deploy Prometheus Grafana  wo snaps on bionic" #OK
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-latest
+    #     - sudo make deploy-prometheus-demo
+    #   after_success:
+    #     - deactivate
 
-    - name: "deploy Prometheus Grafana  snapped minikube kubectl helm Python 3.7 on bionic" #OK
-      dist: bionic
-      addons:
-        snaps:
-          - name: minikube
-            confinement: classic
-            channel: latest/stable
-          - name: kubectl
-            confinement: classic
-            channel: latest/stable
-          - name: helm
-            confinement: classic
-            channel: latest/stable
-      language: python
-      python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - minikube version
-        - helm version
-        - kubectl version --client
-        - sudo make deploy-promethues-demo
-      after_success:
-        - deactivate
+    # - name: "deploy Prometheus Grafana  snapped minikube kubectl helm Python 3.7 on bionic" #OK
+    #   dist: bionic
+    #   addons:
+    #     snaps:
+    #       - name: minikube
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: kubectl
+    #         confinement: classic
+    #         channel: latest/stable
+    #       - name: helm
+    #         confinement: classic
+    #         channel: latest/stable
+    #   language: python
+    #   python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - minikube version
+    #     - helm version
+    #     - kubectl version --client
+    #     - sudo make deploy-promethues-demo
+    #   after_success:
+    #     - deactivate
 
 # The connection to the server localhost:8080 was refused - did you specify the right host or port?
     # - name: "voting-app minikube w snaps on bionic amd64"

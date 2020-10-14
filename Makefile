@@ -1,6 +1,9 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-argocd:
+	bash app/deploy-argocd.sh
+
 deploy-sonarqube:
 	bash app/deploy-sonarqube.sh
 
