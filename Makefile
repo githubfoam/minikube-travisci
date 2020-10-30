@@ -1,6 +1,12 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-clair:
+	bash app/deploy-clair.sh
+
+deploy-influxdb-trick:
+	bash app/deploy-influxdb-trick.sh
+
 deploy-argocd:
 	bash app/deploy-argocd.sh
 
