@@ -25,6 +25,22 @@ matrix:
     #   after_success:
     #     - deactivate
 
+    - name: "deploy minikube kubectl helm latest wo snaps on focal amd64"
+      dist: focal
+      arch: amd64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-kubectl-helm-latest
+        # - sudo make deploy-clair
+      after_success:
+        - deactivate
+
     - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
       dist: bionic
       arch: amd64
@@ -37,7 +53,7 @@ matrix:
         - pip install -r requirements.txt
       script:
         - sudo make deploy-minikube-kubectl-helm-latest
-        - sudo make deploy-clair
+        # - sudo make deploy-clair
       after_success:
         - deactivate
 
