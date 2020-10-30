@@ -5,10 +5,14 @@ set -o nounset
 set -o xtrace
 # set -eox pipefail #safety for script
 
-# https://minikube.sigs.k8s.io/docs/start/
-echo "=============================deploy minikube============================================================="
 #https://minikube.sigs.k8s.io/docs/start/
 #https://github.com/kubernetes/minikube
+echo "=============================deploy minikube============================================================="
+
+# Sorry, Kubernetes 1.19.2 requires conntrack to be installed in root's path
+apt-get update -qq
+apt-get install -qqy conntrack 
+
 # Install Minikube
 # curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 # chmod +x minikube
