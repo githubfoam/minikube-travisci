@@ -6,13 +6,7 @@ set -o xtrace
 # set -eox pipefail #safety for script
 
 # https://minikube.sigs.k8s.io/docs/start/
-echo "=============================deploy kubectl============================================================="
-#Install kubectl
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mv ./kubectl /usr/local/bin/kubectl
-kubectl version --client #ensure the version
-
+echo "=============================deploy minikube============================================================="
 #https://minikube.sigs.k8s.io/docs/start/
 #https://github.com/kubernetes/minikube
 # Install Minikube
@@ -20,10 +14,12 @@ kubectl version --client #ensure the version
 # chmod +x minikube
 # cp minikube /usr/local/bin/ && rm minikube
 
+ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+ install minikube-linux-amd64 /usr/local/bin/minikube
 
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.2.0/minikube-linux-amd64
-chmod +x minikube
-cp minikube /usr/local/bin/ && rm minikube
+# curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.2.0/minikube-linux-amd64
+# chmod +x minikube
+# cp minikube /usr/local/bin/ && rm minikube
 #starts Minikube with 6 CPUs, 12288 memory, 120G disk size
 minikube start --vm-driver=none \
                 --cpus 6 \
@@ -36,9 +32,26 @@ minikube start --vm-driver=none \
 # Set docker environment to minikube
 eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 minikube version
-echo "=========================================================================================="
-kubectl cluster-info
 minikube status
+
+
+echo "=============================deploy kubectl============================================================="
+#Install kubectl latest version
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/OS_DISTRIBUTION/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+
+#Install kubectl specific version
+# curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl
+# chmod +x ./kubectl
+# mv ./kubectl /usr/local/bin/kubectl
+
+kubectl version --client #ensure the version
+kubectl cluster-info
+
+# kubectl get nodes #verify the cluster by checking the nodes
+# kubectl describe node
+
 echo "=========================================================================================="
 echo "Waiting for kubernetes to be ready ..."
   for i in {1..150}; do # Timeout after 5 minutes, 150x2=300 secs
@@ -54,6 +67,15 @@ kubectl get pods --all-namespaces
 kubectl get pods -n default
 kubectl get pod -o wide #The IP column will contain the internal cluster IP address for each pod.
 kubectl get service --all-namespaces # find a Service IP,list all services in all namespaces
+
+
+# https://helm.sh/docs/intro/install/
+echo "============================Install and configure Helm=============================================================="
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 > get_helm.sh
+chmod 700 get_helm.sh
+./get_helm.sh
+helm version
+
 
 #
 # - sudo apt-get -qq -y install conntrack #X Sorry, Kubernetes v1.18.3 requires conntrack to be installed in root's path
