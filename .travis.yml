@@ -25,55 +25,76 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    - name: "deploy liquibase wo snaps on focal amd64"
-      dist: focal
-      arch: amd64
-      services:
-          - docker
-      env:
-          global:
-              - OPERATION='update'
-              - CHANGELOGFILE='samplechangelog.h2.sql'
-              - USERNAME='liquibase'
-              - PASSWORD='password'
-              - URL='jdbc:h2:file:./example/h2tutorial'                
-      language: java
-      before_install:
-        - java --version
-        - docker pull liquibase/liquibase:4.1
-        - docker image ls
-      script:
-        - docker run --rm -v $(pwd):$(pwd) liquibase/liquibase:4.1 --classpath=$(pwd)/changelogs --url=$URL --changeLogFile=$CHANGELOGFILE --username=$USERNAME --password=$PASSWORD $OPERATION
-        # - |
-        #   docker run \ 
-        #   --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
-        #   --classpath=$(pwd)/changelogs \
-        #   --url=$URL \
-        #   --changeLogFile=$CHANGELOGFILE \
-        #   --username=$USERNAME \
-        #   --password=$PASSWORD $OPERATION
-      after_success:
-        - deactivate
+  # TESTED OK
+    # - name: "deploy liquibase wo snaps on focal amd64"
+    #   dist: focal
+    #   arch: amd64
+    #   services:
+    #       - docker
+    #   env:
+    #       global:
+    #           - OPERATION='update'
+    #           - CHANGELOGFILE='samplechangelog.h2.sql'
+    #           - USERNAME='liquibase'
+    #           - PASSWORD='password'
+    #           - URL='jdbc:h2:file:./example/h2tutorial'                
+    #   language: java
+    #   before_install:
+    #     - java --version
+    #     - docker pull liquibase/liquibase:4.1
+    #     - docker image ls
+    #   script:
+    #     - docker run --rm -v $(pwd):$(pwd) liquibase/liquibase:4.1 --classpath=$(pwd)/changelogs --url=$URL --changeLogFile=$CHANGELOGFILE --username=$USERNAME --password=$PASSWORD $OPERATION
+    #     # - |
+    #     #   docker run \ 
+    #     #   --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
+    #     #   --classpath=$(pwd)/changelogs \
+    #     #   --url=$URL \
+    #     #   --changeLogFile=$CHANGELOGFILE \
+    #     #   --username=$USERNAME \
+    #     #   --password=$PASSWORD $OPERATION
+    #   after_success:
+    #     - deactivate
 
-    - name: "deploy minikube kubectl helm latest wo snaps on focal amd64"
-      dist: focal
-      arch: amd64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube-kubectl-helm-latest
-        # - sudo make deploy-clair
-      after_success:
-        - deactivate
+    # - name: "deploy minikube kubectl helm latest wo snaps on focal amd64"
+    #   dist: focal
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-kubectl-helm-latest
+    #     # - sudo make deploy-clair
+    #   after_success:
+    #     - deactivate
 
-    - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
+    # - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-kubectl-helm-latest
+    #     # - sudo make deploy-clair
+    #   after_success:
+    #     - deactivate
+
+    # https://github.com/anchore/anchore-engine
+    # https://docs.anchore.com/current/docs/engine/quickstart/
+    - name: "scan images w Anchore Engine wo snaps on bionic amd64"
       dist: bionic
       arch: amd64
+      services:
+        - docker      
       language: python
       # python: 3.7
       before_install:
@@ -82,11 +103,26 @@ matrix:
         - source ~venvpy3/bin/activate
         - pip install -r requirements.txt
       script:
-        - sudo make deploy-minikube-kubectl-helm-latest
-        # - sudo make deploy-clair
+        #  Download the docker-compose.yaml file and start
+        - curl https://docs.anchore.com/current/docs/engine/quickstart/docker-compose.yaml > docker-compose.yaml
+        - docker-compose up -d
+        # Verify service availability
+        - docker-compose ps
+        # get the status of the Anchore Engine services
+        - docker-compose exec api anchore-cli system status
+        # check the status of the feed sync using the CLI
+        - docker-compose exec api anchore-cli system feeds list
+        # he CLI tool includes a useful utility that will block until the feeds have completed a successful sync
+        - docker-compose exec api anchore-cli system wait
+        #  adding a container image for analysis
+        - docker-compose exec api anchore-cli image add docker.io/library/debian:7
+        # waiting for the analysis to complete
+        - docker-compose exec api anchore-cli image wait docker.io/library/debian:7
+        # running content reports
+        - docker-compose exec api anchore-cli image content docker.io/library/debian:7 os
       after_success:
-        - deactivate
-
+        - deactivate        
+        
     # - name: "scan images w clair wo snaps on bionic amd64"
     #   dist: bionic
     #   arch: amd64
