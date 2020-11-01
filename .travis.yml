@@ -25,6 +25,34 @@ matrix:
     #   after_success:
     #     - deactivate
 
+    - name: "deploy liquibase wo snaps on focal amd64"
+      dist: focal
+      arch: amd64
+      services:
+          - docker
+      env:
+          global:
+              - OPERATION='update'
+              - CHANGELOGFILE='samplechangelog.h2.sql'
+              - USERNAME='liquibase'
+              - PASSWORD='password'
+              - URL='jdbc:h2:file:./example/h2tutorial'                
+      language: java
+      before_install:
+        - java --version
+        - docker pull liquibase/liquibase:4.1
+      script:
+        - |
+          docker run \ 
+          --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
+          --classpath=$(pwd)/changelogs \
+          --url=$URL \
+          --changeLogFile=$CHANGELOGFILE \
+          --username=$USERNAME \
+          --password=$PASSWORD $OPERATION
+      after_success:
+        - deactivate
+
     - name: "deploy minikube kubectl helm latest wo snaps on focal amd64"
       dist: focal
       arch: amd64
@@ -57,21 +85,21 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "scan images w clair wo snaps on bionic amd64"
-      dist: bionic
-      arch: amd64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-minikube-latest
-        - sudo make deploy-clair
-      after_success:
-        - deactivate
+    # - name: "scan images w clair wo snaps on bionic amd64"
+    #   dist: bionic
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-minikube-latest
+    #     - sudo make deploy-clair
+    #   after_success:
+    #     - deactivate
 
 # TESTED OK
     # - name: "deploy argo cd  wo snaps on bionic amd64"
