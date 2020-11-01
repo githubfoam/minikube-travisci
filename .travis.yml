@@ -41,15 +41,17 @@ matrix:
       before_install:
         - java --version
         - docker pull liquibase/liquibase:4.1
+        - docker image ls
       script:
-        - |
-          docker run \ 
-          --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
-          --classpath=$(pwd)/changelogs \
-          --url=$URL \
-          --changeLogFile=$CHANGELOGFILE \
-          --username=$USERNAME \
-          --password=$PASSWORD $OPERATION
+        - docker run --rm -v $(pwd):$(pwd) liquibase/liquibase:4.1 --classpath=$(pwd)/changelogs --url=$URL --changeLogFile=$CHANGELOGFILE --username=$USERNAME --password=$PASSWORD $OPERATION
+        # - |
+        #   docker run \ 
+        #   --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
+        #   --classpath=$(pwd)/changelogs \
+        #   --url=$URL \
+        #   --changeLogFile=$CHANGELOGFILE \
+        #   --username=$USERNAME \
+        #   --password=$PASSWORD $OPERATION
       after_success:
         - deactivate
 
