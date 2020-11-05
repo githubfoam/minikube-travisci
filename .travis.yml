@@ -56,8 +56,8 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    - name: "deploy minikube kubectl helm latest wo snaps on focal amd64"
-      dist: focal
+    - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
+      dist: bionic
       arch: amd64
       language: python
       # python: 3.7

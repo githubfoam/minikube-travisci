@@ -7,6 +7,21 @@ set -o xtrace
 
 #https://minikube.sigs.k8s.io/docs/start/
 #https://github.com/kubernetes/minikube
+echo "===============================deploy kubectl==========================================================="
+
+# install kubectl
+apt-get update -qq && apt-get install -yqq apt-transport-https gnupg2 curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+apt-get update -qq
+apt-get install -yqq kubectl
+
+
+# install jq
+apt-get update -qq
+apt-get install -yqq jq
+
+
 echo "=============================deploy minikube============================================================="
 
 # Sorry, Kubernetes 1.19.2 requires conntrack to be installed in root's path
@@ -38,18 +53,4 @@ eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 minikube version
 minikube status
 
-echo "===============================deploy kubectl==========================================================="
 
-# install kubectl
-apt-get update -qq && apt-get install -yqq apt-transport-https gnupg2 curl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-apt-get update -qq
-apt-get install -yqq kubectl
-
-
-# install jq
-apt-get update -qq
-apt-get install -yqq jq
-
-echo "===============================deploy kubectl==========================================================="
