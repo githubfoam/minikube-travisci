@@ -1,6 +1,9 @@
 IMAGE := alpine/fio
 APP:="app/deploy-openesb.sh"
 
+deploy-kubectl-testing:
+	bash app/deploy-kubectl-testing.sh
+
 deploy-minikube-kubectl-helm-latest:
 	bash app/deploy-minikube-kubectl-helm-latest.sh
 
