@@ -72,20 +72,20 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "kubectl testing on xenial amd64"
-      dist: xenial
-      arch: amd64
-      language: python
-      # python: 3.7
-      before_install:
-        - pip3 install virtualenv
-        - virtualenv -p $(which python3) ~venvpy3
-        - source ~venvpy3/bin/activate
-        - pip install -r requirements.txt
-      script:
-        - sudo make deploy-kubectl-testing
-      after_success:
-        - deactivate        
+    # - name: "kubectl testing on xenial amd64"
+    #   dist: xenial
+    #   arch: amd64
+    #   language: python
+    #   # python: 3.7
+    #   before_install:
+    #     - pip3 install virtualenv
+    #     - virtualenv -p $(which python3) ~venvpy3
+    #     - source ~venvpy3/bin/activate
+    #     - pip install -r requirements.txt
+    #   script:
+    #     - sudo make deploy-kubectl-testing
+    #   after_success:
+    #     - deactivate        
 
     # - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
     #   dist: bionic
@@ -105,55 +105,55 @@ matrix:
 
     # https://github.com/anchore/anchore-engine
     # https://docs.anchore.com/current/docs/engine/quickstart/
-    # - name: "scan images w Anchore Engine wo snaps on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   services:
-    #     - docker      
-    #   language: python
-    #   # python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     #  Download the docker-compose.yaml file and start
-    #     - curl https://docs.anchore.com/current/docs/engine/quickstart/docker-compose.yaml > docker-compose.yaml
-    #     - docker-compose up -d
-    #     # Verify service availability
-    #     - docker-compose ps
-    #     # get the status of the Anchore Engine services
-    #     - docker-compose exec api anchore-cli system status
-    #     # check the status of the feed sync using the CLI
-    #     - docker-compose exec api anchore-cli system feeds list
-    #     # he CLI tool includes a useful utility that will block until the feeds have completed a successful sync
-    #     - docker-compose exec api anchore-cli system wait
-    #     #  adding a container image for analysis
-    #     - docker-compose exec api anchore-cli image add docker.io/library/debian:7
-    #     # waiting for the analysis to complete
-    #     - docker-compose exec api anchore-cli image wait docker.io/library/debian:7
-    #     # running content reports
-    #     - docker-compose exec api anchore-cli image content docker.io/library/debian:7 os
-    #   after_success:
-    #     - deactivate        
+    - name: "scan images w Anchore Engine wo snaps on bionic amd64"
+      dist: bionic
+      arch: amd64
+      services:
+        - docker      
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        #  Download the docker-compose.yaml file and start
+        - curl https://docs.anchore.com/current/docs/engine/quickstart/docker-compose.yaml > docker-compose.yaml
+        - docker-compose up -d
+        # Verify service availability
+        - docker-compose ps
+        # get the status of the Anchore Engine services
+        - docker-compose exec api anchore-cli system status
+        # check the status of the feed sync using the CLI
+        - docker-compose exec api anchore-cli system feeds list
+        # he CLI tool includes a useful utility that will block until the feeds have completed a successful sync
+        - docker-compose exec api anchore-cli system wait
+        #  adding a container image for analysis
+        - docker-compose exec api anchore-cli image add docker.io/library/debian:7
+        # waiting for the analysis to complete
+        - docker-compose exec api anchore-cli image wait docker.io/library/debian:7
+        # running content reports
+        - docker-compose exec api anchore-cli image content docker.io/library/debian:7 os
+      after_success:
+        - deactivate        
 
 
-    # - name: "scan images w clair wo snaps on bionic amd64"
-    #   dist: bionic
-    #   arch: amd64
-    #   language: python
-    #   # python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-minikube-latest
-    #     - sudo make deploy-clair
-    #   after_success:
-    #     - deactivate
+    - name: "scan images w clair wo snaps on bionic amd64"
+      dist: bionic
+      arch: amd64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-minikube-latest
+        - sudo make deploy-clair
+      after_success:
+        - deactivate
 
 # TESTED OK
     # - name: "deploy argo cd  wo snaps on bionic amd64"
