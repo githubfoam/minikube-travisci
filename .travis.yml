@@ -87,6 +87,28 @@ matrix:
     #   after_success:
     #     - deactivate       
 
+    - name: "deploy trivy-ci wo snaps on bionic amd64"
+      dist: bionic
+      arch: amd64
+      # language: python
+      sudo: false
+      services:
+      - docker
+      env:
+        global:
+          - COMMIT=${TRAVIS_COMMIT::8}      
+      before_install:
+        - docker build -t trivy-ci-test:${COMMIT} .
+        - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+      script:
+      - docker images ls
+      - trivy --exit-code 0 --severity CRITICAL --no-progress trivy-ci-test:${COMMIT}
+      cache:
+        directories:
+          - $HOME/.cache/trivy
+      after_success:
+        - deactivate
+
     - name: "deploy trivy wo snaps on bionic amd64"
       dist: bionic
       arch: amd64
