@@ -42,35 +42,25 @@ matrix:
       after_success:
         - deactivate
 
-    - name: "deploy minikube docker kubernetes helm hyperkit wo homebrew on macOS 10.15.7 osx xcode12.2"
-      os: osx
-      osx_image:
-        - xcode12.2 #macOS 10.15.7
-      # addons:
-      #   homebrew:
-      #     packages:
-      #     - hyperkit
-      #     - virtualbox
-      #     - docker
-      #     - kubernetes-cli 
-      #     - minikube                   
-      #     - kubernetes-helm
-      #     update: true
-      language: java
-      before_install:
-        - brew cask install virtualbox # Virtualbox (for virtualization)
-        - brew install hyperkit
-        - brew cask install docker
-        - brew install kubernetes-cli # Kubernetes CLI & kubectl
-        - brew cask install minikube
-        - brew install kubernetes-helm
-      script:
-      - minikube version
-      - kubectl version --client
-      - helm version
-      - docker version
-      after_success:
-        - deactivate
+    # - name: "deploy minikube docker kubernetes helm hyperkit wo homebrew on macOS 10.15.7 osx xcode12.2"
+    #   os: osx
+    #   osx_image:
+    #     - xcode12.2 #macOS 10.15.7
+    #   language: java
+    #   before_install:
+    #     - brew cask install virtualbox # Virtualbox (for virtualization)
+    #     - brew install hyperkit
+    #     - brew cask install docker
+    #     - brew install kubernetes-cli # Kubernetes CLI & kubectl
+    #     - brew cask install minikube
+    #     - brew install kubernetes-helm
+    #   script:
+    #   - minikube version
+    #   - kubectl version --client
+    #   - helm version
+    #   - docker version
+    #   after_success:
+    #     - deactivate
 
 #
 #     - name: "vbox vagrant    Python 2.7.17 on macOS 10.15.4 osx xcode11.5" #installer: Error - Your CPU does not have the features necessary for Multipass. Installation cannot proceed.
