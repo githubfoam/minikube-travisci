@@ -18,7 +18,9 @@ mv ./kubectl /usr/local/bin/kubectl
 # mv ./kubectl /usr/local/bin/kubectl
 
 kubectl version --client #ensure the version
-kubectl cluster-info
+
+# The connection to the server localhost:8080 was refused - did you specify the right host or port?
+# kubectl cluster-info
 
 # kubectl get nodes #verify the cluster by checking the nodes
 # kubectl describe node
