@@ -5,11 +5,10 @@ set -o nounset
 set -o xtrace
 # set -eox pipefail #safety for script
 
-#https://minikube.sigs.k8s.io/docs/start/
-#https://github.com/kubernetes/minikube
+
 echo "=============================deploy kubectl============================================================="
 #Install kubectl latest version
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/OS_DISTRIBUTION/amd64/kubectl
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
 
@@ -23,6 +22,9 @@ kubectl cluster-info
 
 # kubectl get nodes #verify the cluster by checking the nodes
 # kubectl describe node
+
+#https://minikube.sigs.k8s.io/docs/start/
+#https://github.com/kubernetes/minikube
 echo "=============================deploy minikube============================================================="
 
 # Sorry, Kubernetes 1.19.2 requires conntrack to be installed in root's path
