@@ -7,6 +7,22 @@ set -o xtrace
 
 #https://minikube.sigs.k8s.io/docs/start/
 #https://github.com/kubernetes/minikube
+echo "=============================deploy kubectl============================================================="
+#Install kubectl latest version
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/OS_DISTRIBUTION/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+
+#Install kubectl specific version
+# curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl
+# chmod +x ./kubectl
+# mv ./kubectl /usr/local/bin/kubectl
+
+kubectl version --client #ensure the version
+kubectl cluster-info
+
+# kubectl get nodes #verify the cluster by checking the nodes
+# kubectl describe node
 echo "=============================deploy minikube============================================================="
 
 # Sorry, Kubernetes 1.19.2 requires conntrack to be installed in root's path
@@ -25,6 +41,8 @@ apt-get install -qqy conntrack
 # chmod +x minikube
 # cp minikube /usr/local/bin/ && rm minikube
 #starts Minikube with 6 CPUs, 12288 memory, 120G disk size
+# ! The 'none' driver does not respect the --cpus flag
+# ! The 'none' driver does not respect the --memory flag
 minikube start --vm-driver=none \
                 --cpus 6 \
                 --memory 7960 \
@@ -38,23 +56,6 @@ eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 minikube version
 minikube status
 
-
-echo "=============================deploy kubectl============================================================="
-#Install kubectl latest version
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/OS_DISTRIBUTION/amd64/kubectl
-chmod +x ./kubectl
-mv ./kubectl /usr/local/bin/kubectl
-
-#Install kubectl specific version
-# curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/linux/amd64/kubectl
-# chmod +x ./kubectl
-# mv ./kubectl /usr/local/bin/kubectl
-
-kubectl version --client #ensure the version
-kubectl cluster-info
-
-# kubectl get nodes #verify the cluster by checking the nodes
-# kubectl describe node
 
 echo "=========================================================================================="
 echo "Waiting for kubernetes to be ready ..."
@@ -75,7 +76,7 @@ kubectl get service --all-namespaces # find a Service IP,list all services in al
 
 
 # https://helm.sh/docs/intro/install/
-echo "============================Install and configure Helm=============================================================="
+echo "============================deploy Helm=============================================================="
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 > get_helm.sh
 chmod 700 get_helm.sh
 ./get_helm.sh
