@@ -31,7 +31,7 @@ echo "=============================deploy minikube==============================
 
 # Sorry, Kubernetes 1.19.2 requires conntrack to be installed in root's path
 apt-get update -qq
-apt-get install -qqy conntrack 
+apt-get install -qqy conntrack socat
 
 # Install Minikube
 # curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
