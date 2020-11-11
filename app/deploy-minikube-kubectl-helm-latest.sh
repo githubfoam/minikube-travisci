@@ -65,6 +65,7 @@ echo "Waiting for kubernetes to be ready ..."
     sleep 2
   done
 echo "============================status check=============================================================="
+minikube version
 minikube status
 kubectl cluster-info
 kubectl get pods --all-namespaces
