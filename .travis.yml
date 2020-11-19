@@ -56,20 +56,38 @@ matrix:
     #   after_success:
     #     - deactivate
 
-    # - name: "kubectl testing on xenial amd64"
-    #   dist: xenial
-    #   arch: amd64
-    #   language: python
-    #   # python: 3.7
-    #   before_install:
-    #     - pip3 install virtualenv
-    #     - virtualenv -p $(which python3) ~venvpy3
-    #     - source ~venvpy3/bin/activate
-    #     - pip install -r requirements.txt
-    #   script:
-    #     - sudo make deploy-kubectl-testing
-    #   after_success:
-    #     - deactivate 
+# https://github.com/kubernetes/test-infra/tree/master/kubetest#installation
+    - name: "deploy kubetest on xenial amd64"
+      dist: xenial
+      arch: amd64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - git clone https://github.com/kubernetes/test-infra.git && cd test-infra
+        - GO111MODULE=on go install ./kubetest
+        - kubetest -h
+      after_success:
+        - deactivate 
+
+    - name: "kubectl testing on xenial amd64"
+      dist: xenial
+      arch: amd64
+      language: python
+      # python: 3.7
+      before_install:
+        - pip3 install virtualenv
+        - virtualenv -p $(which python3) ~venvpy3
+        - source ~venvpy3/bin/activate
+        - pip install -r requirements.txt
+      script:
+        - sudo make deploy-kubectl-testing
+      after_success:
+        - deactivate 
 
     - name: "deploy minikube kubectl helm latest wo snaps on bionic amd64"
       dist: bionic

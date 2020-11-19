@@ -5,7 +5,7 @@ set -o nounset
 set -o xtrace
 # set -eox pipefail #safety for script
 
-
+# https://kubernetes.io/docs/tasks/tools/install-kubectl/
 echo "=============================deploy kubectl============================================================="
 #Install kubectl latest version
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
